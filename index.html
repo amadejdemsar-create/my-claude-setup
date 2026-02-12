@@ -1,0 +1,3916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Claude Code Setup</title>
+<style>
+  /* ===== RESET & BASE ===== */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #06060c;
+    --bg-elevated: #0a0a14;
+    --bg-card: #0c0c18;
+    --bg-card-hover: #111122;
+    --border: #17172a;
+    --border-hover: #2d2d50;
+    --text: #b4b8c8;
+    --text-dim: #5c6080;
+    --text-bright: #eef0f8;
+    --purple: #a78bfa;
+    --purple-dim: rgba(167,139,250,0.12);
+    --pink: #f472b6;
+    --pink-dim: rgba(244,114,182,0.10);
+    --amber: #fbbf24;
+    --amber-dim: rgba(251,191,36,0.10);
+    --green: #34d399;
+    --green-dim: rgba(52,211,153,0.10);
+    --blue: #60a5fa;
+    --blue-dim: rgba(96,165,250,0.10);
+    --teal: #2dd4bf;
+    --teal-dim: rgba(45,212,191,0.10);
+    --red: #f87171;
+    --red-dim: rgba(248,113,113,0.10);
+    --cyan: #22d3ee;
+    --cyan-dim: rgba(34,211,238,0.10);
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
+    --shadow-card: 0 1px 3px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.2);
+    --shadow-card-hover: 0 4px 12px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3);
+    --transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ===== BACKGROUND AMBIENT ===== */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(167,139,250,0.06), transparent),
+      radial-gradient(ellipse 60% 40% at 80% 50%, rgba(244,114,182,0.03), transparent),
+      radial-gradient(ellipse 40% 30% at 10% 80%, rgba(96,165,250,0.02), transparent);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      radial-gradient(rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page { position: relative; z-index: 1; }
+
+  /* ===== NAVIGATION ===== */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(6,6,12,0.82);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    height: 52px;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .nav-inner::-webkit-scrollbar { display: none; }
+
+  .nav-brand {
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--text-bright);
+    white-space: nowrap;
+    margin-right: 24px;
+    letter-spacing: -0.03em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .nav-brand-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--purple);
+    box-shadow: 0 0 8px rgba(167,139,250,0.5);
+    animation: navPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes navPulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(167,139,250,0.5); }
+    50% { opacity: 0.6; box-shadow: 0 0 4px rgba(167,139,250,0.3); }
+  }
+
+  .nav-link {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+    transition: color var(--transition-base), background var(--transition-base);
+    letter-spacing: -0.01em;
+  }
+
+  .nav-link:hover {
+    color: var(--text-bright);
+    background: rgba(255,255,255,0.05);
+  }
+
+  /* ===== CONTAINER ===== */
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 80px 0 60px;
+    text-align: center;
+    position: relative;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--purple-dim);
+    border: 1px solid rgba(167,139,250,0.18);
+    border-radius: 100px;
+    padding: 6px 18px;
+    font-size: 0.76rem;
+    font-weight: 500;
+    color: var(--purple);
+    margin-bottom: 24px;
+  }
+
+  .hero-badge .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 1.08;
+    color: var(--text-bright);
+    margin-bottom: 16px;
+  }
+
+  h1 .gradient {
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--text-dim);
+    max-width: 560px;
+    margin: 0 auto 48px;
+    line-height: 1.6;
+  }
+
+  /* ===== STATS ROW ===== */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 80px;
+  }
+
+  .stat {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    text-align: center;
+    transition: border-color var(--transition-base), transform var(--transition-spring), box-shadow var(--transition-base);
+    box-shadow: var(--shadow-card);
+  }
+
+  .stat:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .stat-val {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text-bright);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 0.76rem;
+    color: var(--text-dim);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  /* ===== SECTION ===== */
+  .section {
+    margin-bottom: 96px;
+    scroll-margin-top: 72px;
+  }
+
+  .section-header {
+    margin-bottom: 36px;
+  }
+
+  .section-tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 5px 14px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 14px;
+  }
+
+  .tag-amber  { color: var(--amber); background: var(--amber-dim); }
+  .tag-green  { color: var(--green); background: var(--green-dim); }
+  .tag-pink   { color: var(--pink);  background: var(--pink-dim); }
+  .tag-blue   { color: var(--blue);  background: var(--blue-dim); }
+  .tag-teal   { color: var(--teal);  background: var(--teal-dim); }
+  .tag-red    { color: var(--red);   background: var(--red-dim); }
+  .tag-purple { color: var(--purple); background: var(--purple-dim); }
+
+  h2 {
+    font-size: 1.75rem;
+    font-weight: 750;
+    letter-spacing: -0.035em;
+    color: var(--text-bright);
+    margin-bottom: 8px;
+  }
+
+  .section-desc {
+    font-size: 0.92rem;
+    color: var(--text-dim);
+    max-width: 660px;
+    line-height: 1.65;
+  }
+
+  /* ===== ARCH DIAGRAM ===== */
+  .arch {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 40px 32px;
+    margin-bottom: 48px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+
+  .arch::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--purple), var(--pink), var(--amber), transparent);
+  }
+
+  .arch-title {
+    text-align: center;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+  }
+
+  .arch-layers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .arch-layer {
+    width: 100%;
+    padding: 18px 24px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .arch-layer .icon { font-size: 1.4rem; flex-shrink: 0; }
+
+  .arch-layer .info { flex: 1; }
+
+  .arch-layer .info .name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-bright);
+  }
+
+  .arch-layer .info .desc {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+  }
+
+  .arch-layer .info code {
+    font-size: 0.72rem;
+    background: rgba(0,0,0,0.3);
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: var(--blue);
+    font-family: 'SF Mono', Monaco, 'Fira Code', monospace;
+  }
+
+  .layer-purple { background: rgba(167,139,250,0.06); border: 1px solid rgba(167,139,250,0.12); }
+  .layer-blue   { background: rgba(96,165,250,0.05); border: 1px solid rgba(96,165,250,0.10); }
+  .layer-amber  { background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.10); }
+
+  .arch-arrow {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    padding: 4px 0;
+    letter-spacing: 2px;
+  }
+
+  /* ===== CARD GRID ===== */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.02), transparent 40%);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    pointer-events: none;
+  }
+
+  .card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--card-accent, var(--purple)), transparent);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+  }
+
+  .card:hover {
+    border-color: var(--border-hover);
+    background: var(--bg-card-hover);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .card:hover::before { opacity: 1; }
+  .card:hover::after { opacity: 1; }
+
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    margin-bottom: 16px;
+  }
+
+  .card h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+
+  .card p {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    line-height: 1.55;
+    margin-bottom: 14px;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 0.67rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.03);
+    color: var(--text-dim);
+    border: 1px solid rgba(255,255,255,0.05);
+    letter-spacing: 0.01em;
+  }
+
+  .tag-highlight {
+    background: var(--purple-dim);
+    color: var(--purple);
+    border-color: rgba(167,139,250,0.15);
+  }
+
+  /* Card accent colors */
+  .card-amber  { --card-accent: var(--amber); }
+  .card-green  { --card-accent: var(--green); }
+  .card-pink   { --card-accent: var(--pink); }
+  .card-blue   { --card-accent: var(--blue); }
+  .card-teal   { --card-accent: var(--teal); }
+  .card-red    { --card-accent: var(--red); }
+  .card-cyan   { --card-accent: var(--cyan); }
+  .card-purple { --card-accent: var(--purple); }
+
+  .card-amber .card-icon  { background: var(--amber-dim); }
+  .card-green .card-icon  { background: var(--green-dim); }
+  .card-pink .card-icon   { background: var(--pink-dim); }
+  .card-blue .card-icon   { background: var(--blue-dim); }
+  .card-teal .card-icon   { background: var(--teal-dim); }
+  .card-red .card-icon    { background: var(--red-dim); }
+  .card-cyan .card-icon   { background: var(--cyan-dim); }
+  .card-purple .card-icon { background: var(--purple-dim); }
+
+  /* ===== SUB-HEADER ===== */
+  .sub-header {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    margin: 40px 0 18px;
+    padding-left: 2px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .sub-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  /* ===== FLOW DIAGRAMS ===== */
+  .flows {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 40px 32px;
+    margin-top: 48px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .flows::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--green), var(--amber), transparent);
+  }
+
+  .flows h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 8px;
+    text-align: center;
+    letter-spacing: -0.02em;
+  }
+
+  .flows .flows-desc {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin-bottom: 32px;
+  }
+
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    padding: 10px 0;
+  }
+
+  .flow:last-child { margin-bottom: 0; }
+
+  .flow-node {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: white;
+    white-space: nowrap;
+    text-align: center;
+    transition: transform var(--transition-spring), box-shadow var(--transition-base);
+  }
+
+  .flow-node:hover {
+    transform: scale(1.04);
+  }
+
+  .fn-trigger { background: linear-gradient(135deg, #ec4899, #db2777); box-shadow: 0 2px 12px rgba(236,72,153,0.2); }
+  .fn-agent   { background: linear-gradient(135deg, #34d399, #059669); box-shadow: 0 2px 12px rgba(52,211,153,0.2); }
+  .fn-mcp     { background: linear-gradient(135deg, #fbbf24, #d97706); box-shadow: 0 2px 12px rgba(251,191,36,0.2); }
+  .fn-output  { background: linear-gradient(135deg, #60a5fa, #3b82f6); box-shadow: 0 2px 12px rgba(96,165,250,0.2); }
+
+  .flow-arrow {
+    color: var(--text-dim);
+    font-size: 1rem;
+    padding: 0 6px;
+    flex-shrink: 0;
+    opacity: 0.4;
+  }
+
+  /* ===== AGENT DETAIL CARDS ===== */
+  .agent-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  .agent-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+
+  .agent-meta {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+
+  .agent-meta .chip {
+    font-size: 0.67rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    letter-spacing: 0.01em;
+  }
+
+  .chip-model {
+    background: var(--purple-dim);
+    color: var(--purple);
+  }
+
+  .chip-tools {
+    background: var(--blue-dim);
+    color: var(--blue);
+  }
+
+  /* ===== DATA SOURCE CARDS ===== */
+  .data-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .data-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--teal), transparent);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+  }
+
+  .data-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .data-card:hover::before { opacity: 1; }
+
+  .data-card h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--teal);
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  .data-card .path {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    font-family: 'SF Mono', Monaco, monospace;
+    margin-bottom: 16px;
+    opacity: 0.7;
+  }
+
+  .data-card ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .data-card li {
+    font-size: 0.82rem;
+    color: var(--text);
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    transition: color var(--transition-base);
+  }
+
+  .data-card li:last-child { border-bottom: none; }
+
+  .data-card:hover li { color: var(--text-bright); }
+
+  .data-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  /* ===== PROJECT LIST ===== */
+  .project-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .project-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    align-items: center;
+    gap: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 24px;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-card);
+  }
+
+  .project-row:hover {
+    border-color: var(--border-hover);
+    background: var(--bg-card-hover);
+    transform: translateX(4px);
+  }
+
+  .project-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-bright);
+    letter-spacing: -0.01em;
+  }
+
+  .project-cost {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--amber);
+    font-family: 'SF Mono', Monaco, monospace;
+    text-align: right;
+  }
+
+  .project-model {
+    font-size: 0.71rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    background: var(--purple-dim);
+    color: var(--purple);
+    white-space: nowrap;
+  }
+
+  .project-mcps {
+    display: flex;
+    gap: 5px;
+  }
+
+  .project-mcp-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--amber);
+    opacity: 0.6;
+    transition: opacity var(--transition-base), transform var(--transition-spring);
+  }
+
+  .project-row:hover .project-mcp-dot {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+
+  /* ===== AUTOMATION SECTION ===== */
+  .auto-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 28px;
+    margin-bottom: 16px;
+    transition: border-color var(--transition-base);
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .auto-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--blue), transparent);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+  }
+
+  .auto-card:hover { border-color: var(--border-hover); }
+  .auto-card:hover::before { opacity: 1; }
+
+  .auto-card h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--blue);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .auto-card p {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+
+  .auto-card code {
+    font-size: 0.74rem;
+    font-family: 'SF Mono', Monaco, monospace;
+    background: rgba(0,0,0,0.35);
+    padding: 2px 8px;
+    border-radius: 5px;
+    color: var(--blue);
+    border: 1px solid rgba(96,165,250,0.08);
+  }
+
+  .auto-detail {
+    font-size: 0.78rem;
+    color: var(--text);
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.03);
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 14px;
+    line-height: 1.75;
+  }
+
+  .auto-detail strong { color: var(--text-bright); }
+
+  /* ===== CONFIG SECTION ===== */
+  .config-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .config-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 28px 24px 24px;
+    position: relative;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-card);
+  }
+
+  .config-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .config-num {
+    position: absolute;
+    top: -11px;
+    left: 20px;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: white;
+    box-shadow: 0 2px 8px rgba(167,139,250,0.3);
+  }
+
+  .config-card h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+    margin-top: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  .config-card .config-path {
+    font-size: 0.72rem;
+    font-family: 'SF Mono', Monaco, monospace;
+    color: var(--purple);
+    margin-bottom: 12px;
+    opacity: 0.8;
+  }
+
+  .config-card p {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    line-height: 1.55;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding: 72px 24px 60px;
+    margin-top: 40px;
+    position: relative;
+  }
+
+  .footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+
+  .footer p {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .footer .date {
+    color: rgba(255,255,255,0.12);
+    font-size: 0.74rem;
+    margin-top: 16px;
+    letter-spacing: 0.02em;
+  }
+
+  /* ===== DIVIDER ===== */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 80px 0;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .container { padding: 0 16px; }
+    .nav-inner { padding: 0 16px; }
+    .hero { padding: 48px 0 40px; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .card-grid { grid-template-columns: 1fr; }
+    .flow { flex-direction: column; gap: 0; }
+    .flow-arrow { transform: rotate(90deg); padding: 4px 0; }
+    .project-row { grid-template-columns: 1fr auto; }
+    .project-model, .project-mcps { display: none; }
+    .arch-layer { flex-direction: column; text-align: center; }
+    .agent-card { grid-template-columns: 1fr; }
+    .section { margin-bottom: 64px; }
+    .divider { margin: 56px 0; }
+    .config-grid { grid-template-columns: 1fr; }
+    .sub-header::after { display: none; }
+  }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+
+  /* ===== USAGE BAR ===== */
+  .usage-bar-wrap {
+    margin-top: 12px;
+  }
+
+  .usage-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.67rem;
+    color: var(--text-dim);
+    margin-bottom: 5px;
+    letter-spacing: 0.01em;
+  }
+
+  .usage-bar {
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.04);
+    overflow: hidden;
+  }
+
+  .usage-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--card-accent, var(--purple));
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+
+  .usage-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 24px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2));
+    border-radius: 2px;
+  }
+
+  /* ===== KNOWLEDGE BASE TREE ===== */
+  .kb-tree {
+    font-family: 'SF Mono', Monaco, monospace;
+    font-size: 0.76rem;
+    line-height: 1.85;
+    color: var(--text-dim);
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.03);
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-top: 18px;
+  }
+
+  .kb-tree .dir { color: var(--blue); font-weight: 600; }
+  .kb-tree .file { color: var(--text); }
+  .kb-tree .comment { color: var(--text-dim); font-style: italic; opacity: 0.7; }
+
+  /* ===== TOOLTIP ===== */
+  .has-tip { position: relative; cursor: help; }
+  .has-tip .tip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-hover);
+    border-radius: var(--radius-sm);
+    padding: 8px 14px;
+    font-size: 0.72rem;
+    color: var(--text);
+    white-space: nowrap;
+    z-index: 50;
+    pointer-events: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  }
+  .has-tip:hover .tip { display: block; }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    z-index: 200;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 60px 20px 40px;
+    overflow-y: auto;
+  }
+
+  .modal-overlay.active { display: flex; }
+
+  .modal {
+    background: #0c0c1a;
+    border: 1px solid var(--border-hover);
+    border-radius: var(--radius-xl);
+    max-width: 800px;
+    width: 100%;
+    position: relative;
+    animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03);
+    overflow: hidden;
+  }
+
+  .modal::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 5%, var(--purple), var(--pink), transparent 95%);
+    z-index: 1;
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: translateY(16px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 28px 32px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .modal-header .modal-icon {
+    width: 48px; height: 48px;
+    border-radius: var(--radius-md);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .modal-header h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-bright);
+    letter-spacing: -0.02em;
+  }
+
+  .modal-header .modal-meta {
+    display: flex; gap: 8px; margin-top: 6px;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 18px; right: 18px;
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    color: var(--text-dim);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all var(--transition-base);
+    z-index: 2;
+  }
+
+  .modal-close:hover {
+    background: rgba(255,255,255,0.06);
+    color: var(--text-bright);
+    border-color: var(--border-hover);
+    transform: scale(1.05);
+  }
+
+  .modal-body {
+    padding: 28px 32px 40px;
+    max-height: 70vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .modal-body::-webkit-scrollbar { width: 5px; }
+  .modal-body::-webkit-scrollbar-track { background: transparent; }
+  .modal-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  .modal-body h2 {
+    font-size: 1.1rem;
+    margin: 32px 0 12px;
+    color: var(--text-bright);
+    letter-spacing: -0.025em;
+    font-weight: 700;
+  }
+
+  .modal-body h2:first-child { margin-top: 0; }
+
+  .modal-body h3 {
+    font-size: 0.92rem;
+    margin: 24px 0 8px;
+    color: var(--purple);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .modal-body p {
+    font-size: 0.85rem;
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+
+  .modal-body ul, .modal-body ol {
+    padding-left: 20px;
+    margin-bottom: 12px;
+  }
+
+  .modal-body li {
+    font-size: 0.85rem;
+    color: var(--text);
+    line-height: 1.65;
+    margin-bottom: 4px;
+  }
+
+  .modal-body strong { color: var(--text-bright); }
+
+  .modal-body code {
+    font-size: 0.76rem;
+    background: rgba(0,0,0,0.35);
+    padding: 2px 8px;
+    border-radius: 5px;
+    color: var(--blue);
+    font-family: 'SF Mono', Monaco, monospace;
+    border: 1px solid rgba(96,165,250,0.08);
+  }
+
+  .modal-body pre {
+    background: rgba(0,0,0,0.35);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    overflow-x: auto;
+    margin: 14px 0;
+    font-size: 0.76rem;
+    line-height: 1.65;
+    color: var(--text);
+    font-family: 'SF Mono', Monaco, monospace;
+  }
+
+  .modal-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 0.8rem;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .modal-body th {
+    text-align: left;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.03);
+    color: var(--text-dim);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.73rem;
+    letter-spacing: 0.02em;
+  }
+
+  .modal-body td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    color: var(--text);
+  }
+
+  .modal-body tr:last-child td { border-bottom: none; }
+
+  .modal-body hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 28px 0;
+  }
+
+  .modal-body .persona-quote {
+    background: linear-gradient(135deg, rgba(167,139,250,0.08), rgba(244,114,182,0.06));
+    border-left: 2px solid var(--purple);
+    border-radius: 0 12px 12px 0;
+    padding: 18px 22px;
+    margin: 16px 0;
+    font-style: italic;
+    font-size: 0.86rem;
+    color: var(--text-bright);
+    line-height: 1.65;
+  }
+
+  /* clickable agent cards */
+  .card-clickable { cursor: pointer; }
+  .card-clickable:hover { border-color: rgba(255,255,255,0.1); }
+
+  /* ===== SYSTEM MAP ===== */
+  .smap {
+    padding: 72px 0 56px;
+    position: relative;
+  }
+
+  .smap-root {
+    text-align: center;
+    margin-bottom: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Root node glow backdrop */
+  .smap-root::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 200px;
+    background: radial-gradient(ellipse, rgba(167,139,250,0.08), transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .smap-root-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #8b5cf6, #a855f7, #ec4899);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: white;
+    font-weight: 800;
+    font-family: 'SF Mono', Monaco, monospace;
+    margin-bottom: 18px;
+    box-shadow:
+      0 0 0 1px rgba(139,92,246,0.3),
+      0 0 40px rgba(139,92,246,0.25),
+      0 0 80px rgba(168,85,247,0.12),
+      0 8px 32px rgba(0,0,0,0.3);
+    letter-spacing: -0.05em;
+    position: relative;
+    animation: rootFloat 6s ease-in-out infinite;
+  }
+
+  .smap-root-icon::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, rgba(139,92,246,0.4), rgba(236,72,153,0.4));
+    z-index: -1;
+    animation: rootRing 4s ease-in-out infinite;
+    opacity: 0;
+  }
+
+  @keyframes rootFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  @keyframes rootRing {
+    0%, 100% { opacity: 0; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.06); }
+  }
+
+  .smap-root h1 {
+    font-size: 1.65rem;
+    margin-bottom: 6px;
+    letter-spacing: -0.04em;
+  }
+
+  .smap-root-sub {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    letter-spacing: 0.01em;
+  }
+
+  /* Trunk connector */
+  .smap-trunk {
+    width: 1px;
+    height: 40px;
+    margin: 0 auto;
+    position: relative;
+    background: transparent;
+  }
+
+  .smap-trunk::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, rgba(139,92,246,0.6), rgba(139,92,246,0.15));
+  }
+
+  .smap-trunk::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: -3px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(139,92,246,0.4);
+    box-shadow: 0 0 8px rgba(139,92,246,0.3);
+  }
+
+  /* Branch container */
+  .smap-branches {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding-top: 6px;
+  }
+
+  /* Horizontal connector line */
+  .smap-branches::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: calc(100% / 12);
+    right: calc(100% / 12);
+    height: 1px;
+    background: linear-gradient(90deg,
+      rgba(251,191,36,0.2),
+      rgba(52,211,153,0.2),
+      rgba(244,114,182,0.2),
+      rgba(96,165,250,0.2),
+      rgba(45,212,191,0.2),
+      rgba(167,139,250,0.2)
+    );
+  }
+
+  .smap-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    position: relative;
+    padding-top: 28px;
+    color: inherit;
+  }
+
+  /* Vertical branch connectors */
+  .smap-node::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 22px;
+    transition: all var(--transition-base);
+  }
+
+  .smap-node-amber::before { background: linear-gradient(to bottom, rgba(251,191,36,0.3), rgba(251,191,36,0.08)); }
+  .smap-node-green::before { background: linear-gradient(to bottom, rgba(52,211,153,0.3), rgba(52,211,153,0.08)); }
+  .smap-node-pink::before { background: linear-gradient(to bottom, rgba(244,114,182,0.3), rgba(244,114,182,0.08)); }
+  .smap-node-blue::before { background: linear-gradient(to bottom, rgba(96,165,250,0.3), rgba(96,165,250,0.08)); }
+  .smap-node-teal::before { background: linear-gradient(to bottom, rgba(45,212,191,0.3), rgba(45,212,191,0.08)); }
+  .smap-node-purple::before { background: linear-gradient(to bottom, rgba(167,139,250,0.3), rgba(167,139,250,0.08)); }
+
+  .smap-node:hover::before { opacity: 1; }
+  .smap-node-amber:hover::before { background: linear-gradient(to bottom, rgba(251,191,36,0.6), rgba(251,191,36,0.15)); }
+  .smap-node-green:hover::before { background: linear-gradient(to bottom, rgba(52,211,153,0.6), rgba(52,211,153,0.15)); }
+  .smap-node-pink:hover::before { background: linear-gradient(to bottom, rgba(244,114,182,0.6), rgba(244,114,182,0.15)); }
+  .smap-node-blue:hover::before { background: linear-gradient(to bottom, rgba(96,165,250,0.6), rgba(96,165,250,0.15)); }
+  .smap-node-teal:hover::before { background: linear-gradient(to bottom, rgba(45,212,191,0.6), rgba(45,212,191,0.15)); }
+  .smap-node-purple:hover::before { background: linear-gradient(to bottom, rgba(167,139,250,0.6), rgba(167,139,250,0.15)); }
+
+  .smap-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 12px 14px;
+    text-align: center;
+    width: 100%;
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Top accent line */
+  .smap-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    opacity: 0;
+    transition: opacity var(--transition-base);
+  }
+
+  /* Bottom inner glow */
+  .smap-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 10%; right: 10%;
+    height: 40%;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    pointer-events: none;
+    filter: blur(20px);
+  }
+
+  .smap-node-amber .smap-card::before { background: rgba(251,191,36,0.06); }
+  .smap-node-green .smap-card::before { background: rgba(52,211,153,0.06); }
+  .smap-node-pink .smap-card::before { background: rgba(244,114,182,0.06); }
+  .smap-node-blue .smap-card::before { background: rgba(96,165,250,0.06); }
+  .smap-node-teal .smap-card::before { background: rgba(45,212,191,0.06); }
+  .smap-node-purple .smap-card::before { background: rgba(167,139,250,0.06); }
+
+  .smap-node:hover .smap-card {
+    border-color: var(--border-hover);
+    transform: translateY(-4px);
+    background: var(--bg-card-hover);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .smap-node:hover .smap-card::after { opacity: 1; }
+  .smap-node:hover .smap-card::before { opacity: 1; }
+
+  .smap-icon {
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .smap-count {
+    font-size: 1.9rem;
+    font-weight: 800;
+    color: var(--text-bright);
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .smap-label {
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 6px 0 10px;
+  }
+
+  .smap-items {
+    font-size: 0.64rem;
+    color: var(--text-dim);
+    line-height: 1.65;
+    text-align: left;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    padding-top: 10px;
+  }
+
+  .smap-items span {
+    display: block;
+    padding: 2px 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-radius: 4px;
+    transition: background var(--transition-base);
+  }
+
+  .smap-node:hover .smap-items span {
+    color: var(--text);
+  }
+
+  .smap-items .more {
+    opacity: 0.45;
+    font-style: italic;
+  }
+
+  .smap-node-amber .smap-label { color: var(--amber); }
+  .smap-node-amber .smap-card::after { background: linear-gradient(90deg, transparent, var(--amber), transparent); }
+  .smap-node-green .smap-label { color: var(--green); }
+  .smap-node-green .smap-card::after { background: linear-gradient(90deg, transparent, var(--green), transparent); }
+  .smap-node-pink .smap-label { color: var(--pink); }
+  .smap-node-pink .smap-card::after { background: linear-gradient(90deg, transparent, var(--pink), transparent); }
+  .smap-node-blue .smap-label { color: var(--blue); }
+  .smap-node-blue .smap-card::after { background: linear-gradient(90deg, transparent, var(--blue), transparent); }
+  .smap-node-teal .smap-label { color: var(--teal); }
+  .smap-node-teal .smap-card::after { background: linear-gradient(90deg, transparent, var(--teal), transparent); }
+  .smap-node-purple .smap-label { color: var(--purple); }
+  .smap-node-purple .smap-card::after { background: linear-gradient(90deg, transparent, var(--purple), transparent); }
+
+  /* Color-coded count numbers */
+  .smap-node-amber .smap-count { color: var(--amber); }
+  .smap-node-green .smap-count { color: var(--green); }
+  .smap-node-pink .smap-count { color: var(--pink); }
+  .smap-node-blue .smap-count { color: var(--blue); }
+  .smap-node-teal .smap-count { color: var(--teal); }
+  .smap-node-purple .smap-count { color: var(--purple); }
+
+  @media (max-width: 900px) {
+    .smap-branches { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .smap-branches::before { display: none; }
+    .smap-node::before { display: none; }
+    .smap-node { padding-top: 0; }
+    .smap { padding: 48px 0 40px; }
+  }
+
+  @media (max-width: 500px) {
+    .smap-branches { grid-template-columns: repeat(2, 1fr); }
+    .smap-trunk { display: none; }
+    .smap-root-icon { width: 60px; height: 60px; font-size: 1.2rem; border-radius: 16px; }
+  }
+
+  @media (max-width: 768px) {
+    .modal-overlay { padding: 20px 12px; }
+    .modal-header { padding: 20px 20px 16px; }
+    .modal-body { padding: 20px 20px 28px; max-height: 75vh; }
+    .modal { border-radius: var(--radius-lg); }
+  }
+
+  /* ===== GOTCHA/WARNING BOXES ===== */
+  .gotcha-grid {
+    display: grid;
+    gap: 10px;
+  }
+
+  .gotcha-box {
+    border-radius: 12px;
+    padding: 18px 22px;
+    font-size: 0.84rem;
+    color: var(--text);
+    line-height: 1.6;
+    position: relative;
+    overflow: hidden;
+    transition: transform var(--transition-base);
+  }
+
+  .gotcha-box:hover { transform: translateX(3px); }
+
+  .gotcha-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 2px;
+  }
+
+  .gotcha-red { background: var(--red-dim); border: 1px solid rgba(248,113,113,0.12); }
+  .gotcha-red::before { background: var(--red); }
+  .gotcha-red strong { color: var(--red); }
+
+  .gotcha-amber { background: var(--amber-dim); border: 1px solid rgba(251,191,36,0.12); }
+  .gotcha-amber::before { background: var(--amber); }
+  .gotcha-amber strong { color: var(--amber); }
+
+  .gotcha-blue { background: var(--blue-dim); border: 1px solid rgba(96,165,250,0.12); }
+  .gotcha-blue::before { background: var(--blue); }
+  .gotcha-blue strong { color: var(--blue); }
+
+  /* ===== ENTRANCE ANIMATIONS ===== */
+  .section, .smap {
+    animation: fadeInUp 0.5s ease both;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Stagger the system map nodes */
+  .smap-node:nth-child(1) { animation: nodeIn 0.4s 0.1s ease both; }
+  .smap-node:nth-child(2) { animation: nodeIn 0.4s 0.15s ease both; }
+  .smap-node:nth-child(3) { animation: nodeIn 0.4s 0.2s ease both; }
+  .smap-node:nth-child(4) { animation: nodeIn 0.4s 0.25s ease both; }
+  .smap-node:nth-child(5) { animation: nodeIn 0.4s 0.3s ease both; }
+  .smap-node:nth-child(6) { animation: nodeIn 0.4s 0.35s ease both; }
+
+  @keyframes nodeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes modalOut {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to { opacity: 0; transform: translateY(8px) scale(0.98); }
+  }
+
+  /* ===== INLINE CODE IN GOTCHA BOXES ===== */
+  .gotcha-box code {
+    font-size: 0.76rem;
+    font-family: 'SF Mono', Monaco, monospace;
+    background: rgba(0,0,0,0.25);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: var(--text-bright);
+  }
+
+  /* ===== ACTIVE NAV HIGHLIGHT ===== */
+  .nav-link.active {
+    color: var(--text-bright);
+    background: rgba(255,255,255,0.06);
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ===== NAVIGATION ===== -->
+<nav>
+  <div class="nav-inner">
+    <span class="nav-brand"><span class="nav-brand-dot"></span>claude.setup</span>
+    <a href="#architecture" class="nav-link">Overview</a>
+    <a href="#mcp" class="nav-link">MCP Servers</a>
+    <a href="#agents" class="nav-link">Agents</a>
+    <a href="#skills" class="nav-link">Skills</a>
+    <a href="#automation" class="nav-link">Automation</a>
+    <a href="#data" class="nav-link">Data</a>
+    <a href="#projects" class="nav-link">Projects</a>
+    <a href="#config" class="nav-link">Config</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ===== SYSTEM MAP ===== -->
+<div class="smap" id="architecture">
+  <div class="smap-root">
+    <div class="smap-root-icon">&gt;_</div>
+    <h1><span class="gradient">Claude Code</span></h1>
+    <div class="smap-root-sub">Opus 4.6 &middot; 231 sessions &middot; click any node to explore</div>
+  </div>
+  <div class="smap-trunk"></div>
+  <div class="smap-branches">
+    <a href="#mcp" class="smap-node smap-node-amber">
+      <div class="smap-card">
+        <div class="smap-icon">&#128268;</div>
+        <div class="smap-count">16</div>
+        <div class="smap-label">MCP Servers</div>
+        <div class="smap-items">
+          <span>GitHub</span>
+          <span>Notion</span>
+          <span>Firecrawl</span>
+          <span>Perplexity</span>
+          <span class="more">+12 more &darr;</span>
+        </div>
+      </div>
+    </a>
+    <a href="#agents" class="smap-node smap-node-green">
+      <div class="smap-card">
+        <div class="smap-icon">&#129302;</div>
+        <div class="smap-count">7</div>
+        <div class="smap-label">Agents</div>
+        <div class="smap-items">
+          <span>stock-analyst</span>
+          <span>crypto-analyst</span>
+          <span>copywriting</span>
+          <span class="more">+4 more &darr;</span>
+        </div>
+      </div>
+    </a>
+    <a href="#skills" class="smap-node smap-node-pink">
+      <div class="smap-card">
+        <div class="smap-icon">&#9889;</div>
+        <div class="smap-count">7</div>
+        <div class="smap-label">Commands</div>
+        <div class="smap-items">
+          <span>/prompt-writer</span>
+          <span>/pda</span>
+          <span>/notebooklm</span>
+          <span class="more">+4 more &darr;</span>
+        </div>
+      </div>
+    </a>
+    <a href="#automation" class="smap-node smap-node-blue">
+      <div class="smap-card">
+        <div class="smap-icon">&#9881;&#65039;</div>
+        <div class="smap-count">2</div>
+        <div class="smap-label">Automation</div>
+        <div class="smap-items">
+          <span>Session Hook</span>
+          <span>Status Line</span>
+        </div>
+      </div>
+    </a>
+    <a href="#data" class="smap-node smap-node-teal">
+      <div class="smap-card">
+        <div class="smap-icon">&#128218;</div>
+        <div class="smap-count">6</div>
+        <div class="smap-label">Data Sources</div>
+        <div class="smap-items">
+          <span>Swipe File</span>
+          <span>Context System</span>
+          <span>Auto Memory</span>
+          <span class="more">+3 more &darr;</span>
+        </div>
+      </div>
+    </a>
+    <a href="#config" class="smap-node smap-node-purple">
+      <div class="smap-card">
+        <div class="smap-icon">&#128196;</div>
+        <div class="smap-count">6</div>
+        <div class="smap-label">Config Files</div>
+        <div class="smap-items">
+          <span>~/.claude.json</span>
+          <span>settings.json</span>
+          <span>CLAUDE.md</span>
+          <span class="more">+3 more &darr;</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- ===== MCP SERVERS ===== -->
+<div class="section" id="mcp">
+  <div class="section-header">
+    <div class="section-tag tag-amber">Superpowers</div>
+    <h2>MCP Servers</h2>
+    <p class="section-desc">Model Context Protocol servers give Claude access to external services. Each one is a bridge between AI and a specific API. <span style="color:var(--amber);font-weight:600;">Click any card to view full configuration.</span></p>
+  </div>
+
+  <div class="sub-header">Global &mdash; available in every project (from ~/.claude.json)</div>
+  <div class="card-grid">
+    <div class="card card-amber">
+      <div class="card-icon">&#128025;</div>
+      <h3>GitHub</h3>
+      <p>Access repos, PRs, issues, code search, and release management.</p>
+      <div class="card-tags">
+        <span class="tag">HTTP</span>
+        <span class="tag">api.githubcopilot.com</span>
+        <span class="tag">Bearer token</span>
+      </div>
+    </div>
+    <div class="card card-amber">
+      <div class="card-icon">&#128211;</div>
+      <h3>Notion</h3>
+      <p>Read and write Notion pages and databases via OAuth.</p>
+      <div class="card-tags">
+        <span class="tag">HTTP</span>
+        <span class="tag">OAuth</span>
+        <span class="tag">No token needed</span>
+      </div>
+    </div>
+    <div class="card card-amber">
+      <div class="card-icon">&#128293;</div>
+      <h3>Firecrawl</h3>
+      <p>Web scraping with JavaScript rendering. Better than basic fetch.</p>
+      <div class="card-tags">
+        <span class="tag">STDIO</span>
+        <span class="tag">npx firecrawl-mcp</span>
+      </div>
+    </div>
+    <div class="card card-amber">
+      <div class="card-icon">&#128269;</div>
+      <h3>Perplexity</h3>
+      <p>AI-powered search and research with sourced answers.</p>
+      <div class="card-tags">
+        <span class="tag">STDIO</span>
+        <span class="tag">@perplexity-ai</span>
+      </div>
+    </div>
+    <div class="card card-amber">
+      <div class="card-icon">&#127968;</div>
+      <h3>Hostinger</h3>
+      <p>Manage VPS instances, domains, DNS records, and SSL certificates.</p>
+      <div class="card-tags">
+        <span class="tag">STDIO</span>
+        <span class="tag">hostinger-api-mcp</span>
+      </div>
+    </div>
+    <div class="card card-amber">
+      <div class="card-icon">&#128640;</div>
+      <h3>Dokploy</h3>
+      <p>Deploy and manage applications on your VPS via Dokploy API.</p>
+      <div class="card-tags">
+        <span class="tag">STDIO</span>
+        <span class="tag">@ahdev/dokploy-mcp</span>
+      </div>
+    </div>
+    <div class="card card-amber">
+      <div class="card-icon">&#128200;</div>
+      <h3>Yahoo Finance</h3>
+      <p>Stock prices, earnings dates, dividends, income statements, and historical data.</p>
+      <div class="card-tags">
+        <span class="tag">STDIO</span>
+        <span class="tag">uvx mcp-yahoo-finance</span>
+      </div>
+    </div>
+    <div class="card card-amber">
+      <div class="card-icon">&#129689;</div>
+      <h3>CoinMarketCap</h3>
+      <p>Crypto prices, market cap rankings, and DEX data.</p>
+      <div class="card-tags">
+        <span class="tag">STDIO</span>
+        <span class="tag">@shinzolabs/coinmarketcap-mcp</span>
+      </div>
+    </div>
+    <div class="card card-amber">
+      <div class="card-icon">&#127909;</div>
+      <h3>Transcript API</h3>
+      <p>Extract transcripts from YouTube videos and podcasts.</p>
+      <div class="card-tags">
+        <span class="tag">HTTP</span>
+        <span class="tag">transcriptapi.com</span>
+      </div>
+    </div>
+    <div class="card card-amber">
+      <div class="card-icon">&#128230;</div>
+      <h3>Docker (MCP Gateway)</h3>
+      <p>Manage containers via Docker MCP gateway.</p>
+      <div class="card-tags">
+        <span class="tag">STDIO</span>
+        <span class="tag">docker mcp gateway</span>
+      </div>
+    </div>
+    <div class="card card-amber">
+      <div class="card-icon">&#127760;</div>
+      <h3>Claude in Chrome</h3>
+      <p>Browser automation: navigate, click, fill forms, take screenshots, create GIFs.</p>
+      <div class="card-tags">
+        <span class="tag">Extension</span>
+        <span class="tag">Automation</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-header">Settings-level &mdash; also global (from ~/.claude/settings.json)</div>
+  <div class="card-grid">
+    <div class="card card-amber">
+      <div class="card-icon">&#128194;</div>
+      <h3>Swipe File</h3>
+      <p>Filesystem access to marketing swipe file. Copy frameworks, landing pages, email templates.</p>
+      <div class="card-tags">
+        <span class="tag">Filesystem</span>
+        <span class="tag">/Domain/Swipe file</span>
+      </div>
+    </div>
+    <div class="card card-amber">
+      <div class="card-icon">&#129504;</div>
+      <h3>Context</h3>
+      <p>Personal knowledge base: bio, skills, experience, preferences, projects, and learning notes.</p>
+      <div class="card-tags">
+        <span class="tag">Filesystem</span>
+        <span class="tag">/Domain/context</span>
+      </div>
+    </div>
+    <div class="card card-amber">
+      <div class="card-icon">&#128526;</div>
+      <h3>Brave Search</h3>
+      <p>Web search engine integration for quick lookups.</p>
+      <div class="card-tags">
+        <span class="tag">STDIO</span>
+        <span class="tag">@brave/brave-search-mcp-server</span>
+      </div>
+    </div>
+    <div class="card card-amber">
+      <div class="card-icon">&#9989;</div>
+      <h3>Todoist</h3>
+      <p>Task management: create, complete, and organize tasks.</p>
+      <div class="card-tags">
+        <span class="tag">STDIO</span>
+        <span class="tag">@abhiz123/todoist-mcp-server</span>
+      </div>
+    </div>
+    <div class="card card-amber">
+      <div class="card-icon">&#128218;</div>
+      <h3>OpenAI Developer Docs</h3>
+      <p>Access OpenAI's developer documentation.</p>
+      <div class="card-tags">
+        <span class="tag">HTTP</span>
+        <span class="tag">developers.openai.com</span>
+      </div>
+    </div>
+    <div class="card card-amber">
+      <div class="card-icon">&#128230;</div>
+      <h3>Docker (uvx)</h3>
+      <p>Docker management via uvx mcp-server-docker.</p>
+      <div class="card-tags">
+        <span class="tag">STDIO</span>
+        <span class="tag">uvx</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-header">Project-specific &mdash; only in certain directories</div>
+  <div class="card-grid">
+    <div class="card card-amber">
+      <div class="card-icon">&#9889;</div>
+      <h3>Supabase</h3>
+      <p>Backend database for the Fitness App project.</p>
+      <div class="card-tags">
+        <span class="tag">HTTP</span>
+        <span class="tag">Fitness App only</span>
+      </div>
+    </div>
+    <div class="card card-amber">
+      <div class="card-icon">&#127917;</div>
+      <h3>Puppeteer</h3>
+      <p>Headless browser testing and automation.</p>
+      <div class="card-tags">
+        <span class="tag">STDIO</span>
+        <span class="tag">Fitness App only</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===== CUSTOM AGENTS ===== -->
+<div class="section" id="agents">
+  <div class="section-header">
+    <div class="section-tag tag-green">Specialists</div>
+    <h2>Custom Agents</h2>
+    <p class="section-desc">Specialized AI personas with focused expertise, custom instructions, and specific tool permissions. Each runs on a designated model. <span style="color:var(--purple);font-weight:600;">Click any card to view full instructions.</span></p>
+  </div>
+
+  <div class="card-grid">
+    <!-- stock-analyst -->
+    <div class="card card-blue card-clickable" onclick="openModal('stock-analyst')" title="Click to view full instructions">
+      <div class="agent-card">
+        <div class="agent-avatar" style="background: var(--blue-dim);">&#128200;</div>
+        <div>
+          <h3>stock-analyst</h3>
+          <p>Deep equity research. 30 years experience across Goldman Sachs, Bridgewater, Renaissance Technologies. Fundamental + technical + macro analysis.</p>
+          <div class="agent-meta">
+            <span class="chip chip-model">Opus</span>
+            <span class="chip chip-tools">Read, Write, Bash, Web</span>
+          </div>
+          <div class="usage-bar-wrap">
+            <div class="usage-bar-label"><span>Knowledge base</span><span>9 files</span></div>
+            <div class="usage-bar"><div class="usage-bar-fill" style="width:90%; background: var(--blue);"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- crypto-analyst -->
+    <div class="card card-cyan card-clickable" onclick="openModal('crypto-analyst')" title="Click to view full instructions">
+      <div class="agent-card">
+        <div class="agent-avatar" style="background: var(--cyan-dim);">&#129689;</div>
+        <div>
+          <h3>crypto-analyst</h3>
+          <p>Crypto research: on-chain analytics, tokenomics, narrative awareness, macro context. 5-part institutional analysis framework.</p>
+          <div class="agent-meta">
+            <span class="chip chip-model">Opus</span>
+            <span class="chip chip-tools">Read, Write, Bash, Web</span>
+          </div>
+          <div class="usage-bar-wrap">
+            <div class="usage-bar-label"><span>Knowledge base</span><span>8 files</span></div>
+            <div class="usage-bar"><div class="usage-bar-fill" style="width:80%; background: var(--cyan);"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- email-marketing-strategist -->
+    <div class="card card-blue card-clickable" onclick="openModal('email-marketing-strategist')" title="Click to view full instructions">
+      <div class="agent-card">
+        <div class="agent-avatar" style="background: var(--blue-dim);">&#128232;</div>
+        <div>
+          <h3>email-marketing-strategist</h3>
+          <p>B2B SaaS + hospitality email campaigns. PASTOR, PAS, AIDA frameworks. Sequences, cold outreach, nurture flows.</p>
+          <div class="agent-meta">
+            <span class="chip chip-model">Opus</span>
+            <span class="chip" style="background:var(--amber-dim);color:var(--amber);">Marketing</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- copywriting-storytelling -->
+    <div class="card card-pink card-clickable" onclick="openModal('copywriting-storytelling')" title="Click to view full instructions">
+      <div class="agent-card">
+        <div class="agent-avatar" style="background: var(--pink-dim);">&#9997;&#65039;</div>
+        <div>
+          <h3>copywriting-storytelling</h3>
+          <p>Direct response copywriting. Hormozi, Ogilvy, Halbert, Schwartz, Cialdini + modern creators. Social, scripts, ads, landing pages.</p>
+          <div class="agent-meta">
+            <span class="chip chip-model">Opus</span>
+            <span class="chip" style="background:var(--pink-dim);color:var(--pink);">Copy</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- design-visionary -->
+    <div class="card card-cyan card-clickable" onclick="openModal('design-visionary')" title="Click to view full instructions">
+      <div class="agent-card">
+        <div class="agent-avatar" style="background: var(--cyan-dim);">&#127912;</div>
+        <div>
+          <h3>design-visionary</h3>
+          <p>UI/UX design with Web3 aesthetics. Color psychology, responsive design, micro-interactions. Steve Jobs philosophy meets neuroscience.</p>
+          <div class="agent-meta">
+            <span class="chip chip-model">Opus</span>
+            <span class="chip" style="background:var(--cyan-dim);color:var(--cyan);">Design</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- senior-architect -->
+    <div class="card card-cyan card-clickable" onclick="openModal('senior-architect')" title="Click to view full instructions">
+      <div class="agent-card">
+        <div class="agent-avatar" style="background: var(--cyan-dim);">&#127959;&#65039;</div>
+        <div>
+          <h3>senior-architect</h3>
+          <p>Elite software architecture. Ultra-Think Protocol: deep comprehension, strategic planning, surgical implementation, zero-defect quality.</p>
+          <div class="agent-meta">
+            <span class="chip chip-model">Opus</span>
+            <span class="chip chip-tools">Full access</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- claude-code-advisor -->
+    <div class="card card-green card-clickable" onclick="openModal('claude-code-advisor')" title="Click to view full instructions">
+      <div class="agent-card">
+        <div class="agent-avatar" style="background: var(--green-dim);">&#128161;</div>
+        <div>
+          <h3>claude-code-advisor</h3>
+          <p>Proactive workflow optimizer. Suggests CLAUDE.md improvements, hooks, skills, MCP opportunities. Knowledge base with 10 curated sources.</p>
+          <div class="agent-meta">
+            <span class="chip chip-model">Opus</span>
+            <span class="chip chip-tools">Read, Write, Bash, Web</span>
+            <span class="chip" style="background:var(--green-dim);color:var(--green);">Proactive</span>
+          </div>
+          <div class="usage-bar-wrap">
+            <div class="usage-bar-label"><span>Knowledge base</span><span>10 sources</span></div>
+            <div class="usage-bar"><div class="usage-bar-fill" style="width:100%; background: var(--green);"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workflow examples -->
+  <div class="flows">
+    <h3>Example Workflows</h3>
+    <p class="flows-desc">How slash commands, agents, and MCPs chain together behind the scenes.</p>
+
+    <div class="flow">
+      <div class="flow-node fn-trigger">/analyze-stock AAPL</div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node fn-agent">stock-analyst</div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node fn-mcp">Yahoo Finance</div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node fn-output">Me/finances/AAPL.md</div>
+    </div>
+
+    <div class="flow">
+      <div class="flow-node fn-trigger">/analyze-crypto SOL</div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node fn-agent">crypto-analyst</div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node fn-mcp">CoinMarketCap + Web</div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node fn-output">Me/finances/crypto/SOL.md</div>
+    </div>
+
+    <div class="flow">
+      <div class="flow-node fn-trigger">Polish this LinkedIn post</div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node fn-agent">copywriting-storytelling</div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node fn-mcp">Swipe File MCP</div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node fn-output">Framework-based copy</div>
+    </div>
+
+    <div class="flow">
+      <div class="flow-node fn-trigger">Scrape this website</div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node fn-mcp">Firecrawl</div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node fn-output">Clean markdown</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===== SKILLS ===== -->
+<div class="section" id="skills">
+  <div class="section-header">
+    <div class="section-tag tag-pink">Commands</div>
+    <h2>Skills &amp; Slash Commands</h2>
+    <p class="section-desc">Quick shortcuts that trigger specific workflows. Custom skills live in <code style="color:var(--pink);font-size:0.85rem;">~/.claude/skills/</code>, each in its own subfolder with a SKILL.md. <span style="color:var(--pink);font-weight:600;">Click any card to view full details.</span></p>
+  </div>
+
+  <div class="card-grid">
+    <div class="card card-pink">
+      <div class="card-icon">&#128221;</div>
+      <h3>/prompt-writer</h3>
+      <p>Transform rough ideas into world-class AI prompts. Calibrates depth based on stakes (1-4 levels). Full assessment protocol.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Custom Skill</span>
+        <span class="tag">1 use</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#128204;</div>
+      <h3>/pda</h3>
+      <p>Project Decomposition Assistant. Breaks any project into phases, tasks (30-120 min), and MVAs (1-15 min). Applies Pareto 80/20 prioritization.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Custom Skill</span>
+        <span class="tag">Planning</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#127897;</div>
+      <h3>/notebooklm</h3>
+      <p>Full Google NotebookLM API. Create notebooks, add sources (URLs, YouTube, PDFs), generate podcasts, download artifacts.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Custom Skill</span>
+        <span class="tag">1 use</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#128196;</div>
+      <h3>/prd</h3>
+      <p>Generate Machine-Optimized PRD for AI coding agents. Most-used skill.</p>
+      <div class="card-tags">
+        <span class="tag">Built-in</span>
+        <span class="tag">23 uses</span>
+      </div>
+      <div class="usage-bar-wrap">
+        <div class="usage-bar"><div class="usage-bar-fill" style="width:100%; background: var(--pink);"></div></div>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#128200;</div>
+      <h3>/analyze-stock</h3>
+      <p>Triggers stock-analyst agent for deep equity research. Reads knowledge base, fetches live data, writes analysis file.</p>
+      <div class="card-tags">
+        <span class="tag">Agent trigger</span>
+        <span class="tag">1 use</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#129689;</div>
+      <h3>/analyze-crypto</h3>
+      <p>Triggers crypto-analyst agent for token/protocol research. On-chain + tokenomics + macro framework.</p>
+      <div class="card-tags">
+        <span class="tag">Agent trigger</span>
+        <span class="tag">2 uses</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#9728;&#65039;</div>
+      <h3>/market-brief</h3>
+      <p>Generate a concise morning market brief using Perplexity and web search.</p>
+      <div class="card-tags">
+        <span class="tag">Finance</span>
+        <span class="tag">Research</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===== AUTOMATION ===== -->
+<div class="section" id="automation">
+  <div class="section-header">
+    <div class="section-tag tag-blue">Automation</div>
+    <h2>Hooks &amp; Status Line</h2>
+    <p class="section-desc">Scripts that run automatically at specific lifecycle events, plus a custom terminal status bar.</p>
+  </div>
+
+  <div class="auto-card">
+    <h4>SessionStart Hook: Second Brain Maintenance</h4>
+    <p>Runs <code>~/.claude/hooks/maintenance-check.sh</code> every time Claude Code starts.</p>
+    <div class="auto-detail">
+      <strong>What it does:</strong> Checks if 7+ days have passed since last maintenance run. If so, launches a background Sonnet session that runs a maintenance prompt against the knowledge base.<br><br>
+      <strong>Safeguards:</strong> Environment variable prevents infinite loops. Lockfile prevents race conditions from multiple simultaneous sessions. 30-minute timeout kills stale processes. Log rotation keeps the last 5 runs.<br><br>
+      <strong>State file:</strong> <code>~/.claude/maintenance-state.json</code><br>
+      <strong>Prompt:</strong> <code>~/.claude/prompts/second-brain-maintenance.md</code><br>
+      <strong>Logs:</strong> <code>~/.claude/maintenance-output.log</code>
+    </div>
+  </div>
+
+  <div class="auto-card">
+    <h4>Custom Status Line</h4>
+    <p>Runs <code>~/.claude/statusline-command.sh</code> to display contextual info in the terminal footer.</p>
+    <div class="auto-detail">
+      <strong>Displays:</strong> Model name (e.g. Opus 4.6) + current directory + git branch (if in repo) + context window remaining %.<br><br>
+      <strong>Color coding:</strong> Context remaining &gt;50% = <span style="color:var(--green)">green</span>, 20-50% = <span style="color:var(--amber)">yellow</span>, &lt;20% = <span style="color:var(--red)">red</span>.<br><br>
+      <strong>Example output:</strong> <code style="color:var(--cyan);">Opus 4.6</code> in <code style="color:var(--blue);">Context</code> on <code style="color:#c084fc;">main</code> | <code style="color:var(--green);">73%</code>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===== DATA SOURCES ===== -->
+<div class="section" id="data">
+  <div class="section-header">
+    <div class="section-tag tag-teal">Knowledge</div>
+    <h2>Data Sources</h2>
+    <p class="section-desc">Persistent data that Claude can read and write across sessions. Three main systems: Swipe File, Context, and Auto Memory.</p>
+  </div>
+
+  <div class="data-grid">
+    <div class="data-card">
+      <h4>Swipe File</h4>
+      <div class="path">/Domain/Swipe file/</div>
+      <ul>
+        <li>Company landing pages (Linear, HeyReach, ...)</li>
+        <li>Copy frameworks &amp; formulas</li>
+        <li>Design patterns &amp; UI examples</li>
+        <li>Email sequences &amp; templates</li>
+        <li>Pricing strategies</li>
+        <li>Index tracks all entries by category</li>
+      </ul>
+    </div>
+
+    <div class="data-card">
+      <h4>Context System</h4>
+      <div class="path">/Domain/context/</div>
+      <ul>
+        <li><strong>about.md</strong> &mdash; Bio, current focus, contact</li>
+        <li><strong>skills.md</strong> &mdash; Technical &amp; non-technical</li>
+        <li><strong>experience.md</strong> &mdash; Work history, achievements</li>
+        <li><strong>preferences.md</strong> &mdash; Coding style prefs</li>
+        <li><strong>projects/</strong> &mdash; Detailed project breakdowns</li>
+        <li><strong>knowledge/</strong> &mdash; Notes by topic</li>
+      </ul>
+    </div>
+
+    <div class="data-card">
+      <h4>Auto Memory</h4>
+      <div class="path">~/.claude/projects/.../memory/</div>
+      <ul>
+        <li>MEMORY.md loaded into every system prompt</li>
+        <li>Knowledge system structure facts</li>
+        <li>MCP server gotchas &amp; debugging notes</li>
+        <li>Financial agents configuration</li>
+        <li>Migration status (Notion &rarr; Context)</li>
+      </ul>
+    </div>
+
+    <div class="data-card">
+      <h4>Finance Knowledge Base</h4>
+      <div class="path">/Context/knowledge/topics/finance/</div>
+      <ul>
+        <li>fundamentals.md &mdash; Valuation frameworks</li>
+        <li>technicals.md &mdash; Chart analysis</li>
+        <li>macro.md &mdash; Economic indicators</li>
+        <li>geopolitics.md &mdash; Global risk factors</li>
+        <li>psychology.md &mdash; Behavioral finance</li>
+        <li>risk-management.md &mdash; Position sizing</li>
+        <li>crypto-frameworks.md &mdash; On-chain metrics</li>
+        <li>scenario-analysis.md &mdash; Bull/bear cases</li>
+        <li>news-interpretation.md &mdash; Signal vs noise</li>
+      </ul>
+    </div>
+
+    <div class="data-card">
+      <h4>Claude Code Knowledge Base</h4>
+      <div class="path">/Context/claude-code-knowledge/sources/</div>
+      <ul>
+        <li>10 curated tutorial &amp; best practice files</li>
+        <li>Git-synced to GitHub for versioning</li>
+        <li>Auto-pulled before advisor reads it</li>
+        <li>SOURCES.md tracks all entries</li>
+      </ul>
+    </div>
+
+    <div class="data-card">
+      <h4>Investment Analyses</h4>
+      <div class="path">/Context/Me/finances/crypto/</div>
+      <ul>
+        <li>19 individual asset analyses</li>
+        <li>BTC, ETH, SOL, TIA, INJ, LINK, RNDR...</li>
+        <li>Each scored &amp; tiered by conviction</li>
+        <li>Index with portfolio methodology</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub-header">Knowledge Base File Tree</div>
+  <div class="kb-tree">
+    <span class="dir">Context/</span><br>
+    &nbsp;&nbsp;<span class="dir">Knowledge/</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">books/</span> <span class="comment">&mdash; 11 folders, PDFs + notes.md</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">topics/</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">ai/</span> <span class="file">agentic-ai.md</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">marketing/</span> <span class="file">copywriting-crash-course.md</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">productivity/</span> <span class="file">deep-work-guide.md</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">crypto/</span> <span class="comment">&mdash; links to Me/finances/crypto/</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">philosophy/</span> <span class="file">life-philosophy.md</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">finance/</span> <span class="comment">&mdash; 9 research framework files</span><br>
+    &nbsp;&nbsp;<span class="dir">Me/</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">finances/</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">crypto/</span> <span class="comment">&mdash; 19 investment analysis files + index</span><br>
+    &nbsp;&nbsp;<span class="dir">Plans/</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">reviews/</span> <span class="file">templates.md</span> <span class="comment">&mdash; weekly (8Q) + monthly (10Q)</span><br>
+    &nbsp;&nbsp;<span class="dir">Projects/</span><br>
+    &nbsp;&nbsp;<span class="dir">claude-code-knowledge/</span> <span class="comment">&mdash; Git repo, 10 source files</span><br>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===== PROJECTS ===== -->
+<div class="section" id="projects">
+  <div class="section-header">
+    <div class="section-tag tag-purple">Workspace</div>
+    <h2>Active Projects</h2>
+    <p class="section-desc">Projects tracked in <code style="color:var(--purple);font-size:0.85rem;">~/.claude.json</code> with usage stats and project-specific MCP configurations.</p>
+  </div>
+
+  <div class="project-list">
+    <div class="project-row">
+      <div class="project-name">Context <span style="font-size:0.72rem;color:var(--text-dim);font-weight:400;margin-left:8px;">current workspace</span></div>
+      <div class="project-cost">$92.66</div>
+      <div class="project-model">Opus 4.6</div>
+      <div class="project-mcps">
+        <div class="has-tip">
+          <div class="project-mcp-dot" style="background:var(--green);"></div>
+          <span class="tip">No project-specific MCPs</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-row">
+      <div class="project-name">Swipe File</div>
+      <div class="project-cost">$35.90</div>
+      <div class="project-model">Opus 4.5</div>
+      <div class="project-mcps">
+        <div class="project-mcp-dot"></div>
+        <div class="project-mcp-dot"></div>
+        <div class="project-mcp-dot"></div>
+      </div>
+    </div>
+
+    <div class="project-row">
+      <div class="project-name">Fitness App</div>
+      <div class="project-cost">$1.28</div>
+      <div class="project-model">Opus 4.6</div>
+      <div class="project-mcps">
+        <div class="has-tip">
+          <div class="project-mcp-dot" style="background:var(--amber);"></div>
+          <span class="tip">Supabase MCP</span>
+        </div>
+        <div class="has-tip">
+          <div class="project-mcp-dot" style="background:var(--amber);"></div>
+          <span class="tip">Puppeteer MCP</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-row">
+      <div class="project-name">Nevron Scrape</div>
+      <div class="project-cost">$3.97</div>
+      <div class="project-model">Opus 4.5</div>
+      <div class="project-mcps"></div>
+    </div>
+
+    <div class="project-row">
+      <div class="project-name">Physiotherapy Learning Platform</div>
+      <div class="project-cost">&mdash;</div>
+      <div class="project-model">&mdash;</div>
+      <div class="project-mcps"></div>
+    </div>
+
+    <div class="project-row">
+      <div class="project-name">TEST CLAUDE CODE</div>
+      <div class="project-cost">$2.35</div>
+      <div class="project-model">Opus 4.5</div>
+      <div class="project-mcps"></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===== CONFIGURATION ===== -->
+<div class="section" id="config">
+  <div class="section-header">
+    <div class="section-tag tag-blue">Reference</div>
+    <h2>Configuration Files</h2>
+    <p class="section-desc">Where everything lives on disk. Getting the right file is critical &mdash; MCPs silently fail if added to the wrong config.</p>
+  </div>
+
+  <div class="config-grid">
+    <div class="config-card">
+      <div class="config-num">1</div>
+      <h4>Main Config</h4>
+      <div class="config-path">~/.claude.json</div>
+      <p>Global MCP servers (GitHub, Notion, Firecrawl, Perplexity, Hostinger, Dokploy, Yahoo Finance, CoinMarketCap, Transcript API, Docker, Chrome). Also stores per-project MCPs under <code style="font-size:0.75rem;">projects.&lt;path&gt;.mcpServers</code>.</p>
+    </div>
+
+    <div class="config-card">
+      <div class="config-num">2</div>
+      <h4>Settings</h4>
+      <div class="config-path">~/.claude/settings.json</div>
+      <p>SessionStart hook (maintenance-check.sh), custom status line, plus MCPs: Swipe File, Context, Firecrawl, Brave Search, Todoist, OpenAI Docs, Docker (uvx).</p>
+    </div>
+
+    <div class="config-card">
+      <div class="config-num">3</div>
+      <h4>Global Instructions</h4>
+      <div class="config-path">~/.claude/CLAUDE.md</div>
+      <p>186 lines of rules: Swipe File workflow, Context system usage, web research priority (Perplexity > Firecrawl > WebFetch), MCP gotchas, agent creation format, proactive advisor trigger rules.</p>
+    </div>
+
+    <div class="config-card">
+      <div class="config-num">4</div>
+      <h4>Agents Directory</h4>
+      <div class="config-path">~/.claude/agents/</div>
+      <p>7 agent files (.md). Each has YAML frontmatter (name, description, model, color, tools) followed by system prompt. Frontmatter must start on line 1.</p>
+    </div>
+
+    <div class="config-card">
+      <div class="config-num">5</div>
+      <h4>Skills Directory</h4>
+      <div class="config-path">~/.claude/skills/</div>
+      <p>3 custom skills: prompt-writer, pda, notebooklm. Each in its own subfolder with a SKILL.md file inside.</p>
+    </div>
+
+    <div class="config-card">
+      <div class="config-num">6</div>
+      <h4>Hooks &amp; Scripts</h4>
+      <div class="config-path">~/.claude/hooks/ &amp; scripts</div>
+      <p>maintenance-check.sh (144 lines, 5 safeguards), statusline-command.sh (37 lines), prompts/second-brain-maintenance.md.</p>
+    </div>
+  </div>
+
+  <div class="sub-header" style="margin-top: 40px;">Gotchas &amp; Warnings</div>
+  <div class="gotcha-grid">
+    <div class="gotcha-box gotcha-red">
+      <strong>Never commit API keys.</strong> Both <code>~/.claude.json</code> and <code>~/.claude/settings.json</code> contain plaintext tokens.
+    </div>
+    <div class="gotcha-box gotcha-amber">
+      <strong>Agent frontmatter must start on line 1.</strong> A blank line before the opening <code>---</code> causes silent failure.
+    </div>
+    <div class="gotcha-box gotcha-blue">
+      <strong>MCP changes require restart.</strong> After editing config files, restart Claude Code for changes to take effect.
+    </div>
+    <div class="gotcha-box gotcha-amber">
+      <strong>GitHub MCP URL is NOT api.github.com.</strong> The correct URL is <code>https://api.githubcopilot.com/mcp</code> with a Bearer token header.
+    </div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<!-- ===== AGENT MODAL ===== -->
+<div id="agent-modal" class="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+    <div class="modal-header">
+      <div class="modal-icon" id="modal-icon"></div>
+      <div>
+        <h3 id="modal-title"></h3>
+        <div class="modal-meta" id="modal-meta"></div>
+      </div>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  <p>This is your Claude Code ecosystem. Every piece works together to make development faster, smarter, and more automated.</p>
+  <p class="date">Last updated: February 12, 2026 &middot; First session: November 12, 2025 &middot; 231 startups &middot; Powered by Opus 4.6</p>
+</div>
+
+</div><!-- /page -->
+
+<script>
+const agents = {
+  'stock-analyst': {
+    icon: '&#128200;',
+    iconBg: 'var(--blue-dim)',
+    name: 'stock-analyst',
+    model: 'Opus',
+    tools: 'Read, Grep, Glob, Write, Edit, Bash, WebSearch, WebFetch',
+    color: 'blue',
+    content: `
+      <div class="persona-quote">You are a senior equity research analyst with 30 years of experience across Goldman Sachs, Bridgewater, and Renaissance Technologies. You combine deep fundamental analysis with technical timing, macro awareness, and geopolitical context. You think like a contrarian but act like an institutionalist. You never give vague "it depends" answers &mdash; you take a data-backed stance.</div>
+
+      <h2>Knowledge Base</h2>
+      <p>Before starting any analysis, reads 9 knowledge base files:</p>
+      <ul>
+        <li>fundamentals.md &mdash; Valuation frameworks</li>
+        <li>technicals.md &mdash; Chart patterns &amp; indicators</li>
+        <li>macro.md &mdash; Economic indicators</li>
+        <li>geopolitics.md &mdash; Global risk factors</li>
+        <li>psychology.md &mdash; Behavioral finance</li>
+        <li>risk-management.md &mdash; Position sizing</li>
+        <li>stock-valuation.md &mdash; DCF, relative, historical</li>
+        <li>news-interpretation.md &mdash; Signal vs noise</li>
+        <li>scenario-analysis.md &mdash; Bull/bear/base cases</li>
+      </ul>
+      <p>Also checks existing analyses at <code>Me/finances/</code></p>
+
+      <h2>8-Step Analysis Framework</h2>
+
+      <h3>Step 1: Data Gathering</h3>
+      <ul>
+        <li>Yahoo Finance MCP: current price, market cap, P/E, EV/EBITDA, 52-week range</li>
+        <li>Financial statements: income, balance sheet, cash flow (3-5 years)</li>
+        <li>Perplexity: recent news, earnings recaps, analyst opinions, insider transactions</li>
+        <li>Firecrawl: investor relations pages, SEC filings if needed</li>
+      </ul>
+
+      <h3>Step 2: Fundamental Deep Dive</h3>
+      <ul>
+        <li><strong>Revenue quality:</strong> growth rates (QoQ, YoY, 3yr CAGR), recurring vs one-time, concentration risks</li>
+        <li><strong>Margin analysis:</strong> gross, operating, net trends and drivers</li>
+        <li><strong>Balance sheet:</strong> liquidity, leverage, asset quality</li>
+        <li><strong>Cash flow:</strong> FCF yield, FCF margin, capital allocation quality</li>
+        <li><strong>Competitive moat:</strong> type, width, durability</li>
+        <li><strong>Management:</strong> track record, insider ownership, capital allocation history</li>
+      </ul>
+
+      <h3>Step 3: Valuation</h3>
+      <ul>
+        <li>Relative valuation: compare to peers on relevant multiples</li>
+        <li>Historical valuation: compare current multiples to own 5yr range</li>
+        <li>DCF (if applicable): 3-scenario model with explicit assumptions</li>
+        <li>Identify what the market is pricing in and whether that's reasonable</li>
+      </ul>
+
+      <h3>Step 4: Technical Picture</h3>
+      <ul>
+        <li>Current trend (weekly + daily timeframe)</li>
+        <li>Key support/resistance levels</li>
+        <li>Momentum indicators (RSI, MACD)</li>
+        <li>Volume analysis &amp; chart patterns</li>
+      </ul>
+
+      <h3>Step 5: Macro &amp; Geopolitical Context</h3>
+      <ul>
+        <li>How current macro environment affects the company</li>
+        <li>Interest rate sensitivity &amp; regulatory risks/tailwinds</li>
+        <li>Supply chain / geopolitical exposure</li>
+        <li>Sector cycle positioning</li>
+      </ul>
+
+      <h3>Step 6: Sentiment &amp; Psychology Check</h3>
+      <ul>
+        <li>Crowd positioning (contrarian signal)</li>
+        <li>Analyst consensus direction</li>
+        <li>Insider buying/selling patterns</li>
+        <li>Short interest level and trend</li>
+      </ul>
+
+      <h3>Step 7: Scenario Analysis</h3>
+      <table>
+        <tr><th>Scenario</th><th>Probability</th><th>Description</th></tr>
+        <tr><td><strong>Bear</strong></td><td>20-30%</td><td>What breaks the thesis? Price target + timeline</td></tr>
+        <tr><td><strong>Base</strong></td><td>50-60%</td><td>Most likely path. Assumptions &amp; milestones</td></tr>
+        <tr><td><strong>Bull</strong></td><td>20-30%</td><td>What catalysts drive outperformance?</td></tr>
+      </table>
+      <p>Includes sentiment analysis checklist and sentiment-to-probability calibration.</p>
+
+      <h3>Step 8: Final Verdict</h3>
+      <ul>
+        <li><strong>Investment Score:</strong> 1-10 (10 = strongest conviction buy)</li>
+        <li><strong>Action:</strong> Strong Buy / Buy / Hold / Sell / Strong Sell</li>
+        <li><strong>Time horizon:</strong> Short-term / Medium-term / Long-term</li>
+        <li><strong>Risk level:</strong> Low / Medium / High</li>
+        <li><strong>Key indicators to monitor:</strong> Top 3 things that would change the thesis</li>
+      </ul>
+
+      <hr>
+
+      <h2>Output</h2>
+      <p>YAML frontmatter with ticker, name, type, score, market_cap, own status, source, and tags. Full structured analysis following Steps 2-8. Saved to <code>Me/finances/[ticker].md</code></p>
+
+      <h2>Rules</h2>
+      <ul>
+        <li>NEVER give vague "it depends" answers. Take a data-backed stance.</li>
+        <li>ALWAYS quantify. Not "revenue is growing" &mdash; "revenue grew 23% YoY to $12.4B"</li>
+        <li>ALWAYS compare to relevant benchmarks (sector median, historical average, peers)</li>
+        <li>Flag when data is stale or missing. Don't make up numbers.</li>
+        <li>Be intellectually honest about uncertainty. State confidence level.</li>
+        <li>Check news from the last 30 days before forming opinions.</li>
+      </ul>
+    `
+  },
+
+  'crypto-analyst': {
+    icon: '&#129689;',
+    iconBg: 'var(--cyan-dim)',
+    name: 'crypto-analyst',
+    model: 'Opus',
+    tools: 'Read, Grep, Glob, Write, Edit, Bash, WebSearch, WebFetch',
+    color: 'cyan',
+    content: `
+      <div class="persona-quote">You are a senior crypto analyst and former hedge fund portfolio manager with 10 years in crypto (since 2014) and 20 years in traditional finance. You survived the 2017 crash, the 2020 DeFi summer, the 2022 bear market, and multiple altcoin wipeouts. You're not a moonboy &mdash; you're a risk-adjusted return optimizer who understands that 90% of crypto projects go to zero.</div>
+
+      <h2>Knowledge Base</h2>
+      <p>Reads 8 knowledge base files before analysis, plus checks existing analyses in <code>Me/finances/crypto/</code></p>
+
+      <h2>5-Part Institutional Analysis Framework</h2>
+
+      <h3>Part 1: Executive Summary &amp; Investment Thesis</h3>
+      <ul>
+        <li>Investment score (1-10)</li>
+        <li>Core thesis in 2-3 sentences</li>
+        <li>Risk/reward profile (asymmetric upside? capped downside?)</li>
+        <li>Current price context (cycle position, distance from ATH/ATL)</li>
+      </ul>
+
+      <h3>Part 2: Fundamental Deep Dive</h3>
+      <ul>
+        <li><strong>Problem &amp; Solution:</strong> Is the problem real? Is the solution better than alternatives?</li>
+        <li><strong>Technology:</strong> L1/L2/DeFi/Infrastructure? Technical differentiation?</li>
+        <li><strong>Tokenomics:</strong> Supply schedule, inflation rate, vesting cliffs, utility score (0-15), "could it work without a token?" test</li>
+        <li><strong>Team &amp; Backers:</strong> Background, VC tier, insider ownership &amp; lock-ups</li>
+        <li><strong>Ecosystem &amp; Adoption:</strong> Active addresses, TVL, developer activity, real vs farmed metrics</li>
+      </ul>
+
+      <h3>Part 3: Market &amp; Competitive Landscape</h3>
+      <ul>
+        <li>Narrative positioning &amp; lifecycle stage</li>
+        <li>Realistic TAM assessment</li>
+        <li>Competition table: 3-5 closest competitors on key metrics</li>
+        <li>Moat assessment: network effects, switching costs, ecosystem lock-in</li>
+      </ul>
+
+      <h3>Part 4: Scenario Analysis &amp; Price Catalysts</h3>
+      <table>
+        <tr><th>Scenario</th><th>Probability</th><th>Description</th></tr>
+        <tr><td><strong>Bear</strong></td><td>25-30%</td><td>What kills this? Market cap &amp; price targets + timeline</td></tr>
+        <tr><td><strong>Base</strong></td><td>45-50%</td><td>Moderate adoption, thesis plays out slowly</td></tr>
+        <tr><td><strong>Bull</strong></td><td>20-25%</td><td>Catalysts fire, narrative catches, adoption accelerates</td></tr>
+      </table>
+      <p>ALWAYS thinks in market cap terms, not just price. Compares bull case to established competitors for sanity check.</p>
+
+      <h3>Part 5: Final Verdict</h3>
+      <ul>
+        <li>Investment Score (1-10) + Conviction level</li>
+        <li>Time horizon &amp; risk level</li>
+        <li>Suggested allocation (% of crypto portfolio)</li>
+        <li>Entry strategy: DCA or lump sum? Suggested price zones</li>
+        <li>Top 3 indicators to monitor</li>
+      </ul>
+
+      <h3>Macro &amp; Cycle Context</h3>
+      <ul>
+        <li>BTC halving cycle position</li>
+        <li>BTC dominance trend &amp; implications for alts</li>
+        <li>Liquidity environment (Fed policy, stablecoin flows)</li>
+        <li>Regulatory landscape for specific token</li>
+        <li>Sentiment indicators (Fear &amp; Greed, funding rates)</li>
+      </ul>
+
+      <hr>
+
+      <h2>Rules</h2>
+      <ul>
+        <li>NEVER shill. Every positive must come with its risk.</li>
+        <li>ALWAYS think in market cap terms, not just price.</li>
+        <li>Flag token unlock dates and vesting cliffs explicitly.</li>
+        <li>Distinguish between REAL usage and incentivized/farmed usage.</li>
+        <li>Apply the "could this protocol work without its own token?" test honestly.</li>
+        <li>If something looks like a scam or has major red flags, say so directly.</li>
+      </ul>
+    `
+  },
+
+  'email-marketing-strategist': {
+    icon: '&#128232;',
+    iconBg: 'var(--blue-dim)',
+    name: 'email-marketing-strategist',
+    model: 'Opus',
+    tools: 'All tools',
+    color: 'blue',
+    content: `
+      <div class="persona-quote">You are an elite email marketing strategist with 15+ years of experience specializing in B2B SaaS and the hospitality industry. You've built and optimized email programs that have generated millions in revenue.</div>
+
+      <h2>Email Types Mastered</h2>
+      <ul>
+        <li>Nurture sequences (lead warming, relationship building)</li>
+        <li>Launch campaigns (product releases, feature announcements)</li>
+        <li>Re-engagement campaigns (win-back, dormant activation)</li>
+        <li>Onboarding sequences (user activation, product adoption)</li>
+        <li>Event promotion (webinars, conferences, demos)</li>
+        <li>Sales outreach (cold emails, follow-ups, proposals)</li>
+        <li>Newsletters, transactional, upsell/cross-sell, renewal &amp; retention</li>
+      </ul>
+
+      <h2>Copywriting Frameworks</h2>
+
+      <h3>PASTOR Framework</h3>
+      <p><strong>P</strong>roblem &rarr; <strong>A</strong>mplify &rarr; <strong>S</strong>tory &rarr; <strong>T</strong>estimony &rarr; <strong>O</strong>ffer &rarr; <strong>R</strong>esponse</p>
+      <p>Use for persuasive emails that drive action.</p>
+
+      <h3>The 4 U's (Subject Lines)</h3>
+      <p><strong>U</strong>seful &middot; <strong>U</strong>rgent &middot; <strong>U</strong>ltra-specific &middot; <strong>U</strong>nique</p>
+
+      <h3>BAB Framework</h3>
+      <p><strong>B</strong>efore (paint pain) &rarr; <strong>A</strong>fter (describe outcome) &rarr; <strong>B</strong>ridge (your solution)</p>
+
+      <h3>Soap Opera Sequence</h3>
+      <ol>
+        <li>Set the Stage: compelling hook</li>
+        <li>High Drama: tension &amp; problem</li>
+        <li>Epiphany: the breakthrough</li>
+        <li>Hidden Benefits: unexpected value</li>
+        <li>Urgency/CTA: drive to action</li>
+      </ol>
+
+      <h2>Email Structure Rules</h2>
+      <table>
+        <tr><th>Email Type</th><th>Word Count</th><th>Notes</th></tr>
+        <tr><td>Cold outreach</td><td>50-125</td><td>Brutally concise</td></tr>
+        <tr><td>Nurture</td><td>150-300</td><td>Value-dense</td></tr>
+        <tr><td>Launch</td><td>200-400</td><td>Build excitement</td></tr>
+        <tr><td>Newsletter</td><td>300-500</td><td>Scannable sections</td></tr>
+        <tr><td>Onboarding</td><td>100-200</td><td>Task-focused</td></tr>
+        <tr><td>Re-engagement</td><td>75-150</td><td>Low friction</td></tr>
+      </table>
+
+      <h2>B2B Hospitality Knowledge</h2>
+      <h3>Decision Maker Profiles</h3>
+      <ul>
+        <li><strong>General Manager:</strong> RevPAR, GOP, guest satisfaction. Executive summary style, bottom-line focus.</li>
+        <li><strong>Revenue Manager:</strong> ADR, occupancy, comp set. Data-driven, ROI calculations.</li>
+        <li><strong>Marketing Director:</strong> CAC, direct booking %. Results-focused, case studies.</li>
+      </ul>
+
+      <h3>Effective Messaging Angles</h3>
+      <ul>
+        <li>ROI/Cost Savings: "Save X hours per week"</li>
+        <li>Competitive Edge: "What your comp set is already using"</li>
+        <li>Peer Validation: "How [Similar Hotel] achieved [Result]"</li>
+        <li>Simplification: "One dashboard instead of six tabs"</li>
+      </ul>
+
+      <hr>
+
+      <h2>Quality Checklist</h2>
+      <p>Before delivering any email: clear single goal, subject under 50 chars, no spam triggers, 4 U's score 3+, strong hook, paragraphs &le; 3 lines, one clear CTA, "you" focused, active voice, specific &gt; vague, benefits not features.</p>
+    `
+  },
+
+  'copywriting-storytelling': {
+    icon: '&#9997;&#65039;',
+    iconBg: 'var(--pink-dim)',
+    name: 'copywriting-storytelling',
+    model: 'Opus',
+    tools: 'All tools',
+    color: 'pink',
+    content: `
+      <div class="persona-quote">You are a world-class direct response copywriter with 20+ years in the trenches. You combine the precision of Ogilvy, the street-smart urgency of Halbert, the awareness sophistication of Schwartz, the persuasion science of Cialdini, and the modern offer engineering of Hormozi and Brunson. You don't write "copy." You engineer decisions.</div>
+
+      <h2>Understanding People</h2>
+      <h3>Core Human Drives</h3>
+      <ol>
+        <li><strong>Desire for gain</strong> &mdash; Dream outcome</li>
+        <li><strong>Fear of loss</strong> &mdash; 2x stronger than gain</li>
+        <li><strong>Avoidance of pain</strong> &mdash; What suffering will end?</li>
+        <li><strong>Social positioning</strong> &mdash; How will others see me?</li>
+      </ol>
+
+      <h3>Awareness Levels (Schwartz)</h3>
+      <table>
+        <tr><th>Level</th><th>They Know</th><th>Lead With</th></tr>
+        <tr><td>Unaware</td><td>Nothing about problem</td><td>Story, emotion, identity</td></tr>
+        <tr><td>Problem-Aware</td><td>They have a problem</td><td>Their exact frustration</td></tr>
+        <tr><td>Solution-Aware</td><td>Solutions exist</td><td>Mechanism, unique angle</td></tr>
+        <tr><td>Product-Aware</td><td>Your product</td><td>Proof, risk reversal</td></tr>
+        <tr><td>Most Aware</td><td>Everything</td><td>Deal, urgency, scarcity</td></tr>
+      </table>
+
+      <h2>The Value Equation (Hormozi)</h2>
+      <pre>VALUE = (Dream Outcome &times; Likelihood of Achievement) / (Time Delay &times; Effort Required)</pre>
+
+      <h2>The 7 Rules of Killer Copy</h2>
+      <ol>
+        <li><strong>The Slippery Slope:</strong> Every line's job is to make them read the next line.</li>
+        <li><strong>Clear, Not Clever:</strong> A confused mind always says no.</li>
+        <li><strong>The Rule of One:</strong> One reader. One big idea. One promise. One CTA.</li>
+        <li><strong>Specificity Builds Credibility:</strong> "Save 8.3 hours per week" beats "increase productivity."</li>
+        <li><strong>Speak Their Language:</strong> Use the EXACT words your audience uses.</li>
+        <li><strong>Write Like You Talk:</strong> Short sentences. Fragments fine. One-word paragraphs work.</li>
+        <li><strong>Benefits, Not Features:</strong> Feature &rarr; Benefit &rarr; Outcome.</li>
+      </ol>
+
+      <h2>Copywriting Frameworks</h2>
+      <ul>
+        <li><strong>AIDA:</strong> Attention &rarr; Interest &rarr; Desire &rarr; Action</li>
+        <li><strong>PAS:</strong> Problem &rarr; Agitate &rarr; Solution</li>
+        <li><strong>BAB:</strong> Before &rarr; After &rarr; Bridge</li>
+        <li><strong>4Ps:</strong> Promise &rarr; Picture &rarr; Proof &rarr; Push</li>
+        <li><strong>PASTOR:</strong> Problem &rarr; Amplify &rarr; Solution &rarr; Transformation &rarr; Offer &rarr; Response</li>
+        <li><strong>Hook-Story-Offer (Brunson):</strong> The universal framework for any platform.</li>
+      </ul>
+
+      <h2>Hook Formulas</h2>
+      <table>
+        <tr><th>Type</th><th>When to Use</th></tr>
+        <tr><td>Problem-ID</td><td>When audience has clear pain</td></tr>
+        <tr><td>Curiosity Gap</td><td>When you have surprising insight</td></tr>
+        <tr><td>Data-Backed</td><td>Compelling numbers</td></tr>
+        <tr><td>Contradiction</td><td>Going against common advice</td></tr>
+        <tr><td>Story</td><td>Compelling narrative</td></tr>
+        <tr><td>Warning</td><td>High stakes</td></tr>
+      </table>
+
+      <h2>Offer Engineering (Hormozi)</h2>
+      <p><strong>Grand Slam Offer:</strong> So good people feel stupid saying no.</p>
+      <ol>
+        <li>Identify the Dream Outcome (the transformation, not the tool)</li>
+        <li>List Every Obstacle to getting there alone</li>
+        <li>Create Solutions for Each Obstacle (each becomes a deliverable)</li>
+        <li>Stack the Value (name &amp; price each piece, show total vs your price)</li>
+      </ol>
+
+      <h2>Storytelling Structures</h2>
+      <ul>
+        <li><strong>But-Therefore Rule:</strong> Never "and then" &mdash; always "but" (obstacle) or "therefore" (consequence)</li>
+        <li><strong>Open Loops:</strong> Create tension with unanswered questions. Always close them.</li>
+        <li><strong>Epiphany Bridge:</strong> Tell your epiphany story instead of explaining why they should buy.</li>
+        <li><strong>Mini Hero's Journey:</strong> Separation (10%) &rarr; Initiation (60%) &rarr; Return (30%)</li>
+      </ul>
+
+      <hr>
+      <h2>Working Modes</h2>
+      <ul>
+        <li><strong>Mode 1: Polish Existing Draft</strong> &mdash; Analyze, improve hook/structure/story/specificity/persuasion/CTA, keep their voice</li>
+        <li><strong>Mode 2: Write From Scratch</strong> &mdash; Diagnose awareness, choose framework, 3 hook options, full draft</li>
+        <li><strong>Mode 3: Email Sequence</strong> &mdash; Soap Opera (5 emails) + Daily Seinfeld for ongoing</li>
+      </ul>
+    `
+  },
+
+  'design-visionary': {
+    icon: '&#127912;',
+    iconBg: 'var(--cyan-dim)',
+    name: 'design-visionary',
+    model: 'Opus',
+    tools: 'All tools',
+    color: 'cyan',
+    content: `
+      <div class="persona-quote">You are the embodiment of Steve Jobs' design philosophy, merged with cutting-edge Web3 aesthetics and deep understanding of human psychology. You possess an obsessive, uncompromising eye for design perfection. Every pixel matters. Every interaction must feel inevitable.</div>
+
+      <h2>Design DNA</h2>
+      <ul>
+        <li>Simplicity is the ultimate sophistication</li>
+        <li>Design is not just how it looks, but how it works</li>
+        <li>Details matter &mdash; it's worth waiting to get it right</li>
+        <li>Good design is as little design as possible</li>
+        <li>The intersection of technology and liberal arts creates magic</li>
+      </ul>
+
+      <h2>Psychological Arsenal</h2>
+
+      <h3>Color Psychology</h3>
+      <ul>
+        <li><strong style="color:var(--blue);">Blues:</strong> Trust, security, stability (financial/wallet interfaces)</li>
+        <li><strong style="color:var(--purple);">Purples:</strong> Luxury, creativity, Web3 native (gradients evoke metaverse)</li>
+        <li><strong style="color:var(--green);">Greens:</strong> Growth, success, positive returns</li>
+        <li><strong style="color:var(--amber);">Oranges/Yellows:</strong> Energy, optimism, calls-to-action (sparingly)</li>
+        <li>Dark modes with accent colors: Sophistication, focus, reduced cognitive load</li>
+      </ul>
+
+      <h3>Motion Psychology</h3>
+      <ul>
+        <li>Micro-interactions (0.1-0.3s): Acknowledge input, build responsiveness</li>
+        <li>Transitions (0.3-0.5s): Guide attention, spatial understanding</li>
+        <li>Celebrations (0.5-1s): Dopamine hits for achievements</li>
+        <li>Loading states: Transform anxiety into anticipation</li>
+      </ul>
+
+      <h3>Reward Systems</h3>
+      <ul>
+        <li>Variable reward timing creates engagement (slot machine psychology)</li>
+        <li>Progress indicators trigger completion desire</li>
+        <li>Social proof elements build trust and FOMO</li>
+        <li>Streak mechanics create habit loops</li>
+      </ul>
+
+      <h3>Cognitive Load Management</h3>
+      <ul>
+        <li>Progressive disclosure: Reveal complexity gradually</li>
+        <li>Chunking: Miller's Law (7&plusmn;2 items)</li>
+        <li>Visual hierarchy: Guide eye with size, color, spacing</li>
+        <li>Whitespace: Cramped is cheap. Let designs breathe.</li>
+      </ul>
+
+      <h2>Web3 Design Excellence</h2>
+      <ul>
+        <li>Glassmorphism with purpose (depth, not decoration)</li>
+        <li>Gradient meshes that feel alive</li>
+        <li>Dark themes with vibrant accents</li>
+        <li>Card-based layouts with generous radius (12-24px)</li>
+        <li>Skeleton loaders matching final content structure</li>
+      </ul>
+
+      <h2>Responsive Mastery</h2>
+      <table>
+        <tr><th>Breakpoint</th><th>Key Requirements</th></tr>
+        <tr><td>Mobile (320-768px)</td><td>44px touch targets, thumb-zone optimization, bottom nav, full-width CTAs</td></tr>
+        <tr><td>Tablet (768-1024px)</td><td>Hybrid layouts, both orientations, sidebar viable</td></tr>
+        <tr><td>Desktop (1024px+)</td><td>Multi-column, hover states, keyboard shortcuts, max-width 1200-1440px</td></tr>
+      </table>
+
+      <h2>8-Step Review Process</h2>
+      <ol>
+        <li><strong>First Impression (2s):</strong> What emotion? Is purpose clear?</li>
+        <li><strong>Visual Hierarchy:</strong> Eye flow &mdash; first, second, third?</li>
+        <li><strong>Spacing System:</strong> Consistent scale (4/8/16/24/32/48/64px)?</li>
+        <li><strong>Typography:</strong> Clear type scale, 2-3 weights, 1.4-1.6 line height</li>
+        <li><strong>Color Consistency:</strong> Limited palette, semantic usage, WCAG AA contrast</li>
+        <li><strong>Interactive Elements:</strong> Clear affordances, consistent states, feedback</li>
+        <li><strong>Edge Cases:</strong> First-time UX, error states, loading states</li>
+        <li><strong>Emotional Journey:</strong> Success rewarding? Failure graceful? Moments of delight?</li>
+      </ol>
+
+      <hr>
+      <p><em>"This is not just another app. Every future product will be measured against what you create today. The details are not details. They make the design."</em></p>
+    `
+  },
+
+  'senior-architect': {
+    icon: '&#127959;&#65039;',
+    iconBg: 'var(--cyan-dim)',
+    name: 'senior-architect',
+    model: 'Opus',
+    tools: 'All tools (full access)',
+    color: 'cyan',
+    content: `
+      <div class="persona-quote">You are an elite software architect with 25 years of experience across every major programming language, framework, and paradigm. Your implementations are legendary for their reliability, elegance, and zero-defect quality. You never rush. You never guess. You understand.</div>
+
+      <h2>The Ultra-Think Protocol</h2>
+      <p>Before writing ANY code, execute this 4-phase framework:</p>
+
+      <h3>Phase 1: Deep Comprehension (Never Skip)</h3>
+      <ol>
+        <li>Read the entire relevant context &mdash; every file, function, type</li>
+        <li>Map the data flow from origin to destination</li>
+        <li>Identify all touchpoints (components, hooks, services, types)</li>
+        <li>Understand the "why" &mdash; what constraints shaped current code?</li>
+        <li>Catalog edge cases &mdash; what can go wrong at boundaries?</li>
+      </ol>
+
+      <h3>Phase 2: Strategic Planning</h3>
+      <ol>
+        <li>Define success criteria for every scenario</li>
+        <li>Design solution architecture for seamless integration</li>
+        <li>Identify risk vectors and potential regressions</li>
+        <li>Plan implementation order for minimal risk</li>
+        <li>Prepare rollback strategy</li>
+      </ol>
+
+      <h3>Phase 3: Surgical Implementation</h3>
+      <ol>
+        <li>Make minimal, precise changes &mdash; every line has a purpose</li>
+        <li>Preserve existing behavior unless explicitly changing it</li>
+        <li>Type everything properly (TypeScript is your ally)</li>
+        <li>Handle all edge cases: null checks, error boundaries, loading/empty states</li>
+        <li>Follow established patterns for consistency</li>
+      </ol>
+
+      <h3>Phase 4: Verification &amp; QA</h3>
+      <ol>
+        <li>Mental execution &mdash; walk through every code path</li>
+        <li>Check type safety across the flow</li>
+        <li>Verify no regressions</li>
+        <li>Test boundary conditions (empty arrays, null values, network failures)</li>
+      </ol>
+
+      <h2>Technical Excellence Standards</h2>
+      <ul>
+        <li><strong>Zero any types</strong> &mdash; always proper TypeScript types</li>
+        <li><strong>Defensive programming</strong> &mdash; validate inputs, handle errors gracefully</li>
+        <li><strong>Clean interfaces</strong> &mdash; clear contracts, predictable inputs &rarr; outputs</li>
+        <li><strong>No side effects</strong> &mdash; pure functions are reliable functions</li>
+        <li><strong>Meaningful names</strong> &mdash; code reads like well-written prose</li>
+      </ul>
+
+      <h2>Project-Specific Awareness</h2>
+      <ul>
+        <li>Database types in <code>src/types/db.ts</code></li>
+        <li>State management uses Zustand</li>
+        <li>Styling uses Tailwind with custom design tokens</li>
+        <li>Auth flows through <code>useSession</code> hook</li>
+        <li>Calculations in <code>src/lib/calculations/</code> are critical business logic</li>
+      </ul>
+
+      <hr>
+
+      <h2>Prime Directives</h2>
+      <ol>
+        <li><strong>First, do no harm</strong> &mdash; never break existing functionality</li>
+        <li><strong>Understand before you act</strong> &mdash; comprehension saves debugging time</li>
+        <li><strong>Quality over speed</strong> &mdash; correct later beats buggy now</li>
+        <li><strong>Think in systems</strong> &mdash; every change ripples</li>
+        <li><strong>Leave code better than you found it</strong></li>
+      </ol>
+    `
+  },
+
+  'claude-code-advisor': {
+    icon: '&#128161;',
+    iconBg: 'var(--green-dim)',
+    name: 'claude-code-advisor',
+    model: 'Opus',
+    tools: 'Read, Write, Edit, Grep, Glob, Bash, WebFetch, WebSearch',
+    color: 'green',
+    content: `
+      <div class="persona-quote">You are a Claude Code workflow advisor. Your knowledge comes from curated tutorials and best practices stored in a Git-synced knowledge base. You give concrete, actionable advice &mdash; not generic tips.</div>
+
+      <h2>Knowledge Base</h2>
+      <p>Always syncs from GitHub before reading. 10 curated source files:</p>
+      <table>
+        <tr><th>File</th><th>Topic</th></tr>
+        <tr><td><code>01-setup-claude-code-15-minutes.md</code></td><td>Initial setup guide</td></tr>
+        <tr><td><code>02-complete-guide-claude-md.md</code></td><td>CLAUDE.md deep dive (structure, @imports, rules)</td></tr>
+        <tr><td><code>03-claude-code-101-eyad.md</code></td><td>Fundamentals (plan mode, context windows)</td></tr>
+        <tr><td><code>04-claude-code-102-eyad.md</code></td><td>Advanced (skills, subagents, MCP connectors)</td></tr>
+        <tr><td><code>05-prompting-best-practices-anthropic.md</code></td><td>Anthropic's 10 prompting tips</td></tr>
+        <tr><td><code>06-anthropic-internal-best-practices.md</code></td><td>Anthropic internal patterns (TDD, headless)</td></tr>
+        <tr><td><code>07-boris-creator-best-practices.md</code></td><td>Creator's setup (parallel Claudes, hooks)</td></tr>
+        <tr><td><code>10-external-resources.md</code></td><td>Tools, skill marketplaces, awesome lists</td></tr>
+      </table>
+
+      <h2>What It Advises On</h2>
+      <ul>
+        <li><strong>CLAUDE.md:</strong> Structure, content, length, @imports, .claude/rules/, maintenance</li>
+        <li><strong>Skills:</strong> When to create them, structure, progressive disclosure</li>
+        <li><strong>Subagents:</strong> Custom agents, when to delegate, tool permissions</li>
+        <li><strong>MCP Servers:</strong> Which to set up, configuration, authentication</li>
+        <li><strong>Hooks:</strong> Pre/post tool hooks for automation (prettier, linting, type checking)</li>
+        <li><strong>Context Management:</strong> When to /clear, external memory patterns, scoping</li>
+        <li><strong>Prompting:</strong> Being specific, telling Claude what NOT to do, plan mode</li>
+        <li><strong>Multi-Claude:</strong> Running parallel instances, shared CLAUDE.md</li>
+        <li><strong>Headless Mode:</strong> -p flag, scripting, CI/CD integration</li>
+        <li><strong>Slash Commands:</strong> Custom commands in .claude/commands/</li>
+      </ul>
+
+      <h2>Proactive Observations</h2>
+      <p>This agent is triggered proactively when noticing:</p>
+      <ul>
+        <li>Missing or weak CLAUDE.md (too generic, too long, missing gotchas)</li>
+        <li>Repetitive tasks that could be hooks or skills</li>
+        <li>Missing MCP connections for frequently used tools</li>
+        <li>Poor context management (long conversations, no /clear)</li>
+        <li>Manual steps that could be automated with slash commands</li>
+        <li>No plan mode usage for complex tasks</li>
+        <li>Missing .claude/rules/ for team conventions</li>
+      </ul>
+
+      <hr>
+
+      <h2>How It Works</h2>
+      <ol>
+        <li>Reads relevant sources first &mdash; never answers from general knowledge alone</li>
+        <li>Gives exact commands, file paths, config snippets</li>
+        <li>References sources so you can dig deeper</li>
+        <li>Prioritizes highest-impact suggestions (2-3, not 20)</li>
+        <li>Checks your existing setup before suggesting changes</li>
+      </ol>
+    `
+  }
+};
+
+function openModal(agentName) {
+  const agent = agents[agentName];
+  if (!agent) return;
+
+  const overlay = document.getElementById('agent-modal');
+  const icon = document.getElementById('modal-icon');
+  const title = document.getElementById('modal-title');
+  const meta = document.getElementById('modal-meta');
+  const body = document.getElementById('modal-body');
+
+  icon.innerHTML = agent.icon;
+  icon.style.background = agent.iconBg;
+  title.textContent = agent.name;
+  meta.innerHTML = '<span class="chip chip-model">' + agent.model + '</span>' +
+                   '<span class="chip chip-tools">' + agent.tools + '</span>';
+  body.innerHTML = agent.content;
+
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+// ===== MCP SERVER DATA =====
+const mcpServers = {
+  'GitHub': {
+    icon: '&#128025;', iconBg: 'var(--amber-dim)', color: 'amber',
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>HTTP</strong></td></tr>
+        <tr><td>URL</td><td><code>https://api.githubcopilot.com/mcp</code></td></tr>
+        <tr><td>Auth</td><td>Bearer token (from <code>gh auth token</code>)</td></tr>
+        <tr><td>Config file</td><td><code>~/.claude.json</code> (global mcpServers)</td></tr>
+      </table>
+      <div class="persona-quote" style="border-left-color:var(--red);">Gotcha: The URL is NOT api.github.com! Must use api.githubcopilot.com. Getting this wrong causes silent failure.</div>
+      <h2>Available Tools</h2>
+      <ul>
+        <li><strong>Repositories:</strong> create, fork, search, get file contents, create/update files, push files</li>
+        <li><strong>Pull Requests:</strong> create, list, review, merge, update, add comments</li>
+        <li><strong>Issues:</strong> create, list, search, comment, assign, close</li>
+        <li><strong>Code Search:</strong> search across repos with GitHub's code search</li>
+        <li><strong>Branches:</strong> create, list, get commits</li>
+        <li><strong>Releases:</strong> list, get latest, get by tag</li>
+        <li><strong>Teams:</strong> list teams, get members</li>
+      </ul>
+      <h2>Usage Pattern</h2>
+      <p>Use <code>list_*</code> tools for broad retrieval with pagination. Use <code>search_*</code> tools for targeted queries with filters. Always call <code>get_me</code> first to understand permissions.</p>
+    `
+  },
+  'Notion': {
+    icon: '&#128211;', iconBg: 'var(--amber-dim)', color: 'amber',
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>HTTP</strong></td></tr>
+        <tr><td>URL</td><td><code>https://mcp.notion.com/mcp</code></td></tr>
+        <tr><td>Auth</td><td>OAuth (browser popup on first connect, no manual token needed)</td></tr>
+        <tr><td>Config file</td><td><code>~/.claude.json</code> (global mcpServers)</td></tr>
+      </table>
+      <h2>Available Tools</h2>
+      <ul>
+        <li>Read and write Notion pages</li>
+        <li>Query and update databases</li>
+        <li>Create and modify blocks</li>
+        <li>Search across workspace</li>
+      </ul>
+      <h2>Status</h2>
+      <p>Currently archive-only. All valuable content has been migrated to the local Context system. Notion MCP kept for occasional reference.</p>
+    `
+  },
+  'Firecrawl': {
+    icon: '&#128293;', iconBg: 'var(--amber-dim)', color: 'amber',
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>STDIO</strong></td></tr>
+        <tr><td>Command</td><td><code>npx -y firecrawl-mcp</code></td></tr>
+        <tr><td>Auth</td><td>FIRECRAWL_API_KEY environment variable</td></tr>
+        <tr><td>Config file</td><td><code>~/.claude.json</code> (global) + <code>~/.claude/settings.json</code></td></tr>
+      </table>
+      <h2>Available Tools</h2>
+      <ul>
+        <li><strong>firecrawl_scrape:</strong> Scrape a single URL with JS rendering. Returns clean markdown.</li>
+        <li><strong>firecrawl_crawl:</strong> Crawl an entire site following links. Good for documentation sites.</li>
+        <li><strong>firecrawl_search:</strong> Search the web and get page content (not just links).</li>
+        <li><strong>firecrawl_extract:</strong> Extract structured data from pages using schemas.</li>
+        <li><strong>firecrawl_map:</strong> Map all URLs on a site without scraping content.</li>
+      </ul>
+      <h2>Why Use This</h2>
+      <p>Handles JavaScript-rendered pages (SPAs, dynamic content). Much better than basic HTTP fetch. Priority #2 for web tasks (after Perplexity for research, before WebFetch fallback).</p>
+    `
+  },
+  'Perplexity': {
+    icon: '&#128269;', iconBg: 'var(--amber-dim)', color: 'amber',
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>STDIO</strong></td></tr>
+        <tr><td>Command</td><td><code>npx -y @perplexity-ai/mcp-server</code></td></tr>
+        <tr><td>Auth</td><td>PERPLEXITY_API_KEY environment variable</td></tr>
+        <tr><td>Config file</td><td><code>~/.claude.json</code> (global mcpServers)</td></tr>
+      </table>
+      <h2>Available Tools</h2>
+      <ul>
+        <li><strong>perplexity_ask:</strong> Ask questions, get sourced answers</li>
+        <li><strong>perplexity_search:</strong> Search the web with AI-powered results</li>
+        <li><strong>perplexity_research:</strong> Deep research on complex topics</li>
+        <li><strong>perplexity_reason:</strong> Multi-step reasoning with web data</li>
+      </ul>
+      <h2>Priority</h2>
+      <p><strong>Priority #1 for all research tasks.</strong> Returns sourced, synthesized answers rather than raw links. Use before Firecrawl (for scraping specific URLs) or WebFetch (fallback).</p>
+    `
+  },
+  'Hostinger': {
+    icon: '&#127968;', iconBg: 'var(--amber-dim)', color: 'amber',
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>STDIO</strong></td></tr>
+        <tr><td>Command</td><td><code>npx -y hostinger-api-mcp@latest</code></td></tr>
+        <tr><td>Auth</td><td>API_TOKEN environment variable</td></tr>
+        <tr><td>Config file</td><td><code>~/.claude.json</code> (global mcpServers)</td></tr>
+      </table>
+      <h2>Available Tools</h2>
+      <ul>
+        <li><strong>VPS:</strong> Create, start, stop, restart VMs. Manage firewalls, snapshots, SSH keys, hostnames, metrics</li>
+        <li><strong>Domains:</strong> Check availability, purchase, manage DNS records, WHOIS profiles, domain lock, privacy protection</li>
+        <li><strong>DNS:</strong> Get/update/delete records, snapshots, restore</li>
+        <li><strong>Hosting:</strong> Create websites, deploy JS apps, static sites, WordPress themes/plugins</li>
+        <li><strong>Billing:</strong> Subscriptions, payment methods, auto-renewal, service orders</li>
+        <li><strong>Email (Reach):</strong> Contacts, segments, profiles</li>
+      </ul>
+    `
+  },
+  'Dokploy': {
+    icon: '&#128640;', iconBg: 'var(--amber-dim)', color: 'amber',
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>STDIO</strong></td></tr>
+        <tr><td>Command</td><td><code>npx -y @ahdev/dokploy-mcp</code></td></tr>
+        <tr><td>Auth</td><td>DOKPLOY_URL + DOKPLOY_API_KEY environment variables</td></tr>
+        <tr><td>Server</td><td><code>http://72.62.157.123:3000/api</code></td></tr>
+        <tr><td>Config file</td><td><code>~/.claude.json</code> (global mcpServers)</td></tr>
+      </table>
+      <h2>Available Tools</h2>
+      <ul>
+        <li><strong>Applications:</strong> Create, deploy, redeploy, start, stop, update, monitor. Configure Git/Docker/Bitbucket providers. Manage environment variables and Traefik config.</li>
+        <li><strong>Databases:</strong> PostgreSQL and MySQL &mdash; create, deploy, start, stop, rebuild, manage external ports</li>
+        <li><strong>Domains:</strong> Create, update, delete, validate, generate Traefik domains</li>
+        <li><strong>Projects:</strong> Create, list, update, duplicate, remove</li>
+      </ul>
+      <h2>What It Does</h2>
+      <p>Dokploy is a self-hosted deployment platform running on your VPS. This MCP gives Claude full control over deploying and managing applications, databases, and domains on your server.</p>
+    `
+  },
+  'Yahoo Finance': {
+    icon: '&#128200;', iconBg: 'var(--amber-dim)', color: 'amber',
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>STDIO</strong></td></tr>
+        <tr><td>Command</td><td><code>uvx mcp-yahoo-finance</code></td></tr>
+        <tr><td>Auth</td><td>None (public API)</td></tr>
+        <tr><td>Config file</td><td><code>~/.claude.json</code> (global mcpServers)</td></tr>
+      </table>
+      <h2>Available Tools</h2>
+      <ul>
+        <li><strong>get_current_stock_price:</strong> Real-time stock price</li>
+        <li><strong>get_stock_price_by_date:</strong> Historical price for specific date</li>
+        <li><strong>get_stock_price_date_range:</strong> Price history over range</li>
+        <li><strong>get_historical_stock_prices:</strong> Full historical data</li>
+        <li><strong>get_income_statement:</strong> Revenue, margins, net income</li>
+        <li><strong>get_cashflow:</strong> Cash flow statements</li>
+        <li><strong>get_dividends:</strong> Dividend history</li>
+        <li><strong>get_earning_dates:</strong> Upcoming earnings dates</li>
+        <li><strong>get_recommendations:</strong> Analyst recommendations</li>
+        <li><strong>get_news:</strong> Latest stock news</li>
+      </ul>
+      <h2>Used By</h2>
+      <p>The <strong>stock-analyst</strong> agent uses this as its primary data source for Step 1 (Data Gathering).</p>
+    `
+  },
+  'CoinMarketCap': {
+    icon: '&#129689;', iconBg: 'var(--amber-dim)', color: 'amber',
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>STDIO</strong></td></tr>
+        <tr><td>Command</td><td><code>npx -y @shinzolabs/coinmarketcap-mcp</code></td></tr>
+        <tr><td>Auth</td><td>COINMARKETCAP_API_KEY environment variable</td></tr>
+        <tr><td>Config file</td><td><code>~/.claude.json</code> (global mcpServers)</td></tr>
+      </table>
+      <h2>Available Tools</h2>
+      <ul>
+        <li>Current crypto prices and market data</li>
+        <li>Market cap rankings and sorting</li>
+        <li>Token metadata and supply info</li>
+        <li>DEX trading data</li>
+        <li>Historical price data</li>
+      </ul>
+      <h2>Used By</h2>
+      <p>The <strong>crypto-analyst</strong> agent uses this as its primary data source for Step 1 (Data Gathering).</p>
+    `
+  },
+  'Transcript API': {
+    icon: '&#127909;', iconBg: 'var(--amber-dim)', color: 'amber',
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>HTTP</strong></td></tr>
+        <tr><td>URL</td><td><code>https://transcriptapi.com/mcp</code></td></tr>
+        <tr><td>Auth</td><td>None (public API)</td></tr>
+        <tr><td>Config file</td><td><code>~/.claude.json</code> (global mcpServers)</td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>Extract full transcripts from YouTube videos</li>
+        <li>Extract transcripts from podcast episodes</li>
+        <li>Returns timestamped text for reference</li>
+      </ul>
+      <h2>Use Case</h2>
+      <p>Feed video/podcast content into the knowledge system. Combine with NotebookLM skill to create notebooks from video sources.</p>
+    `
+  },
+  'Docker (MCP Gateway)': {
+    icon: '&#128230;', iconBg: 'var(--amber-dim)', color: 'amber',
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>STDIO</strong></td></tr>
+        <tr><td>Command</td><td><code>docker mcp gateway run</code></td></tr>
+        <tr><td>Auth</td><td>Docker daemon (local socket)</td></tr>
+        <tr><td>Config file</td><td><code>~/.claude.json</code> (global mcpServers)</td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <p>Docker's native MCP gateway. Provides container management through the Docker MCP protocol.</p>
+      <h2>Note</h2>
+      <p>There's also a second Docker MCP at settings-level (<code>uvx mcp-server-docker</code>) for additional Docker management capabilities.</p>
+    `
+  },
+  'Claude in Chrome': {
+    icon: '&#127760;', iconBg: 'var(--amber-dim)', color: 'amber',
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>Browser Extension</strong></td></tr>
+        <tr><td>Setup</td><td>Chrome extension auto-detected</td></tr>
+        <tr><td>Auth</td><td>Extension bridge (no manual config)</td></tr>
+      </table>
+      <h2>Available Tools</h2>
+      <ul>
+        <li><strong>navigate:</strong> Go to URLs in Chrome</li>
+        <li><strong>read_page / get_page_text:</strong> Read page content</li>
+        <li><strong>computer:</strong> Click, type, scroll, interact with elements</li>
+        <li><strong>form_input:</strong> Fill forms and inputs</li>
+        <li><strong>find:</strong> Search for elements on page</li>
+        <li><strong>javascript_tool:</strong> Execute custom JS in page context</li>
+        <li><strong>gif_creator:</strong> Record interactions as GIFs</li>
+        <li><strong>read_console_messages:</strong> Read browser console output</li>
+        <li><strong>read_network_requests:</strong> Monitor network activity</li>
+        <li><strong>tabs_context_mcp / tabs_create_mcp:</strong> Manage browser tabs</li>
+        <li><strong>shortcuts_list / shortcuts_execute:</strong> Browser keyboard shortcuts</li>
+        <li><strong>upload_image / resize_window:</strong> Utility tools</li>
+      </ul>
+      <h2>Important Rules</h2>
+      <ul>
+        <li>Always call <code>tabs_context_mcp</code> first to see current tabs</li>
+        <li>Never trigger JavaScript alerts/confirms (they block the extension)</li>
+        <li>Stop after 2-3 failed attempts and ask user for guidance</li>
+      </ul>
+    `
+  },
+  'Swipe File': {
+    icon: '&#128194;', iconBg: 'var(--amber-dim)', color: 'amber',
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>STDIO (Filesystem)</strong></td></tr>
+        <tr><td>Command</td><td><code>npx -y @modelcontextprotocol/server-filesystem</code></td></tr>
+        <tr><td>Path</td><td><code>/Users/amadejdemsar/Domain/Swipe file</code></td></tr>
+        <tr><td>Config file</td><td><code>~/.claude/settings.json</code></td></tr>
+      </table>
+      <h2>What It Contains</h2>
+      <ul>
+        <li>Company landing pages (Linear, HeyReach, etc.)</li>
+        <li>Copy frameworks &amp; formulas</li>
+        <li>Design patterns &amp; UI examples</li>
+        <li>Email sequences &amp; templates</li>
+        <li>Pricing strategies</li>
+        <li>Positioning examples</li>
+      </ul>
+      <h2>How It Works</h2>
+      <p>Each entry gets its own folder with a <code>notes.md</code> file plus source files (PDFs, screenshots). The <code>index.md</code> file tracks all entries by category. Without an index entry, items are invisible.</p>
+    `
+  },
+  'Context': {
+    icon: '&#129504;', iconBg: 'var(--amber-dim)', color: 'amber',
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>STDIO (Filesystem)</strong></td></tr>
+        <tr><td>Command</td><td><code>npx -y @modelcontextprotocol/server-filesystem</code></td></tr>
+        <tr><td>Path</td><td><code>/Users/amadejdemsar/Domain/context</code></td></tr>
+        <tr><td>Config file</td><td><code>~/.claude/settings.json</code></td></tr>
+      </table>
+      <h2>What It Contains</h2>
+      <ul>
+        <li><strong>about.md</strong> &mdash; Bio, current focus, contact info</li>
+        <li><strong>skills.md</strong> &mdash; Technical and non-technical skills</li>
+        <li><strong>experience.md</strong> &mdash; Work history, achievements</li>
+        <li><strong>preferences.md</strong> &mdash; Working style, coding prefs</li>
+        <li><strong>projects/</strong> &mdash; Detailed project breakdowns</li>
+        <li><strong>knowledge/</strong> &mdash; Notes and learnings by topic</li>
+        <li><strong>index.md</strong> &mdash; Quick reference to everything</li>
+      </ul>
+      <h2>Use Cases</h2>
+      <p>CV/resume generation, coding with preferences, project references, learning notes. Claude reads this to understand your background and write in your style.</p>
+    `
+  },
+  'Brave Search': {
+    icon: '&#128526;', iconBg: 'var(--amber-dim)', color: 'amber',
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>STDIO</strong></td></tr>
+        <tr><td>Command</td><td><code>npx -y @brave/brave-search-mcp-server</code></td></tr>
+        <tr><td>Auth</td><td>BRAVE_API_KEY environment variable</td></tr>
+        <tr><td>Config file</td><td><code>~/.claude/settings.json</code></td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>Web search with privacy focus</li>
+        <li>News search</li>
+        <li>Image search</li>
+        <li>Returns structured results with snippets</li>
+      </ul>
+      <h2>Priority</h2>
+      <p>Lower priority than Perplexity for research. Used as an alternative search engine when Perplexity is unavailable or for quick lookups.</p>
+    `
+  },
+  'Todoist': {
+    icon: '&#9989;', iconBg: 'var(--amber-dim)', color: 'amber',
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>STDIO</strong></td></tr>
+        <tr><td>Command</td><td><code>npx -y @abhiz123/todoist-mcp-server</code></td></tr>
+        <tr><td>Auth</td><td>TODOIST_API_TOKEN environment variable</td></tr>
+        <tr><td>Config file</td><td><code>~/.claude/settings.json</code></td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>Create and complete tasks</li>
+        <li>Organize tasks into projects</li>
+        <li>Set priorities and due dates</li>
+        <li>List and filter tasks</li>
+      </ul>
+    `
+  },
+  'OpenAI Developer Docs': {
+    icon: '&#128218;', iconBg: 'var(--amber-dim)', color: 'amber',
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>HTTP</strong></td></tr>
+        <tr><td>URL</td><td><code>https://developers.openai.com/mcp</code></td></tr>
+        <tr><td>Auth</td><td>None</td></tr>
+        <tr><td>Config file</td><td><code>~/.claude/settings.json</code></td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>Search OpenAI's developer documentation</li>
+        <li>Read API reference pages</li>
+        <li>Access guides and tutorials</li>
+      </ul>
+      <h2>Use Case</h2>
+      <p>Quick reference when working with OpenAI APIs alongside Claude. Useful for comparing API designs or implementing OpenAI-compatible endpoints.</p>
+    `
+  },
+  'Docker (uvx)': {
+    icon: '&#128230;', iconBg: 'var(--amber-dim)', color: 'amber',
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>STDIO</strong></td></tr>
+        <tr><td>Command</td><td><code>uvx mcp-server-docker</code></td></tr>
+        <tr><td>Auth</td><td>Docker daemon (local socket)</td></tr>
+        <tr><td>Config file</td><td><code>~/.claude/settings.json</code></td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>Container management (create, start, stop, remove, logs)</li>
+        <li>Image management (pull, list, remove)</li>
+        <li>Volume management</li>
+        <li>Network management</li>
+      </ul>
+      <h2>Note</h2>
+      <p>Second Docker MCP alongside the gateway version. This one uses the uvx Python tool runner and provides a slightly different set of Docker operations.</p>
+    `
+  },
+  'Supabase': {
+    icon: '&#9889;', iconBg: 'var(--amber-dim)', color: 'amber',
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>HTTP</strong></td></tr>
+        <tr><td>URL</td><td><code>https://mcp.supabase.com/mcp?project_ref=...</code></td></tr>
+        <tr><td>Auth</td><td>OAuth (project-scoped)</td></tr>
+        <tr><td>Config file</td><td><code>~/.claude.json</code> (project: Fitness App)</td></tr>
+        <tr><td>Scope</td><td><strong>Fitness App only</strong></td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>Database queries and mutations</li>
+        <li>Auth management</li>
+        <li>Storage operations</li>
+        <li>Edge function management</li>
+        <li>Real-time subscriptions</li>
+      </ul>
+      <h2>Project-Specific</h2>
+      <p>Only available when working in the Fitness App directory. Connected to the app's Supabase backend for database operations.</p>
+    `
+  },
+  'Puppeteer': {
+    icon: '&#127917;', iconBg: 'var(--amber-dim)', color: 'amber',
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>STDIO</strong></td></tr>
+        <tr><td>Command</td><td><code>npx -y @modelcontextprotocol/server-puppeteer</code></td></tr>
+        <tr><td>Auth</td><td>None (local headless browser)</td></tr>
+        <tr><td>Config file</td><td><code>~/.claude.json</code> (project: Fitness App)</td></tr>
+        <tr><td>Scope</td><td><strong>Fitness App only</strong></td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>Headless Chrome browser automation</li>
+        <li>Navigate to pages and take screenshots</li>
+        <li>Click elements, fill forms</li>
+        <li>Execute JavaScript in page context</li>
+        <li>Wait for selectors and network events</li>
+      </ul>
+      <h2>Use Case</h2>
+      <p>Automated testing and visual regression testing for the Fitness App. Can screenshot pages, interact with the UI, and verify visual output.</p>
+    `
+  }
+};
+
+// ===== SKILLS DATA =====
+const skills = {
+  '/prompt-writer': {
+    icon: '&#128221;', iconBg: 'var(--pink-dim)', color: 'pink',
+    content: `
+      <div class="persona-quote">You are a prompt engineering master. Your mission is to transform user requests into prompts that produce extraordinary results &mdash; the kind of meticulous, first-principles thinking that Einstein, Tesla, and Feynman applied to their work.</div>
+      <h2>The PROMETHEUS Framework</h2>
+      <p>Core architecture for building world-class prompts:</p>
+      <ul>
+        <li><strong>P</strong>urpose &amp; Success Criteria</li>
+        <li><strong>R</strong>ole &amp; Expertise Assignment</li>
+        <li><strong>O</strong>utput Specification</li>
+        <li><strong>M</strong>ethodology &amp; Approach</li>
+        <li><strong>E</strong>xamples &amp; Anti-Examples</li>
+        <li><strong>T</strong>hinking Protocol</li>
+        <li><strong>H</strong>andling Edge Cases</li>
+        <li><strong>E</strong>valuation Criteria</li>
+        <li><strong>U</strong>ser Context &amp; Background</li>
+        <li><strong>S</strong>tructure with XML Tags</li>
+      </ul>
+      <h2>Assessment Protocol</h2>
+      <h3>Step 1: Stakes Level (1-4)</h3>
+      <table>
+        <tr><th>Level</th><th>Description</th><th>Questions</th></tr>
+        <tr><td>1. Quick</td><td>Internal use, speed &gt; perfection</td><td>0-1</td></tr>
+        <tr><td>2. Professional</td><td>Client-facing, solid</td><td>2-3</td></tr>
+        <tr><td>3. Excellence</td><td>High-stakes, competitive</td><td>3-5</td></tr>
+        <tr><td>4. Mission Critical</td><td>Career-defining</td><td>5-8</td></tr>
+      </table>
+      <h3>Step 2: Context Gathering</h3>
+      <p>Adaptive questions by task type: Content &amp; Marketing, Technical &amp; Coding, Analysis &amp; Research, Strategy &amp; Planning, Creative. Each type has 5-8 targeted questions asked one at a time.</p>
+      <h2>13 Thinking Protocols</h2>
+      <p>Chain-of-Thought, Zero-Shot CoT, Tree-of-Thoughts, Step-Back, Self-Consistency, Self-Critique &amp; Refine, Reflexion, Least-to-Most, Plan-and-Solve, Analogical, ReAct, Meta-Cognitive, Socratic Method.</p>
+      <h2>Advanced Techniques</h2>
+      <ul>
+        <li>Goldilocks Altitude (right level of specificity)</li>
+        <li>Preemptive Objection Handling</li>
+        <li>Progressive Disclosure</li>
+        <li>Quality Forcing Functions</li>
+        <li>Constraint Creativity</li>
+        <li>Meta-Cognitive Instructions</li>
+      </ul>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/prompt-writer/SKILL.md</code> &middot; <strong>Size:</strong> 1,017 lines</p>
+    `
+  },
+  '/pda': {
+    icon: '&#128204;', iconBg: 'var(--pink-dim)', color: 'pink',
+    content: `
+      <div class="persona-quote">You are a project decomposition expert. Your mission is to transform any project into clear phases, concrete tasks, and tiny Minimum Viable Actions (MVAs) &mdash; organized so the vital 20% that creates 80% of results is always identified and prioritized first.</div>
+      <h2>Core Definitions</h2>
+      <ul>
+        <li><strong>Task:</strong> Work chunk completable in 30-120 minutes of focused effort</li>
+        <li><strong>MVA (Minimum Viable Action):</strong> Tiny binary action (1-15 min). Starts with a verb. So small it feels almost too easy.</li>
+        <li><strong>P20:</strong> High-leverage item in the vital ~20% that drives ~80% of results. Always listed first.</li>
+      </ul>
+      <h2>Complexity Levels</h2>
+      <table>
+        <tr><th>Level</th><th>Phases</th><th>Tasks</th><th>MVA Depth</th></tr>
+        <tr><td>1. Quick Win</td><td>2-3</td><td>5-10</td><td>Optional</td></tr>
+        <tr><td>2. Standard</td><td>3-5</td><td>10-20</td><td>P20 tasks</td></tr>
+        <tr><td>3. Complex</td><td>4-6</td><td>15-30</td><td>Full breakdown</td></tr>
+        <tr><td>4. Major</td><td>5-7</td><td>20-40+</td><td>Comprehensive</td></tr>
+      </table>
+      <h2>Decomposition Process</h2>
+      <ol>
+        <li><strong>Define Done:</strong> 1-2 sentence outcome + 3-5 acceptance criteria</li>
+        <li><strong>Identify Blockers:</strong> Decisions, info gaps, dependencies, tools needed</li>
+        <li><strong>Create Phases (3-7):</strong> Logical groupings with clear names</li>
+        <li><strong>Create Tasks (per phase):</strong> Verb-first, P20 marked, with time/energy/dependencies</li>
+        <li><strong>Create MVAs (per task):</strong> 3-8 tiny actions, 1-15 min each</li>
+        <li><strong>Summary Views:</strong> P20-only list, "30 minutes today" list, "Do Now" first MVA</li>
+      </ol>
+      <h2>Project Types</h2>
+      <p>Adaptive questions for: Technical/Building, Creative/Content, Business/Strategy, Learning/Personal Development. Each asks 5-6 targeted questions one at a time.</p>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/pda/SKILL.md</code> &middot; <strong>Size:</strong> 456 lines</p>
+    `
+  },
+  '/notebooklm': {
+    icon: '&#127897;', iconBg: 'var(--pink-dim)', color: 'pink',
+    content: `
+      <h2>What It Does</h2>
+      <p>Complete programmatic access to Google NotebookLM &mdash; including capabilities not in the web UI. Create notebooks, add sources, generate artifacts, download results.</p>
+      <h2>Generation Types</h2>
+      <table>
+        <tr><th>Type</th><th>Formats</th><th>Download</th></tr>
+        <tr><td>Podcast</td><td>deep-dive, brief, critique, debate + short/default/long</td><td>.mp3</td></tr>
+        <tr><td>Video</td><td>explainer, brief + 9 visual styles</td><td>.mp4</td></tr>
+        <tr><td>Slide Deck</td><td>detailed, presenter</td><td>.pdf</td></tr>
+        <tr><td>Infographic</td><td>landscape, portrait, square</td><td>.png</td></tr>
+        <tr><td>Report</td><td>briefing-doc, study-guide, blog-post, custom</td><td>.md</td></tr>
+        <tr><td>Mind Map</td><td>instant sync</td><td>.json</td></tr>
+        <tr><td>Data Table</td><td>from description</td><td>.csv</td></tr>
+        <tr><td>Quiz</td><td>easy/medium/hard + quantity</td><td>.json/.md/.html</td></tr>
+        <tr><td>Flashcards</td><td>easy/medium/hard + quantity</td><td>.json/.md/.html</td></tr>
+      </table>
+      <h2>Source Types</h2>
+      <p>PDFs, YouTube URLs, web URLs, Google Docs, text files, Markdown, Word docs, audio files, video files, images. Max 50 sources per notebook.</p>
+      <h2>Key Workflows</h2>
+      <ul>
+        <li><strong>Research to Podcast:</strong> Create notebook &rarr; add sources &rarr; wait for processing &rarr; generate audio &rarr; download .mp3</li>
+        <li><strong>Document Analysis:</strong> Create notebook &rarr; add docs &rarr; chat with content</li>
+        <li><strong>Deep Web Research:</strong> add-research with --mode deep &rarr; auto-import sources</li>
+      </ul>
+      <h2>Features Beyond Web UI</h2>
+      <ul>
+        <li>Batch downloads of all artifacts</li>
+        <li>Quiz/flashcard export as JSON, Markdown, HTML</li>
+        <li>Mind map extraction as hierarchical JSON</li>
+        <li>Source fulltext retrieval</li>
+        <li>Programmatic sharing</li>
+      </ul>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/notebooklm/SKILL.md</code> &middot; <strong>Size:</strong> 546 lines &middot; <strong>Package:</strong> <code>notebooklm-py</code></p>
+    `
+  },
+  '/prd': {
+    icon: '&#128196;', iconBg: 'var(--pink-dim)', color: 'pink',
+    content: `
+      <h2>What It Does</h2>
+      <p>Generates a Machine-Optimized PRD (Product Requirements Document) designed specifically for AI coding agents. The most-used skill with <strong>23 invocations</strong>.</p>
+      <h2>Why Machine-Optimized?</h2>
+      <p>Traditional PRDs are written for humans. This generates PRDs structured for AI agents to parse and implement &mdash; with clear acceptance criteria, technical constraints, and implementation hints that Claude Code can directly act on.</p>
+      <h2>Output</h2>
+      <p>A structured document with project overview, features, user stories, technical requirements, and implementation phases that can be fed directly to Claude Code for development.</p>
+      <hr>
+      <p><strong>Type:</strong> Built-in Skill &middot; <strong>Uses:</strong> 23 (most-used skill)</p>
+    `
+  },
+  '/analyze-stock': {
+    icon: '&#128200;', iconBg: 'var(--pink-dim)', color: 'pink',
+    content: `
+      <h2>What It Does</h2>
+      <p>Triggers the <strong>stock-analyst</strong> agent for deep equity research on any ticker symbol.</p>
+      <h2>Workflow</h2>
+      <ol>
+        <li>Reads 9 knowledge base files (fundamentals, technicals, macro, etc.)</li>
+        <li>Fetches live data from Yahoo Finance MCP</li>
+        <li>Searches recent news via Perplexity</li>
+        <li>Runs 8-step analysis framework</li>
+        <li>Writes structured analysis to <code>Me/finances/[ticker].md</code></li>
+      </ol>
+      <h2>Usage</h2>
+      <pre>/analyze-stock AAPL</pre>
+      <h2>Output</h2>
+      <p>YAML frontmatter with score + full analysis: fundamentals, valuation, technicals, macro context, sentiment, scenario analysis (bear/base/bull with price targets), and final verdict (1-10 score, action, time horizon, risk level).</p>
+      <hr>
+      <p><strong>Type:</strong> Agent Trigger &middot; <strong>Agent:</strong> stock-analyst (Opus) &middot; <strong>MCPs Used:</strong> Yahoo Finance, Perplexity</p>
+    `
+  },
+  '/analyze-crypto': {
+    icon: '&#129689;', iconBg: 'var(--pink-dim)', color: 'pink',
+    content: `
+      <h2>What It Does</h2>
+      <p>Triggers the <strong>crypto-analyst</strong> agent for institutional-grade token/protocol research.</p>
+      <h2>Workflow</h2>
+      <ol>
+        <li>Reads 8 knowledge base files (crypto-frameworks, fundamentals, macro, etc.)</li>
+        <li>Fetches live data from CoinMarketCap MCP</li>
+        <li>Searches recent developments via Perplexity</li>
+        <li>Runs 5-part institutional analysis framework</li>
+        <li>Writes analysis to <code>Me/finances/crypto/[ticker].md</code></li>
+      </ol>
+      <h2>Usage</h2>
+      <pre>/analyze-crypto SOL</pre>
+      <h2>Output</h2>
+      <p>Executive summary, fundamental deep dive (tokenomics, team, adoption), competitive landscape, scenario analysis with market cap targets, final verdict with entry strategy and allocation suggestion.</p>
+      <hr>
+      <p><strong>Type:</strong> Agent Trigger &middot; <strong>Agent:</strong> crypto-analyst (Opus) &middot; <strong>MCPs Used:</strong> CoinMarketCap, Perplexity</p>
+    `
+  },
+  '/market-brief': {
+    icon: '&#9728;&#65039;', iconBg: 'var(--pink-dim)', color: 'pink',
+    content: `
+      <h2>What It Does</h2>
+      <p>Generates a concise morning market brief using Perplexity and web search. Quick overview of what's happening in markets today.</p>
+      <h2>Coverage</h2>
+      <ul>
+        <li>Major indices (S&amp;P 500, Nasdaq, Dow)</li>
+        <li>Key crypto prices (BTC, ETH, SOL)</li>
+        <li>Notable movers and earnings</li>
+        <li>Macro developments and Fed signals</li>
+        <li>Geopolitical events affecting markets</li>
+      </ul>
+      <h2>Usage</h2>
+      <pre>/market-brief</pre>
+      <hr>
+      <p><strong>Type:</strong> Research Command &middot; <strong>MCPs Used:</strong> Perplexity, WebSearch</p>
+    `
+  }
+};
+
+// ===== GENERIC MODAL OPENER =====
+function openGenericModal(data, title) {
+  const overlay = document.getElementById('agent-modal');
+  const icon = document.getElementById('modal-icon');
+  const titleEl = document.getElementById('modal-title');
+  const meta = document.getElementById('modal-meta');
+  const body = document.getElementById('modal-body');
+
+  icon.innerHTML = data.icon;
+  icon.style.background = data.iconBg;
+  titleEl.textContent = title;
+  meta.innerHTML = '';
+  body.innerHTML = data.content;
+
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+// ===== AUTO-WIRE MCP CARDS =====
+document.addEventListener('DOMContentLoaded', function() {
+  // Wire MCP cards
+  document.querySelectorAll('#mcp .card').forEach(function(card) {
+    var h3 = card.querySelector('h3');
+    if (h3 && mcpServers[h3.textContent.trim()]) {
+      card.classList.add('card-clickable');
+      card.style.cursor = 'pointer';
+      card.title = 'Click to view full configuration';
+      card.addEventListener('click', function() {
+        openGenericModal(mcpServers[h3.textContent.trim()], h3.textContent.trim());
+      });
+    }
+  });
+
+  // Wire Skills cards
+  document.querySelectorAll('#skills .card').forEach(function(card) {
+    var h3 = card.querySelector('h3');
+    if (h3 && skills[h3.textContent.trim()]) {
+      card.classList.add('card-clickable');
+      card.style.cursor = 'pointer';
+      card.title = 'Click to view full details';
+      card.addEventListener('click', function() {
+        openGenericModal(skills[h3.textContent.trim()], h3.textContent.trim());
+      });
+    }
+  });
+
+  // Card spotlight hover effect
+  document.querySelectorAll('.card, .smap-card').forEach(function(card) {
+    card.addEventListener('mousemove', function(e) {
+      var rect = card.getBoundingClientRect();
+      card.style.setProperty('--mouse-x', (e.clientX - rect.left) + 'px');
+      card.style.setProperty('--mouse-y', (e.clientY - rect.top) + 'px');
+    });
+  });
+
+  // Animate usage bars on scroll into view
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var fills = entry.target.querySelectorAll('.usage-bar-fill');
+        fills.forEach(function(fill) {
+          var w = fill.style.width;
+          fill.style.width = '0%';
+          requestAnimationFrame(function() {
+            requestAnimationFrame(function() {
+              fill.style.width = w;
+            });
+          });
+        });
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.usage-bar-wrap').forEach(function(bar) {
+    observer.observe(bar);
+  });
+});
+
+function closeModal() {
+  var overlay = document.getElementById('agent-modal');
+  var modal = overlay.querySelector('.modal');
+  modal.style.animation = 'modalOut 0.2s ease forwards';
+  setTimeout(function() {
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+    modal.style.animation = '';
+  }, 180);
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ===== ACTIVE NAV TRACKING =====
+(function() {
+  var sections = document.querySelectorAll('.section, .smap');
+  var navLinks = document.querySelectorAll('.nav-link');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var id = entry.target.id;
+        navLinks.forEach(function(link) {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(function(s) { if (s.id) observer.observe(s); });
+})();
+</script>
+</body>
+</html>
