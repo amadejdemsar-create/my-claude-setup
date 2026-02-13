@@ -1665,6 +1665,64 @@
     color: var(--text-bright);
   }
 
+  /* ===== INSTALL BUTTON ===== */
+  .install-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, rgba(52,211,153,0.12), rgba(52,211,153,0.06));
+    border: 1px solid rgba(52,211,153,0.25);
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--green);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    margin-bottom: 24px;
+    width: 100%;
+    justify-content: center;
+    letter-spacing: 0.01em;
+  }
+
+  .install-btn:hover {
+    background: linear-gradient(135deg, rgba(52,211,153,0.2), rgba(52,211,153,0.1));
+    border-color: rgba(52,211,153,0.4);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(52,211,153,0.15);
+  }
+
+  .install-btn:active { transform: translateY(0); }
+
+  .install-btn.copied {
+    background: linear-gradient(135deg, rgba(52,211,153,0.25), rgba(52,211,153,0.15));
+    border-color: rgba(52,211,153,0.5);
+    color: #fff;
+  }
+
+  .install-btn .btn-icon { font-size: 1rem; flex-shrink: 0; }
+
+  /* ===== TOAST ===== */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--green);
+    color: #000;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 10px 24px;
+    border-radius: 10px;
+    box-shadow: 0 4px 24px rgba(52,211,153,0.35);
+    z-index: 300;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+  }
+
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
   /* ===== ACTIVE NAV HIGHLIGHT ===== */
   .nav-link.active {
     color: var(--text-bright);
@@ -2548,6 +2606,8 @@
 
 </div><!-- /page -->
 
+<div class="toast" id="toast">Copied to clipboard!</div>
+
 <script>
 const agents = {
   'stock-analyst': {
@@ -3166,6 +3226,26 @@ function openModal(agentName) {
 const mcpServers = {
   'GitHub': {
     icon: '&#128025;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the GitHub MCP server in my Claude Code setup.
+
+Before you do anything, ask me: "Do you have a GitHub account?"
+
+If I say YES:
+- Add the config below to ~/.claude.json
+- Then tell me to restart Claude Code and authenticate by running /mcp, selecting "github", and choosing "Authenticate"
+
+If I say NO:
+- Tell me to create a free account at https://github.com — just sign up with email
+- Then once I confirm, add the config below and walk me through authentication
+
+Add this to ~/.claude.json under the top-level "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+
+"github": {
+  "type": "http",
+  "url": "https://api.githubcopilot.com/mcp"
+}
+
+IMPORTANT: The URL must be https://api.githubcopilot.com/mcp (NOT api.github.com — that will silently fail).`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3192,6 +3272,24 @@ const mcpServers = {
   },
   'Notion': {
     icon: '&#128211;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the Notion MCP server in my Claude Code setup.
+
+Before you do anything, ask me: "Do you have a Notion account?"
+
+If I say YES:
+- Add the config below to ~/.claude.json
+- Tell me to restart Claude Code — on first use a browser popup will ask me to authorize Notion access (OAuth). No API key needed.
+
+If I say NO:
+- Tell me to create a free account at https://notion.so
+- Once I confirm, add the config below and tell me to restart Claude Code
+
+Add this to ~/.claude.json under the top-level "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+
+"notion": {
+  "type": "http",
+  "url": "https://mcp.notion.com/mcp"
+}`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3214,6 +3312,31 @@ const mcpServers = {
   },
   'Firecrawl': {
     icon: '&#128293;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the Firecrawl MCP server in my Claude Code setup.
+
+Before you do anything, ask me: "Do you already have a Firecrawl API key, or do you need to create an account first?"
+
+If I HAVE an API key:
+- Ask me to paste it
+- Add the config below to ~/.claude.json with my key filled in
+- Tell me to restart Claude Code
+
+If I DON'T have an account yet:
+- Tell me to go to https://firecrawl.dev and sign up for a free account
+- Once signed up, tell me to go to my dashboard and find the API Keys section to copy my API key
+- Ask me to paste it
+- Then add the config below with my key filled in and tell me to restart Claude Code
+
+Add this to ~/.claude.json under the top-level "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+
+"firecrawl": {
+  "type": "stdio",
+  "command": "npx",
+  "args": ["-y", "firecrawl-mcp"],
+  "env": {
+    "FIRECRAWL_API_KEY": "PASTE_KEY_HERE"
+  }
+}`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3237,6 +3360,31 @@ const mcpServers = {
   },
   'Perplexity': {
     icon: '&#128269;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the Perplexity MCP server in my Claude Code setup.
+
+Before you do anything, ask me: "Do you already have a Perplexity API key, or do you need to create an account first?"
+
+If I HAVE an API key:
+- Ask me to paste it
+- Add the config below to ~/.claude.json with my key filled in
+- Tell me to restart Claude Code
+
+If I DON'T have an account yet:
+- Tell me to go to https://perplexity.ai and sign up
+- Once signed up, tell me to go to Settings > API and generate a new API key
+- Ask me to paste it
+- Then add the config below with my key filled in and tell me to restart Claude Code
+
+Add this to ~/.claude.json under the top-level "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+
+"perplexity": {
+  "type": "stdio",
+  "command": "npx",
+  "args": ["-y", "@nicepkg/perplexity-mcp"],
+  "env": {
+    "PERPLEXITY_API_KEY": "PASTE_KEY_HERE"
+  }
+}`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3259,6 +3407,37 @@ const mcpServers = {
   },
   'Hostinger': {
     icon: '&#127968;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the Hostinger MCP server in my Claude Code setup.
+
+Before you do anything, ask me: "Do you already have a Hostinger account and API token, or do you need to set that up first?"
+
+If I HAVE an API token:
+- Ask me to paste it
+- Add the config below to ~/.claude.json with my token filled in
+- Tell me to restart Claude Code
+
+If I HAVE an account but NO API token:
+- Tell me to log in to my Hostinger account at https://hpanel.hostinger.com
+- Go to Account > API Tokens and generate a new token
+- Ask me to paste it
+- Then add the config below with my token filled in and tell me to restart Claude Code
+
+If I DON'T have an account yet:
+- Tell me Hostinger is a hosting provider — I need an active Hostinger hosting plan to use this MCP
+- Direct me to https://hostinger.com to sign up
+- Once I have an account, walk me through generating an API token (Account > API Tokens)
+- Then add the config and tell me to restart
+
+Add this to ~/.claude.json under the top-level "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+
+"hostinger": {
+  "type": "stdio",
+  "command": "npx",
+  "args": ["-y", "hostinger-api-mcp@latest"],
+  "env": {
+    "API_TOKEN": "PASTE_TOKEN_HERE"
+  }
+}`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3281,6 +3460,38 @@ const mcpServers = {
   },
   'Dokploy': {
     icon: '&#128640;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the Dokploy MCP server in my Claude Code setup.
+
+Before you do anything, ask me: "Do you have a Dokploy instance running on a VPS, and do you have your Dokploy API key and URL?"
+
+If I HAVE the URL and API key:
+- Ask me to paste both my Dokploy URL (e.g. http://my-vps-ip:3000/api) and API key
+- Add the config below to ~/.claude.json with my values filled in
+- Tell me to restart Claude Code
+
+If I HAVE Dokploy running but NO API key:
+- Tell me to open my Dokploy dashboard in the browser
+- Go to Settings and generate a new API key
+- Ask me to paste the API key and my Dokploy URL
+- Then add the config below and tell me to restart Claude Code
+
+If I DON'T have Dokploy set up:
+- Tell me Dokploy is a self-hosted deployment platform that runs on a VPS
+- Direct me to https://dokploy.com for setup instructions — I need a VPS first
+- Once Dokploy is running, walk me through getting the API key from Settings
+- Then add the config and tell me to restart
+
+Add this to ~/.claude.json under the top-level "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+
+"dokploy": {
+  "type": "stdio",
+  "command": "npx",
+  "args": ["-y", "@ahdev/dokploy-mcp"],
+  "env": {
+    "DOKPLOY_URL": "PASTE_URL_HERE",
+    "DOKPLOY_API_KEY": "PASTE_KEY_HERE"
+  }
+}`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3304,6 +3515,15 @@ const mcpServers = {
   },
   'Yahoo Finance': {
     icon: '&#128200;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the Yahoo Finance MCP server in my Claude Code setup. Add this to my global config at ~/.claude.json under the top-level "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+
+"yahoo-finance": {
+  "type": "stdio",
+  "command": "uvx",
+  "args": ["mcp-yahoo-finance"]
+}
+
+No API key needed — this uses Yahoo's public finance data. Make sure I have Python and uvx installed (pip install uvx if needed). After adding, tell me to restart Claude Code.`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3332,6 +3552,31 @@ const mcpServers = {
   },
   'CoinMarketCap': {
     icon: '&#129689;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the CoinMarketCap MCP server in my Claude Code setup.
+
+Before you do anything, ask me: "Do you already have a CoinMarketCap API key, or do you need to create an account first?"
+
+If I HAVE an API key:
+- Ask me to paste it
+- Add the config below to ~/.claude.json with my key filled in
+- Tell me to restart Claude Code
+
+If I DON'T have an account yet:
+- Tell me to go to https://coinmarketcap.com/api/ and sign up for the Basic plan (it's free)
+- Once signed up, tell me to go to my Developer Dashboard and copy my API key
+- Ask me to paste it
+- Then add the config below with my key filled in and tell me to restart Claude Code
+
+Add this to ~/.claude.json under the top-level "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+
+"coinmarketcap": {
+  "type": "stdio",
+  "command": "npx",
+  "args": ["-y", "@shinzolabs/coinmarketcap-mcp"],
+  "env": {
+    "COINMARKETCAP_API_KEY": "PASTE_KEY_HERE"
+  }
+}`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3355,6 +3600,14 @@ const mcpServers = {
   },
   'Transcript API': {
     icon: '&#127909;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the Transcript API MCP server in my Claude Code setup. Add this to my global config at ~/.claude.json under the top-level "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+
+"transcript-api": {
+  "type": "http",
+  "url": "https://transcriptapi.com/mcp"
+}
+
+No API key needed — this is a free public API for extracting YouTube transcripts. After adding, tell me to restart Claude Code.`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3376,6 +3629,15 @@ const mcpServers = {
   },
   'Docker (MCP Gateway)': {
     icon: '&#128230;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the Docker MCP Gateway in my Claude Code setup. Add this to my global config at ~/.claude.json under the top-level "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+
+"docker": {
+  "type": "stdio",
+  "command": "docker",
+  "args": ["mcp", "gateway", "run"]
+}
+
+No API key needed — this uses your local Docker daemon. Make sure Docker Desktop is installed and running. After adding, tell me to restart Claude Code.`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3393,6 +3655,15 @@ const mcpServers = {
   },
   'Claude in Chrome': {
     icon: '&#127760;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the Claude in Chrome extension for browser automation with Claude Code.
+
+This is NOT a config file change — it's a Chrome extension:
+
+1. Go to the Chrome Web Store and search for "Claude in Chrome" (or "Claude Code Chrome Extension")
+2. Install the extension
+3. The extension will automatically be detected by Claude Code — no config needed
+
+After installing, restart Claude Code. The browser automation tools (navigate, click, screenshot, fill forms, etc.) will appear automatically.`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3426,6 +3697,15 @@ const mcpServers = {
   },
   'Swipe File': {
     icon: '&#128194;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install a Filesystem MCP server to give Claude Code access to a local folder. Add this to ~/.claude/settings.json under the "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+
+"swipe-file": {
+  "type": "stdio",
+  "command": "npx",
+  "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/your/folder"]
+}
+
+Replace /path/to/your/folder with the absolute path to the folder you want Claude to access. No API key needed. After adding, tell me to restart Claude Code.`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3450,6 +3730,15 @@ const mcpServers = {
   },
   'Context': {
     icon: '&#129504;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install a Filesystem MCP server to give Claude Code access to a personal knowledge folder. Add this to ~/.claude/settings.json under the "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+
+"context": {
+  "type": "stdio",
+  "command": "npx",
+  "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/your/context"]
+}
+
+Replace /path/to/your/context with the absolute path to your personal context/notes folder. No API key needed. After adding, tell me to restart Claude Code.`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3475,6 +3764,31 @@ const mcpServers = {
   },
   'Brave Search': {
     icon: '&#128526;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the Brave Search MCP server in my Claude Code setup.
+
+Before you do anything, ask me: "Do you already have a Brave Search API key, or do you need to create an account first?"
+
+If I HAVE an API key:
+- Ask me to paste it
+- Add the config below to ~/.claude/settings.json with my key filled in
+- Tell me to restart Claude Code
+
+If I DON'T have an account yet:
+- Tell me to go to https://brave.com/search/api/ and sign up (there's a free tier)
+- Once signed up, tell me to go to my dashboard and copy my API key
+- Ask me to paste it
+- Then add the config below with my key filled in and tell me to restart Claude Code
+
+Add this to ~/.claude/settings.json under the "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+
+"brave-search": {
+  "type": "stdio",
+  "command": "npx",
+  "args": ["-y", "@brave/brave-search-mcp-server"],
+  "env": {
+    "BRAVE_API_KEY": "PASTE_KEY_HERE"
+  }
+}`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3497,6 +3811,37 @@ const mcpServers = {
   },
   'Todoist': {
     icon: '&#9989;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the Todoist MCP server in my Claude Code setup.
+
+Before you do anything, ask me: "Do you already have a Todoist account and API token, or do you need to set that up first?"
+
+If I HAVE an API token:
+- Ask me to paste it
+- Add the config below to ~/.claude/settings.json with my token filled in
+- Tell me to restart Claude Code
+
+If I HAVE an account but NO API token:
+- Tell me to log in to Todoist and go to Settings > Integrations > Developer
+- Copy my API token from there
+- Ask me to paste it
+- Then add the config below with my token filled in and tell me to restart Claude Code
+
+If I DON'T have an account yet:
+- Tell me to sign up at https://todoist.com (there's a free plan)
+- Once signed up, tell me to go to Settings > Integrations > Developer to find my API token
+- Ask me to paste it
+- Then add the config below with my token filled in and tell me to restart Claude Code
+
+Add this to ~/.claude/settings.json under the "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+
+"todoist": {
+  "type": "stdio",
+  "command": "npx",
+  "args": ["-y", "@abhiz123/todoist-mcp-server"],
+  "env": {
+    "TODOIST_API_TOKEN": "PASTE_TOKEN_HERE"
+  }
+}`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3517,6 +3862,14 @@ const mcpServers = {
   },
   'OpenAI Developer Docs': {
     icon: '&#128218;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the OpenAI Developer Docs MCP server in my Claude Code setup. Add this to ~/.claude/settings.json under the "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+
+"openai-docs": {
+  "type": "http",
+  "url": "https://developers.openai.com/mcp"
+}
+
+No API key needed — this provides read-only access to OpenAI's developer documentation. After adding, tell me to restart Claude Code.`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3538,6 +3891,15 @@ const mcpServers = {
   },
   'Docker (uvx)': {
     icon: '&#128230;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the Docker MCP server (uvx version) in my Claude Code setup. Add this to ~/.claude/settings.json under the "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+
+"docker": {
+  "type": "stdio",
+  "command": "uvx",
+  "args": ["mcp-server-docker"]
+}
+
+No API key needed — this uses your local Docker daemon. Make sure Docker Desktop is installed and running, and that you have Python with uvx installed (pip install uvx). After adding, tell me to restart Claude Code.`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3560,6 +3922,34 @@ const mcpServers = {
   },
   'Supabase': {
     icon: '&#9889;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the Supabase MCP server in my Claude Code setup.
+
+Before you do anything, ask me: "Do you already have a Supabase project, and do you know your project reference ID?"
+
+If I HAVE a project and know my project ref:
+- Ask me to paste my project reference ID
+- Add the config below to ~/.claude.json with my ref filled in
+- Tell me to restart Claude Code — on first use a browser popup will ask me to authorize (OAuth)
+
+If I HAVE a Supabase account but DON'T know my project ref:
+- Tell me to go to my Supabase dashboard at https://supabase.com/dashboard
+- Open my project, go to Settings > General, and find the Reference ID
+- Ask me to paste it
+- Then add the config below and tell me to restart Claude Code
+
+If I DON'T have a Supabase project yet:
+- Tell me to sign up at https://supabase.com (free tier available)
+- Create a new project
+- Then go to Settings > General to find the Reference ID
+- Ask me to paste it
+- Then add the config below and tell me to restart Claude Code
+
+Add this to ~/.claude.json under the top-level "mcpServers" key (or under a project-specific path if I only want it for one project — create the key if it doesn't exist, preserve any existing MCP servers):
+
+"supabase": {
+  "type": "http",
+  "url": "https://mcp.supabase.com/mcp?project_ref=PASTE_PROJECT_REF_HERE"
+}`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3584,6 +3974,15 @@ const mcpServers = {
   },
   'Puppeteer': {
     icon: '&#127917;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the Puppeteer MCP server in my Claude Code setup. Add this to my global config at ~/.claude.json under the top-level "mcpServers" key (or under a project-specific key if you only want it for one project):
+
+"puppeteer": {
+  "type": "stdio",
+  "command": "npx",
+  "args": ["-y", "@modelcontextprotocol/server-puppeteer"]
+}
+
+No API key needed — this runs a local headless Chrome browser. Make sure Node.js is installed. After adding, tell me to restart Claude Code.`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3813,10 +4212,38 @@ function openGenericModal(data, title) {
   icon.style.background = data.iconBg;
   titleEl.textContent = title;
   meta.innerHTML = '';
-  body.innerHTML = data.content;
+
+  var installBtnHtml = '';
+  if (data.installPrompt) {
+    var escapedTitle = title.replace(/'/g, "\\'");
+    installBtnHtml = '<button class="install-btn" onclick="event.stopPropagation(); copyInstallPrompt(\'' + escapedTitle + '\')">' +
+      '<span class="btn-icon">&#128203;</span> Copy Install Prompt for Claude Code</button>';
+  }
+  body.innerHTML = installBtnHtml + data.content;
 
   overlay.classList.add('active');
   document.body.style.overflow = 'hidden';
+}
+
+// ===== COPY INSTALL PROMPT =====
+function copyInstallPrompt(mcpName) {
+  var server = mcpServers[mcpName];
+  if (!server || !server.installPrompt) return;
+
+  navigator.clipboard.writeText(server.installPrompt).then(function() {
+    var btn = document.querySelector('.install-btn');
+    if (btn) {
+      btn.classList.add('copied');
+      btn.innerHTML = '<span class="btn-icon">&#10003;</span> Copied! Paste into Claude Code';
+      setTimeout(function() {
+        btn.classList.remove('copied');
+        btn.innerHTML = '<span class="btn-icon">&#128203;</span> Copy Install Prompt for Claude Code';
+      }, 2500);
+    }
+    var toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(function() { toast.classList.remove('show'); }, 2000);
+  });
 }
 
 // ===== AUTO-WIRE MCP CARDS =====
