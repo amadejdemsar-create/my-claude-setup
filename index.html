@@ -2175,7 +2175,7 @@
       <div class="flow-arrow">&rarr;</div>
       <div class="flow-node fn-mcp">Yahoo Finance</div>
       <div class="flow-arrow">&rarr;</div>
-      <div class="flow-node fn-output">Me/finances/AAPL.md</div>
+      <div class="flow-node fn-output">~/analyses/stocks/AAPL.md</div>
     </div>
 
     <div class="flow">
@@ -2185,7 +2185,7 @@
       <div class="flow-arrow">&rarr;</div>
       <div class="flow-node fn-mcp">CoinMarketCap + Web</div>
       <div class="flow-arrow">&rarr;</div>
-      <div class="flow-node fn-output">Me/finances/crypto/SOL.md</div>
+      <div class="flow-node fn-output">~/analyses/crypto/SOL.md</div>
     </div>
 
     <div class="flow">
@@ -2405,7 +2405,7 @@
 
     <div class="data-card">
       <h4>Investment Analyses</h4>
-      <div class="path">/Context/Me/finances/crypto/</div>
+      <div class="path">~/analyses/stocks/ &amp; ~/analyses/crypto/</div>
       <ul>
         <li>19 individual asset analyses</li>
         <li>BTC, ETH, SOL, TIA, INJ, LINK, RNDR...</li>
@@ -2424,7 +2424,7 @@
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">ai/</span> <span class="file">agentic-ai.md</span><br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">marketing/</span> <span class="file">copywriting-crash-course.md</span><br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">productivity/</span> <span class="file">deep-work-guide.md</span><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">crypto/</span> <span class="comment">&mdash; links to Me/finances/crypto/</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">crypto/</span> <span class="comment">&mdash; links to ~/analyses/crypto/</span><br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">philosophy/</span> <span class="file">life-philosophy.md</span><br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">finance/</span> <span class="comment">&mdash; 9 research framework files</span><br>
     &nbsp;&nbsp;<span class="dir">Me/</span><br>
@@ -2620,8 +2620,19 @@ const agents = {
     installPrompt: `Install the stock-analyst agent in my Claude Code setup.
 
 Run these commands:
-mkdir -p ~/.claude/agents
+mkdir -p ~/.claude/agents ~/.claude/knowledge/finance ~/analyses/stocks
 curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/stock-analyst.md -o ~/.claude/agents/stock-analyst.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/fundamentals.md -o ~/.claude/knowledge/finance/fundamentals.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/technicals.md -o ~/.claude/knowledge/finance/technicals.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/macro.md -o ~/.claude/knowledge/finance/macro.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/geopolitics.md -o ~/.claude/knowledge/finance/geopolitics.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/psychology.md -o ~/.claude/knowledge/finance/psychology.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/risk-management.md -o ~/.claude/knowledge/finance/risk-management.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/stock-valuation.md -o ~/.claude/knowledge/finance/stock-valuation.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/news-interpretation.md -o ~/.claude/knowledge/finance/news-interpretation.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/scenario-analysis.md -o ~/.claude/knowledge/finance/scenario-analysis.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/crypto-frameworks.md -o ~/.claude/knowledge/finance/crypto-frameworks.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/index.md -o ~/.claude/knowledge/finance/index.md
 
 Then tell me to restart Claude Code for the agent to become available.
 
@@ -2645,7 +2656,7 @@ For the best experience, also install these MCP servers (check the MCP Servers s
         <li>news-interpretation.md &mdash; Signal vs noise</li>
         <li>scenario-analysis.md &mdash; Bull/bear/base cases</li>
       </ul>
-      <p>Also checks existing analyses at <code>Me/finances/</code></p>
+      <p>Also checks existing analyses at <code>~/analyses/stocks/</code></p>
 
       <h2>8-Step Analysis Framework</h2>
 
@@ -2720,7 +2731,7 @@ For the best experience, also install these MCP servers (check the MCP Servers s
       <hr>
 
       <h2>Output</h2>
-      <p>YAML frontmatter with ticker, name, type, score, market_cap, own status, source, and tags. Full structured analysis following Steps 2-8. Saved to <code>Me/finances/[ticker].md</code></p>
+      <p>YAML frontmatter with ticker, name, type, score, market_cap, own status, source, and tags. Full structured analysis following Steps 2-8. Saved to <code>~/analyses/stocks/[ticker].md</code></p>
 
       <h2>Rules</h2>
       <ul>
@@ -2744,8 +2755,19 @@ For the best experience, also install these MCP servers (check the MCP Servers s
     installPrompt: `Install the crypto-analyst agent in my Claude Code setup.
 
 Run these commands:
-mkdir -p ~/.claude/agents
+mkdir -p ~/.claude/agents ~/.claude/knowledge/finance ~/analyses/crypto
 curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/crypto-analyst.md -o ~/.claude/agents/crypto-analyst.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/fundamentals.md -o ~/.claude/knowledge/finance/fundamentals.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/technicals.md -o ~/.claude/knowledge/finance/technicals.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/macro.md -o ~/.claude/knowledge/finance/macro.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/geopolitics.md -o ~/.claude/knowledge/finance/geopolitics.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/psychology.md -o ~/.claude/knowledge/finance/psychology.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/risk-management.md -o ~/.claude/knowledge/finance/risk-management.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/stock-valuation.md -o ~/.claude/knowledge/finance/stock-valuation.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/news-interpretation.md -o ~/.claude/knowledge/finance/news-interpretation.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/scenario-analysis.md -o ~/.claude/knowledge/finance/scenario-analysis.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/crypto-frameworks.md -o ~/.claude/knowledge/finance/crypto-frameworks.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/index.md -o ~/.claude/knowledge/finance/index.md
 
 Then tell me to restart Claude Code for the agent to become available.
 
@@ -2757,7 +2779,7 @@ For the best experience, also install these MCP servers (check the MCP Servers s
       <div class="persona-quote">You are a senior crypto analyst and former hedge fund portfolio manager with 10 years in crypto (since 2014) and 20 years in traditional finance. You survived the 2017 crash, the 2020 DeFi summer, the 2022 bear market, and multiple altcoin wipeouts. You're not a moonboy &mdash; you're a risk-adjusted return optimizer who understands that 90% of crypto projects go to zero.</div>
 
       <h2>Knowledge Base</h2>
-      <p>Reads 8 knowledge base files before analysis, plus checks existing analyses in <code>Me/finances/crypto/</code></p>
+      <p>Reads 8 knowledge base files before analysis, plus checks existing analyses in <code>~/analyses/crypto/</code></p>
 
       <h2>5-Part Institutional Analysis Framework</h2>
 
@@ -3199,10 +3221,13 @@ Then tell me to restart Claude Code for the agent to become available.`,
     installPrompt: `Install the claude-code-advisor agent in my Claude Code setup.
 
 Run these commands:
-mkdir -p ~/.claude/agents
+mkdir -p ~/.claude/agents ~/.claude/knowledge
 curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/claude-code-advisor.md -o ~/.claude/agents/claude-code-advisor.md
+git clone https://github.com/amadejdemsar-create/claude-code-knowledge.git ~/.claude/knowledge/claude-code
 
-Then tell me to restart Claude Code for the agent to become available.`,
+Then tell me to restart Claude Code for the agent to become available.
+
+The knowledge base is a Git repo. The agent will auto-sync it (git pull) before answering questions.`,
     content: `
       <div class="persona-quote">You are a Claude Code workflow advisor. Your knowledge comes from curated tutorials and best practices stored in a Git-synced knowledge base. You give concrete, actionable advice &mdash; not generic tips.</div>
 
@@ -4250,9 +4275,7 @@ curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/m
 
 Then tell me to restart Claude Code. After that I can use it by typing /analyze-stock AAPL in Claude Code.
 
-IMPORTANT: This command requires the stock-analyst agent to be installed first. If I don't have it yet, also run:
-mkdir -p ~/.claude/agents
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/stock-analyst.md -o ~/.claude/agents/stock-analyst.md`,
+IMPORTANT: This command requires the stock-analyst agent AND the finance knowledge base to be installed. If I haven't installed the stock-analyst agent yet, do that first (it includes the knowledge base download).`,
     content: `
       <h2>What It Does</h2>
       <p>Triggers the <strong>stock-analyst</strong> agent for deep equity research on any ticker symbol.</p>
@@ -4262,7 +4285,7 @@ curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/m
         <li>Fetches live data from Yahoo Finance MCP</li>
         <li>Searches recent news via Perplexity</li>
         <li>Runs 8-step analysis framework</li>
-        <li>Writes structured analysis to <code>Me/finances/[ticker].md</code></li>
+        <li>Writes structured analysis to <code>~/analyses/stocks/[ticker].md</code></li>
       </ol>
       <h2>Usage</h2>
       <pre>/analyze-stock AAPL</pre>
@@ -4282,9 +4305,7 @@ curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/m
 
 Then tell me to restart Claude Code. After that I can use it by typing /analyze-crypto SOL in Claude Code.
 
-IMPORTANT: This command requires the crypto-analyst agent to be installed first. If I don't have it yet, also run:
-mkdir -p ~/.claude/agents
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/crypto-analyst.md -o ~/.claude/agents/crypto-analyst.md`,
+IMPORTANT: This command requires the crypto-analyst agent AND the finance knowledge base to be installed. If I haven't installed the crypto-analyst agent yet, do that first (it includes the knowledge base download).`,
     content: `
       <h2>What It Does</h2>
       <p>Triggers the <strong>crypto-analyst</strong> agent for institutional-grade token/protocol research.</p>
@@ -4294,7 +4315,7 @@ curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/m
         <li>Fetches live data from CoinMarketCap MCP</li>
         <li>Searches recent developments via Perplexity</li>
         <li>Runs 5-part institutional analysis framework</li>
-        <li>Writes analysis to <code>Me/finances/crypto/[ticker].md</code></li>
+        <li>Writes analysis to <code>~/analyses/crypto/[ticker].md</code></li>
       </ol>
       <h2>Usage</h2>
       <pre>/analyze-crypto SOL</pre>
