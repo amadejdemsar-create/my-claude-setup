@@ -2617,6 +2617,18 @@ const agents = {
     model: 'Opus',
     tools: 'Read, Grep, Glob, Write, Edit, Bash, WebSearch, WebFetch',
     color: 'blue',
+    installPrompt: `Install the stock-analyst agent in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/agents
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/stock-analyst.md -o ~/.claude/agents/stock-analyst.md
+
+Then tell me to restart Claude Code for the agent to become available.
+
+For the best experience, also install these MCP servers (check the MCP Servers section above for install prompts):
+- Yahoo Finance MCP (for live stock data)
+- Perplexity MCP (for news research)
+- Firecrawl MCP (for scraping financial sites)`,
     content: `
       <div class="persona-quote">You are a senior equity research analyst with 30 years of experience across Goldman Sachs, Bridgewater, and Renaissance Technologies. You combine deep fundamental analysis with technical timing, macro awareness, and geopolitical context. You think like a contrarian but act like an institutionalist. You never give vague "it depends" answers &mdash; you take a data-backed stance.</div>
 
@@ -2729,6 +2741,18 @@ const agents = {
     model: 'Opus',
     tools: 'Read, Grep, Glob, Write, Edit, Bash, WebSearch, WebFetch',
     color: 'cyan',
+    installPrompt: `Install the crypto-analyst agent in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/agents
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/crypto-analyst.md -o ~/.claude/agents/crypto-analyst.md
+
+Then tell me to restart Claude Code for the agent to become available.
+
+For the best experience, also install these MCP servers (check the MCP Servers section above for install prompts):
+- CoinMarketCap MCP (for live crypto data)
+- Perplexity MCP (for news research)
+- Firecrawl MCP (for scraping project docs)`,
     content: `
       <div class="persona-quote">You are a senior crypto analyst and former hedge fund portfolio manager with 10 years in crypto (since 2014) and 20 years in traditional finance. You survived the 2017 crash, the 2020 DeFi summer, the 2022 bear market, and multiple altcoin wipeouts. You're not a moonboy &mdash; you're a risk-adjusted return optimizer who understands that 90% of crypto projects go to zero.</div>
 
@@ -2810,6 +2834,13 @@ const agents = {
     model: 'Opus',
     tools: 'All tools',
     color: 'blue',
+    installPrompt: `Install the email-marketing-strategist agent in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/agents
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/email-marketing-strategist.md -o ~/.claude/agents/email-marketing-strategist.md
+
+Then tell me to restart Claude Code for the agent to become available.`,
     content: `
       <div class="persona-quote">You are an elite email marketing strategist with 15+ years of experience specializing in B2B SaaS and the hospitality industry. You've built and optimized email programs that have generated millions in revenue.</div>
 
@@ -2886,6 +2917,13 @@ const agents = {
     model: 'Opus',
     tools: 'All tools',
     color: 'pink',
+    installPrompt: `Install the copywriting-storytelling agent in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/agents
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/copywriting-storytelling.md -o ~/.claude/agents/copywriting-storytelling.md
+
+Then tell me to restart Claude Code for the agent to become available.`,
     content: `
       <div class="persona-quote">You are a world-class direct response copywriter with 20+ years in the trenches. You combine the precision of Ogilvy, the street-smart urgency of Halbert, the awareness sophistication of Schwartz, the persuasion science of Cialdini, and the modern offer engineering of Hormozi and Brunson. You don't write "copy." You engineer decisions.</div>
 
@@ -2977,6 +3015,13 @@ const agents = {
     model: 'Opus',
     tools: 'All tools',
     color: 'cyan',
+    installPrompt: `Install the design-visionary agent in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/agents
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/design-visionary.md -o ~/.claude/agents/design-visionary.md
+
+Then tell me to restart Claude Code for the agent to become available.`,
     content: `
       <div class="persona-quote">You are the embodiment of Steve Jobs' design philosophy, merged with cutting-edge Web3 aesthetics and deep understanding of human psychology. You possess an obsessive, uncompromising eye for design perfection. Every pixel matters. Every interaction must feel inevitable.</div>
 
@@ -3065,6 +3110,13 @@ const agents = {
     model: 'Opus',
     tools: 'All tools (full access)',
     color: 'cyan',
+    installPrompt: `Install the senior-architect agent in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/agents
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/senior-architect.md -o ~/.claude/agents/senior-architect.md
+
+Then tell me to restart Claude Code for the agent to become available.`,
     content: `
       <div class="persona-quote">You are an elite software architect with 25 years of experience across every major programming language, framework, and paradigm. Your implementations are legendary for their reliability, elegance, and zero-defect quality. You never rush. You never guess. You understand.</div>
 
@@ -3144,6 +3196,13 @@ const agents = {
     model: 'Opus',
     tools: 'Read, Write, Edit, Grep, Glob, Bash, WebFetch, WebSearch',
     color: 'green',
+    installPrompt: `Install the claude-code-advisor agent in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/agents
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/claude-code-advisor.md -o ~/.claude/agents/claude-code-advisor.md
+
+Then tell me to restart Claude Code for the agent to become available.`,
     content: `
       <div class="persona-quote">You are a Claude Code workflow advisor. Your knowledge comes from curated tutorials and best practices stored in a Git-synced knowledge base. You give concrete, actionable advice &mdash; not generic tips.</div>
 
@@ -3216,7 +3275,14 @@ function openModal(agentName) {
   title.textContent = agent.name;
   meta.innerHTML = '<span class="chip chip-model">' + agent.model + '</span>' +
                    '<span class="chip chip-tools">' + agent.tools + '</span>';
-  body.innerHTML = agent.content;
+
+  var installBtnHtml = '';
+  if (agent.installPrompt) {
+    var escapedName = agentName.replace(/'/g, "\\'");
+    installBtnHtml = '<button class="install-btn" onclick="event.stopPropagation(); copyInstallPrompt(\'' + escapedName + '\')">' +
+      '<span class="btn-icon">&#128203;</span> Copy Install Prompt for Claude Code</button>';
+  }
+  body.innerHTML = installBtnHtml + agent.content;
 
   overlay.classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -4011,6 +4077,13 @@ No API key needed — this runs a local headless Chrome browser. Make sure Node.
 const skills = {
   '/prompt-writer': {
     icon: '&#128221;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /prompt-writer skill in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/skills/prompt-writer
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/prompt-writer/SKILL.md -o ~/.claude/skills/prompt-writer/SKILL.md
+
+Then tell me to restart Claude Code. After that I can use it by typing /prompt-writer in Claude Code.`,
     content: `
       <div class="persona-quote">You are a prompt engineering master. Your mission is to transform user requests into prompts that produce extraordinary results &mdash; the kind of meticulous, first-principles thinking that Einstein, Tesla, and Feynman applied to their work.</div>
       <h2>The PROMETHEUS Framework</h2>
@@ -4055,6 +4128,13 @@ const skills = {
   },
   '/pda': {
     icon: '&#128204;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /pda (Project Decomposition Assistant) skill in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/skills/pda
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/pda/SKILL.md -o ~/.claude/skills/pda/SKILL.md
+
+Then tell me to restart Claude Code. After that I can use it by typing /pda in Claude Code.`,
     content: `
       <div class="persona-quote">You are a project decomposition expert. Your mission is to transform any project into clear phases, concrete tasks, and tiny Minimum Viable Actions (MVAs) &mdash; organized so the vital 20% that creates 80% of results is always identified and prioritized first.</div>
       <h2>Core Definitions</h2>
@@ -4088,6 +4168,22 @@ const skills = {
   },
   '/notebooklm': {
     icon: '&#127897;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /notebooklm skill in my Claude Code setup.
+
+Before you do anything, ask me: "Do you have the notebooklm-py Python package installed?"
+
+If I DO have it installed:
+- Run: notebooklm skill install
+- This will automatically set up the skill in my Claude Code
+- Tell me to restart Claude Code
+
+If I DON'T have it installed:
+- Run: pip install notebooklm-py
+- Then run: notebooklm login (this opens a browser for Google OAuth)
+- Then run: notebooklm skill install
+- Tell me to restart Claude Code
+
+After that I can use it by typing /notebooklm in Claude Code.`,
     content: `
       <h2>What It Does</h2>
       <p>Complete programmatic access to Google NotebookLM &mdash; including capabilities not in the web UI. Create notebooks, add sources, generate artifacts, download results.</p>
@@ -4126,6 +4222,13 @@ const skills = {
   },
   '/prd': {
     icon: '&#128196;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /prd (PRD Generator) command in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/commands
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/commands/prd.md -o ~/.claude/commands/prd.md
+
+Then tell me to restart Claude Code. After that I can use it by typing /prd in Claude Code.`,
     content: `
       <h2>What It Does</h2>
       <p>Generates a Machine-Optimized PRD (Product Requirements Document) designed specifically for AI coding agents. The most-used skill with <strong>23 invocations</strong>.</p>
@@ -4139,6 +4242,17 @@ const skills = {
   },
   '/analyze-stock': {
     icon: '&#128200;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /analyze-stock command in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/commands
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/commands/analyze-stock.md -o ~/.claude/commands/analyze-stock.md
+
+Then tell me to restart Claude Code. After that I can use it by typing /analyze-stock AAPL in Claude Code.
+
+IMPORTANT: This command requires the stock-analyst agent to be installed first. If I don't have it yet, also run:
+mkdir -p ~/.claude/agents
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/stock-analyst.md -o ~/.claude/agents/stock-analyst.md`,
     content: `
       <h2>What It Does</h2>
       <p>Triggers the <strong>stock-analyst</strong> agent for deep equity research on any ticker symbol.</p>
@@ -4160,6 +4274,17 @@ const skills = {
   },
   '/analyze-crypto': {
     icon: '&#129689;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /analyze-crypto command in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/commands
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/commands/analyze-crypto.md -o ~/.claude/commands/analyze-crypto.md
+
+Then tell me to restart Claude Code. After that I can use it by typing /analyze-crypto SOL in Claude Code.
+
+IMPORTANT: This command requires the crypto-analyst agent to be installed first. If I don't have it yet, also run:
+mkdir -p ~/.claude/agents
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/crypto-analyst.md -o ~/.claude/agents/crypto-analyst.md`,
     content: `
       <h2>What It Does</h2>
       <p>Triggers the <strong>crypto-analyst</strong> agent for institutional-grade token/protocol research.</p>
@@ -4181,6 +4306,13 @@ const skills = {
   },
   '/market-brief': {
     icon: '&#9728;&#65039;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /market-brief command in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/commands
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/commands/market-brief.md -o ~/.claude/commands/market-brief.md
+
+Then tell me to restart Claude Code. After that I can use it by typing /market-brief in Claude Code.`,
     content: `
       <h2>What It Does</h2>
       <p>Generates a concise morning market brief using Perplexity and web search. Quick overview of what's happening in markets today.</p>
@@ -4226,11 +4358,11 @@ function openGenericModal(data, title) {
 }
 
 // ===== COPY INSTALL PROMPT =====
-function copyInstallPrompt(mcpName) {
-  var server = mcpServers[mcpName];
-  if (!server || !server.installPrompt) return;
+function copyInstallPrompt(itemName) {
+  var item = mcpServers[itemName] || agents[itemName] || skills[itemName];
+  if (!item || !item.installPrompt) return;
 
-  navigator.clipboard.writeText(server.installPrompt).then(function() {
+  navigator.clipboard.writeText(item.installPrompt).then(function() {
     var btn = document.querySelector('.install-btn');
     if (btn) {
       btn.classList.add('copied');
