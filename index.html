@@ -2620,21 +2620,13 @@ const agents = {
     installPrompt: `Install the stock-analyst agent in my Claude Code setup.
 
 Run these commands:
-mkdir -p ~/.claude/agents ~/.claude/knowledge/finance ~/analyses/stocks
+mkdir -p ~/.claude/agents ~/.claude/knowledge ~/analyses/stocks
 curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/stock-analyst.md -o ~/.claude/agents/stock-analyst.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/fundamentals.md -o ~/.claude/knowledge/finance/fundamentals.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/technicals.md -o ~/.claude/knowledge/finance/technicals.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/macro.md -o ~/.claude/knowledge/finance/macro.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/geopolitics.md -o ~/.claude/knowledge/finance/geopolitics.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/psychology.md -o ~/.claude/knowledge/finance/psychology.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/risk-management.md -o ~/.claude/knowledge/finance/risk-management.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/stock-valuation.md -o ~/.claude/knowledge/finance/stock-valuation.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/news-interpretation.md -o ~/.claude/knowledge/finance/news-interpretation.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/scenario-analysis.md -o ~/.claude/knowledge/finance/scenario-analysis.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/crypto-frameworks.md -o ~/.claude/knowledge/finance/crypto-frameworks.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/index.md -o ~/.claude/knowledge/finance/index.md
+git clone https://github.com/amadejdemsar-create/finance-knowledge.git ~/.claude/knowledge/finance
 
 Then tell me to restart Claude Code for the agent to become available.
+
+The knowledge base is a Git repo. The agent will auto-sync it (git pull) before each analysis.
 
 For the best experience, also install these MCP servers (check the MCP Servers section above for install prompts):
 - Yahoo Finance MCP (for live stock data)
@@ -2755,21 +2747,13 @@ For the best experience, also install these MCP servers (check the MCP Servers s
     installPrompt: `Install the crypto-analyst agent in my Claude Code setup.
 
 Run these commands:
-mkdir -p ~/.claude/agents ~/.claude/knowledge/finance ~/analyses/crypto
+mkdir -p ~/.claude/agents ~/.claude/knowledge ~/analyses/crypto
 curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/crypto-analyst.md -o ~/.claude/agents/crypto-analyst.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/fundamentals.md -o ~/.claude/knowledge/finance/fundamentals.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/technicals.md -o ~/.claude/knowledge/finance/technicals.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/macro.md -o ~/.claude/knowledge/finance/macro.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/geopolitics.md -o ~/.claude/knowledge/finance/geopolitics.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/psychology.md -o ~/.claude/knowledge/finance/psychology.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/risk-management.md -o ~/.claude/knowledge/finance/risk-management.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/stock-valuation.md -o ~/.claude/knowledge/finance/stock-valuation.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/news-interpretation.md -o ~/.claude/knowledge/finance/news-interpretation.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/scenario-analysis.md -o ~/.claude/knowledge/finance/scenario-analysis.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/crypto-frameworks.md -o ~/.claude/knowledge/finance/crypto-frameworks.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/knowledge/finance/index.md -o ~/.claude/knowledge/finance/index.md
+git clone https://github.com/amadejdemsar-create/finance-knowledge.git ~/.claude/knowledge/finance
 
 Then tell me to restart Claude Code for the agent to become available.
+
+The knowledge base is a Git repo. The agent will auto-sync it (git pull) before each analysis.
 
 For the best experience, also install these MCP servers (check the MCP Servers section above for install prompts):
 - CoinMarketCap MCP (for live crypto data)
