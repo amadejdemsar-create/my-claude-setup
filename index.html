@@ -3212,8 +3212,17 @@ Then tell me to restart Claude Code for the agent to become available.`,
     content: `
       <div class="persona-quote">You are a Claude Code workflow advisor. Your knowledge comes from curated tutorials and best practices hosted on GitHub. You give concrete, actionable advice, not generic tips.</div>
 
+      <h2>First Run: GitHub Setup</h2>
+      <p>On first use, the agent walks you through connecting GitHub:</p>
+      <ol>
+        <li>Asks if you have a GitHub account</li>
+        <li>If yes, checks if GitHub MCP is already connected</li>
+        <li>If not, configures it automatically and tells you to restart, then <code>/mcp</code> &rarr; select github &rarr; authenticate in browser</li>
+        <li>If no GitHub account, falls back to public raw URLs (works fine)</li>
+      </ol>
+
       <h2>Knowledge Base</h2>
-      <p>Fetches sources directly from GitHub (no local clone needed). 10 curated source files:</p>
+      <p>Fetches sources directly from GitHub (via MCP or raw URLs). 10 curated source files:</p>
       <table>
         <tr><th>File</th><th>Topic</th></tr>
         <tr><td><code>01-setup-claude-code-15-minutes.md</code></td><td>Initial setup guide</td></tr>
@@ -3223,6 +3232,8 @@ Then tell me to restart Claude Code for the agent to become available.`,
         <tr><td><code>05-prompting-best-practices-anthropic.md</code></td><td>Anthropic's 10 prompting tips</td></tr>
         <tr><td><code>06-anthropic-internal-best-practices.md</code></td><td>Anthropic internal patterns (TDD, headless)</td></tr>
         <tr><td><code>07-boris-creator-best-practices.md</code></td><td>Creator's setup (parallel Claudes, hooks)</td></tr>
+        <tr><td><code>08-viral-claude-prompts.md</code></td><td>13 viral Claude prompts</td></tr>
+        <tr><td><code>09-claude-coders-beginners-guide.md</code></td><td>Complete beginners guide</td></tr>
         <tr><td><code>10-external-resources.md</code></td><td>Tools, skill marketplaces, awesome lists</td></tr>
       </table>
 
@@ -3256,7 +3267,8 @@ Then tell me to restart Claude Code for the agent to become available.`,
 
       <h2>How It Works</h2>
       <ol>
-        <li>Fetches relevant sources directly from GitHub &mdash; no local clone needed</li>
+        <li>On first run, helps you connect GitHub MCP (or falls back to raw URLs)</li>
+        <li>Fetches relevant sources from GitHub before answering</li>
         <li>Gives exact commands, file paths, config snippets</li>
         <li>References sources so you can dig deeper</li>
         <li>Prioritizes highest-impact suggestions (2-3, not 20)</li>
