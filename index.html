@@ -2394,11 +2394,11 @@
 
     <div class="data-card">
       <h4>Claude Code Knowledge Base</h4>
-      <div class="path">/Context/claude-code-knowledge/sources/</div>
+      <div class="path">github.com/amadejdemsar-create/claude-code-knowledge</div>
       <ul>
         <li>10 curated tutorial &amp; best practice files</li>
-        <li>Git-synced to GitHub for versioning</li>
-        <li>Auto-pulled before advisor reads it</li>
+        <li>Hosted on GitHub, fetched on demand via raw URLs</li>
+        <li>No local clone needed</li>
         <li>SOURCES.md tracks all entries</li>
       </ul>
     </div>
@@ -3205,18 +3205,15 @@ Then tell me to restart Claude Code for the agent to become available.`,
     installPrompt: `Install the claude-code-advisor agent in my Claude Code setup.
 
 Run these commands:
-mkdir -p ~/.claude/agents ~/.claude/knowledge
+mkdir -p ~/.claude/agents
 curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/claude-code-advisor.md -o ~/.claude/agents/claude-code-advisor.md
-git clone https://github.com/amadejdemsar-create/claude-code-knowledge.git ~/.claude/knowledge/claude-code
 
-Then tell me to restart Claude Code for the agent to become available.
-
-The knowledge base is a Git repo. The agent will auto-sync it (git pull) before answering questions.`,
+Then tell me to restart Claude Code for the agent to become available.`,
     content: `
-      <div class="persona-quote">You are a Claude Code workflow advisor. Your knowledge comes from curated tutorials and best practices stored in a Git-synced knowledge base. You give concrete, actionable advice &mdash; not generic tips.</div>
+      <div class="persona-quote">You are a Claude Code workflow advisor. Your knowledge comes from curated tutorials and best practices hosted on GitHub. You give concrete, actionable advice, not generic tips.</div>
 
       <h2>Knowledge Base</h2>
-      <p>Always syncs from GitHub before reading. 10 curated source files:</p>
+      <p>Fetches sources directly from GitHub (no local clone needed). 10 curated source files:</p>
       <table>
         <tr><th>File</th><th>Topic</th></tr>
         <tr><td><code>01-setup-claude-code-15-minutes.md</code></td><td>Initial setup guide</td></tr>
@@ -3259,7 +3256,7 @@ The knowledge base is a Git repo. The agent will auto-sync it (git pull) before 
 
       <h2>How It Works</h2>
       <ol>
-        <li>Reads relevant sources first &mdash; never answers from general knowledge alone</li>
+        <li>Fetches relevant sources directly from GitHub &mdash; no local clone needed</li>
         <li>Gives exact commands, file paths, config snippets</li>
         <li>References sources so you can dig deeper</li>
         <li>Prioritizes highest-impact suggestions (2-3, not 20)</li>
