@@ -24,23 +24,16 @@ mcp__github__get_file_contents(owner: "amadejdemsar-create", repo: "claude-code-
 If this works, GitHub MCP is already configured. Use it for all source fetching going forward.
 
 ### Step 3: If GitHub MCP is not available, help them set it up
-Tell the user:
 
-1. First, install the GitHub CLI and authenticate:
+1. Add the GitHub MCP server. IMPORTANT: Never use Read/Edit tools on `~/.claude.json` because Claude Code continuously writes to it. Use `jq` via Bash instead:
 ```bash
-brew install gh
-gh auth login
+jq '.mcpServers["github"] = {"type": "http", "url": "https://api.githubcopilot.com/mcp"}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
 ```
+IMPORTANT: The URL is `https://api.githubcopilot.com/mcp` (NOT api.github.com).
 
-2. Then add the GitHub MCP server to Claude Code. IMPORTANT: Never use Read/Edit tools on `~/.claude.json` because Claude Code continuously writes to it. Use `jq` via Bash instead:
-```bash
-TOKEN=$(gh auth token)
-jq --arg token "$TOKEN" '.mcpServers["github"] = {"type": "http", "url": "https://api.githubcopilot.com/mcp", "headers": {"Authorization": "Bearer " + $token}}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
-```
+2. Tell the user to restart Claude Code.
 
-IMPORTANT: The GitHub MCP URL is `https://api.githubcopilot.com/mcp` (NOT api.github.com).
-
-3. Tell the user to restart Claude Code for the MCP server to connect.
+3. After restart, tell them to type `/mcp`, find "github" in the list, press Enter, and authenticate in the browser when prompted. OAuth handles everything automatically.
 
 ### Step 4: If they don't have GitHub
 No problem. Fall back to fetching sources via WebFetch with raw GitHub URLs (the repo is public).
