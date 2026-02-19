@@ -3471,21 +3471,18 @@ const mcpServers = {
 Before you do anything, ask me: "Do you have a GitHub account?"
 
 If I say YES:
-- Add the config below to ~/.claude.json
+- Add the GitHub MCP config to ~/.claude.json using the jq command below
 - Then tell me to restart Claude Code and authenticate by running /mcp, selecting "github", and choosing "Authenticate"
 
 If I say NO:
-- Tell me to create a free account at https://github.com — just sign up with email
-- Then once I confirm, add the config below and walk me through authentication
+- Tell me to create a free account at https://github.com (just sign up with email)
+- Then once I confirm, add the config using the jq command below and walk me through authentication
 
-Add this to ~/.claude.json under the top-level "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail with "File has been modified since read." Use this jq command via Bash instead (it reads, modifies, and writes atomically):
 
-"github": {
-  "type": "http",
-  "url": "https://api.githubcopilot.com/mcp"
-}
+jq '.mcpServers.github = {"type": "http", "url": "https://api.githubcopilot.com/mcp"}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
 
-IMPORTANT: The URL must be https://api.githubcopilot.com/mcp (NOT api.github.com — that will silently fail).`,
+IMPORTANT: The URL must be https://api.githubcopilot.com/mcp (NOT api.github.com, that will silently fail).`,
     content: `
       <h2>Connection</h2>
       <table>
