@@ -3514,19 +3514,16 @@ IMPORTANT: The URL must be https://api.githubcopilot.com/mcp (NOT api.github.com
 Before you do anything, ask me: "Do you have a Notion account?"
 
 If I say YES:
-- Add the config below to ~/.claude.json
-- Tell me to restart Claude Code — on first use a browser popup will ask me to authorize Notion access (OAuth). No API key needed.
+- Add the Notion MCP config using the jq command below
+- Tell me to restart Claude Code; on first use a browser popup will ask me to authorize Notion access (OAuth). No API key needed.
 
 If I say NO:
 - Tell me to create a free account at https://notion.so
-- Once I confirm, add the config below and tell me to restart Claude Code
+- Once I confirm, add the config using the jq command below and tell me to restart Claude Code
 
-Add this to ~/.claude.json under the top-level "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
 
-"notion": {
-  "type": "http",
-  "url": "https://mcp.notion.com/mcp"
-}`,
+jq '.mcpServers.notion = {"type": "http", "url": "https://mcp.notion.com/mcp"}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3555,25 +3552,18 @@ Before you do anything, ask me: "Do you already have a Firecrawl API key, or do 
 
 If I HAVE an API key:
 - Ask me to paste it
-- Add the config below to ~/.claude.json with my key filled in
+- Add the config using the jq command below (replace YOUR_KEY with my actual key)
 - Tell me to restart Claude Code
 
 If I DON'T have an account yet:
 - Tell me to go to https://firecrawl.dev and sign up for a free account
 - Once signed up, tell me to go to my dashboard and find the API Keys section to copy my API key
 - Ask me to paste it
-- Then add the config below with my key filled in and tell me to restart Claude Code
+- Then add the config using the jq command below (replace YOUR_KEY) and tell me to restart Claude Code
 
-Add this to ~/.claude.json under the top-level "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
 
-"firecrawl": {
-  "type": "stdio",
-  "command": "npx",
-  "args": ["-y", "firecrawl-mcp"],
-  "env": {
-    "FIRECRAWL_API_KEY": "PASTE_KEY_HERE"
-  }
-}`,
+jq --arg key "YOUR_KEY" '.mcpServers.firecrawl = {"type": "stdio", "command": "npx", "args": ["-y", "firecrawl-mcp"], "env": {"FIRECRAWL_API_KEY": $key}}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3603,25 +3593,18 @@ Before you do anything, ask me: "Do you already have a Perplexity API key, or do
 
 If I HAVE an API key:
 - Ask me to paste it
-- Add the config below to ~/.claude.json with my key filled in
+- Add the config using the jq command below (replace YOUR_KEY with my actual key)
 - Tell me to restart Claude Code
 
 If I DON'T have an account yet:
 - Tell me to go to https://perplexity.ai and sign up
 - Once signed up, tell me to go to Settings > API and generate a new API key
 - Ask me to paste it
-- Then add the config below with my key filled in and tell me to restart Claude Code
+- Then add the config using the jq command below (replace YOUR_KEY) and tell me to restart Claude Code
 
-Add this to ~/.claude.json under the top-level "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
 
-"perplexity": {
-  "type": "stdio",
-  "command": "npx",
-  "args": ["-y", "@nicepkg/perplexity-mcp"],
-  "env": {
-    "PERPLEXITY_API_KEY": "PASTE_KEY_HERE"
-  }
-}`,
+jq --arg key "YOUR_KEY" '.mcpServers.perplexity = {"type": "stdio", "command": "npx", "args": ["-y", "@nicepkg/perplexity-mcp"], "env": {"PERPLEXITY_API_KEY": $key}}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3650,31 +3633,24 @@ Before you do anything, ask me: "Do you already have a Hostinger account and API
 
 If I HAVE an API token:
 - Ask me to paste it
-- Add the config below to ~/.claude.json with my token filled in
+- Add the config using the jq command below (replace YOUR_TOKEN with my actual token)
 - Tell me to restart Claude Code
 
 If I HAVE an account but NO API token:
 - Tell me to log in to my Hostinger account at https://hpanel.hostinger.com
 - Go to Account > API Tokens and generate a new token
 - Ask me to paste it
-- Then add the config below with my token filled in and tell me to restart Claude Code
+- Then add the config using the jq command below (replace YOUR_TOKEN) and tell me to restart Claude Code
 
 If I DON'T have an account yet:
-- Tell me Hostinger is a hosting provider — I need an active Hostinger hosting plan to use this MCP
+- Tell me Hostinger is a hosting provider; I need an active Hostinger hosting plan to use this MCP
 - Direct me to https://hostinger.com to sign up
 - Once I have an account, walk me through generating an API token (Account > API Tokens)
-- Then add the config and tell me to restart
+- Then add the config using the jq command below and tell me to restart
 
-Add this to ~/.claude.json under the top-level "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
 
-"hostinger": {
-  "type": "stdio",
-  "command": "npx",
-  "args": ["-y", "hostinger-api-mcp@latest"],
-  "env": {
-    "API_TOKEN": "PASTE_TOKEN_HERE"
-  }
-}`,
+jq --arg token "YOUR_TOKEN" '.mcpServers.hostinger = {"type": "stdio", "command": "npx", "args": ["-y", "hostinger-api-mcp@latest"], "env": {"API_TOKEN": $token}}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3703,32 +3679,24 @@ Before you do anything, ask me: "Do you have a Dokploy instance running on a VPS
 
 If I HAVE the URL and API key:
 - Ask me to paste both my Dokploy URL (e.g. http://my-vps-ip:3000/api) and API key
-- Add the config below to ~/.claude.json with my values filled in
+- Add the config using the jq command below (replace YOUR_URL and YOUR_KEY with my actual values)
 - Tell me to restart Claude Code
 
 If I HAVE Dokploy running but NO API key:
 - Tell me to open my Dokploy dashboard in the browser
 - Go to Settings and generate a new API key
 - Ask me to paste the API key and my Dokploy URL
-- Then add the config below and tell me to restart Claude Code
+- Then add the config using the jq command below and tell me to restart Claude Code
 
 If I DON'T have Dokploy set up:
 - Tell me Dokploy is a self-hosted deployment platform that runs on a VPS
-- Direct me to https://dokploy.com for setup instructions — I need a VPS first
+- Direct me to https://dokploy.com for setup instructions; I need a VPS first
 - Once Dokploy is running, walk me through getting the API key from Settings
-- Then add the config and tell me to restart
+- Then add the config using the jq command below and tell me to restart
 
-Add this to ~/.claude.json under the top-level "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
 
-"dokploy": {
-  "type": "stdio",
-  "command": "npx",
-  "args": ["-y", "@ahdev/dokploy-mcp"],
-  "env": {
-    "DOKPLOY_URL": "PASTE_URL_HERE",
-    "DOKPLOY_API_KEY": "PASTE_KEY_HERE"
-  }
-}`,
+jq --arg url "YOUR_URL" --arg key "YOUR_KEY" '.mcpServers.dokploy = {"type": "stdio", "command": "npx", "args": ["-y", "@ahdev/dokploy-mcp"], "env": {"DOKPLOY_URL": $url, "DOKPLOY_API_KEY": $key}}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3752,15 +3720,15 @@ Add this to ~/.claude.json under the top-level "mcpServers" key (create the key 
   },
   'Yahoo Finance': {
     icon: '&#128200;', iconBg: 'var(--amber-dim)', color: 'amber',
-    installPrompt: `Install the Yahoo Finance MCP server in my Claude Code setup. Add this to my global config at ~/.claude.json under the top-level "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+    installPrompt: `Install the Yahoo Finance MCP server in my Claude Code setup.
 
-"yahoo-finance": {
-  "type": "stdio",
-  "command": "uvx",
-  "args": ["mcp-yahoo-finance"]
-}
+No API key needed; this uses Yahoo's public finance data. Make sure I have Python and uvx installed (pip install uvx if needed).
 
-No API key needed — this uses Yahoo's public finance data. Make sure I have Python and uvx installed (pip install uvx if needed). After adding, tell me to restart Claude Code.`,
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
+
+jq '.mcpServers["yahoo-finance"] = {"type": "stdio", "command": "uvx", "args": ["mcp-yahoo-finance"]}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
+
+After running the command, tell me to restart Claude Code.`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3795,25 +3763,18 @@ Before you do anything, ask me: "Do you already have a CoinMarketCap API key, or
 
 If I HAVE an API key:
 - Ask me to paste it
-- Add the config below to ~/.claude.json with my key filled in
+- Add the config using the jq command below (replace YOUR_KEY with my actual key)
 - Tell me to restart Claude Code
 
 If I DON'T have an account yet:
 - Tell me to go to https://coinmarketcap.com/api/ and sign up for the Basic plan (it's free)
 - Once signed up, tell me to go to my Developer Dashboard and copy my API key
 - Ask me to paste it
-- Then add the config below with my key filled in and tell me to restart Claude Code
+- Then add the config using the jq command below (replace YOUR_KEY) and tell me to restart Claude Code
 
-Add this to ~/.claude.json under the top-level "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
 
-"coinmarketcap": {
-  "type": "stdio",
-  "command": "npx",
-  "args": ["-y", "@shinzolabs/coinmarketcap-mcp"],
-  "env": {
-    "COINMARKETCAP_API_KEY": "PASTE_KEY_HERE"
-  }
-}`,
+jq --arg key "YOUR_KEY" '.mcpServers.coinmarketcap = {"type": "stdio", "command": "npx", "args": ["-y", "@shinzolabs/coinmarketcap-mcp"], "env": {"COINMARKETCAP_API_KEY": $key}}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3837,14 +3798,15 @@ Add this to ~/.claude.json under the top-level "mcpServers" key (create the key 
   },
   'Transcript API': {
     icon: '&#127909;', iconBg: 'var(--amber-dim)', color: 'amber',
-    installPrompt: `Install the Transcript API MCP server in my Claude Code setup. Add this to my global config at ~/.claude.json under the top-level "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+    installPrompt: `Install the Transcript API MCP server in my Claude Code setup.
 
-"transcript-api": {
-  "type": "http",
-  "url": "https://transcriptapi.com/mcp"
-}
+No API key needed; this is a free public API for extracting YouTube transcripts.
 
-No API key needed — this is a free public API for extracting YouTube transcripts. After adding, tell me to restart Claude Code.`,
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
+
+jq '.mcpServers["transcript-api"] = {"type": "http", "url": "https://transcriptapi.com/mcp"}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
+
+After running the command, tell me to restart Claude Code.`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3866,15 +3828,15 @@ No API key needed — this is a free public API for extracting YouTube transcrip
   },
   'Docker (MCP Gateway)': {
     icon: '&#128230;', iconBg: 'var(--amber-dim)', color: 'amber',
-    installPrompt: `Install the Docker MCP Gateway in my Claude Code setup. Add this to my global config at ~/.claude.json under the top-level "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
+    installPrompt: `Install the Docker MCP Gateway in my Claude Code setup.
 
-"docker": {
-  "type": "stdio",
-  "command": "docker",
-  "args": ["mcp", "gateway", "run"]
-}
+No API key needed; this uses your local Docker daemon. Make sure Docker Desktop is installed and running.
 
-No API key needed — this uses your local Docker daemon. Make sure Docker Desktop is installed and running. After adding, tell me to restart Claude Code.`,
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
+
+jq '.mcpServers.docker = {"type": "stdio", "command": "docker", "args": ["mcp", "gateway", "run"]}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
+
+After running the command, tell me to restart Claude Code.`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -4165,28 +4127,25 @@ Before you do anything, ask me: "Do you already have a Supabase project, and do 
 
 If I HAVE a project and know my project ref:
 - Ask me to paste my project reference ID
-- Add the config below to ~/.claude.json with my ref filled in
-- Tell me to restart Claude Code — on first use a browser popup will ask me to authorize (OAuth)
+- Add the config using the jq command below (replace YOUR_PROJECT_REF with my actual ref)
+- Tell me to restart Claude Code; on first use a browser popup will ask me to authorize (OAuth)
 
 If I HAVE a Supabase account but DON'T know my project ref:
 - Tell me to go to my Supabase dashboard at https://supabase.com/dashboard
 - Open my project, go to Settings > General, and find the Reference ID
 - Ask me to paste it
-- Then add the config below and tell me to restart Claude Code
+- Then add the config using the jq command below and tell me to restart Claude Code
 
 If I DON'T have a Supabase project yet:
 - Tell me to sign up at https://supabase.com (free tier available)
 - Create a new project
 - Then go to Settings > General to find the Reference ID
 - Ask me to paste it
-- Then add the config below and tell me to restart Claude Code
+- Then add the config using the jq command below and tell me to restart Claude Code
 
-Add this to ~/.claude.json under the top-level "mcpServers" key (or under a project-specific path if I only want it for one project — create the key if it doesn't exist, preserve any existing MCP servers):
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
 
-"supabase": {
-  "type": "http",
-  "url": "https://mcp.supabase.com/mcp?project_ref=PASTE_PROJECT_REF_HERE"
-}`,
+jq --arg ref "YOUR_PROJECT_REF" '.mcpServers.supabase = {"type": "http", "url": ("https://mcp.supabase.com/mcp?project_ref=" + $ref)}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -4211,15 +4170,15 @@ Add this to ~/.claude.json under the top-level "mcpServers" key (or under a proj
   },
   'Puppeteer': {
     icon: '&#127917;', iconBg: 'var(--amber-dim)', color: 'amber',
-    installPrompt: `Install the Puppeteer MCP server in my Claude Code setup. Add this to my global config at ~/.claude.json under the top-level "mcpServers" key:
+    installPrompt: `Install the Puppeteer MCP server in my Claude Code setup.
 
-"puppeteer": {
-  "type": "stdio",
-  "command": "npx",
-  "args": ["-y", "@modelcontextprotocol/server-puppeteer"]
-}
+No API key needed; this runs a local headless Chrome browser. Make sure Node.js is installed.
 
-No API key needed — this runs a local headless Chrome browser. Make sure Node.js is installed. After adding, tell me to restart Claude Code.`,
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
+
+jq '.mcpServers.puppeteer = {"type": "stdio", "command": "npx", "args": ["-y", "@modelcontextprotocol/server-puppeteer"]}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
+
+After running the command, tell me to restart Claude Code.`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -4244,15 +4203,15 @@ No API key needed — this runs a local headless Chrome browser. Make sure Node.
   },
   'Google Workspace': {
     icon: '&#128197;', iconBg: 'var(--amber-dim)', color: 'amber',
-    installPrompt: `Install the Google Workspace MCP server in my Claude Code setup. Add this to ~/.claude.json under the top-level "mcpServers" key:
+    installPrompt: `Install the Google Workspace MCP server in my Claude Code setup.
 
-"google-workspace": {
-  "type": "stdio",
-  "command": "npx",
-  "args": ["-y", "@dguido/google-workspace-mcp"]
-}
+No API key needed; it uses OAuth. After adding, restart Claude Code and authenticate when prompted.
 
-No API key needed; it uses OAuth. After adding, restart Claude Code and authenticate when prompted.`,
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
+
+jq '.mcpServers["google-workspace"] = {"type": "stdio", "command": "npx", "args": ["-y", "@dguido/google-workspace-mcp"]}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
+
+After running the command, restart Claude Code and authenticate when prompted.`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -4273,15 +4232,15 @@ No API key needed; it uses OAuth. After adding, restart Claude Code and authenti
   },
   'BrowserMCP': {
     icon: '&#128421;', iconBg: 'var(--amber-dim)', color: 'amber',
-    installPrompt: `Install the BrowserMCP server in my Claude Code setup. Add this to ~/.claude.json under the top-level "mcpServers" key:
+    installPrompt: `Install the BrowserMCP server in my Claude Code setup.
 
-"browsermcp": {
-  "type": "stdio",
-  "command": "npx",
-  "args": ["@browsermcp/mcp@latest"]
-}
+No API key needed.
 
-No API key needed. After adding, restart Claude Code.`,
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
+
+jq '.mcpServers.browsermcp = {"type": "stdio", "command": "npx", "args": ["@browsermcp/mcp@latest"]}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
+
+After running the command, restart Claude Code.`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -4302,14 +4261,15 @@ No API key needed. After adding, restart Claude Code.`,
   },
   'n8n': {
     icon: '&#9881;', iconBg: 'var(--amber-dim)', color: 'amber',
-    installPrompt: `Install the n8n MCP server in my Claude Code setup. Add this to ~/.claude.json under the top-level "mcpServers" key:
+    installPrompt: `Install the n8n MCP server in my Claude Code setup.
 
-"n8n": {
-  "type": "http",
-  "url": "http://ai.nevron.net:6868/mcp-server/http"
-}
+This connects to an n8n instance. You will need your n8n instance URL with the MCP server path.
 
-This connects to the Nevron n8n instance. After adding, restart Claude Code.`,
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
+
+jq '.mcpServers.n8n = {"type": "http", "url": "http://YOUR_N8N_HOST:PORT/mcp-server/http"}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
+
+Replace YOUR_N8N_HOST:PORT with your actual n8n instance address. After running the command, restart Claude Code.`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -4331,14 +4291,15 @@ This connects to the Nevron n8n instance. After adding, restart Claude Code.`,
   },
   'Todoist (HTTP)': {
     icon: '&#9989;', iconBg: 'var(--amber-dim)', color: 'amber',
-    installPrompt: `Install the Todoist HTTP MCP server in my Claude Code setup. Add this to ~/.claude.json under the top-level "mcpServers" key:
+    installPrompt: `Install the Todoist HTTP MCP server in my Claude Code setup.
 
-"todoist": {
-  "type": "http",
-  "url": "https://ai.todoist.net/mcp"
-}
+Uses OAuth authentication. No API key needed.
 
-Uses OAuth authentication. After adding, restart Claude Code and authenticate when prompted.`,
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
+
+jq '.mcpServers.todoist = {"type": "http", "url": "https://ai.todoist.net/mcp"}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
+
+After running the command, restart Claude Code and authenticate when prompted.`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -4360,14 +4321,15 @@ Uses OAuth authentication. After adding, restart Claude Code and authenticate wh
   },
   'Figma': {
     icon: '&#127912;', iconBg: 'var(--amber-dim)', color: 'amber',
-    installPrompt: `Install the Figma MCP server in my Claude Code setup. Add this to ~/.claude.json under the top-level "mcpServers" key:
+    installPrompt: `Install the Figma MCP server in my Claude Code setup.
 
-"figma": {
-  "type": "http",
-  "url": "https://mcp.figma.com/mcp"
-}
+Uses OAuth authentication. No API key needed.
 
-Uses OAuth authentication. After adding, restart Claude Code and authenticate in your browser when prompted.`,
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
+
+jq '.mcpServers.figma = {"type": "http", "url": "https://mcp.figma.com/mcp"}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
+
+After running the command, restart Claude Code and authenticate in your browser when prompted.`,
     content: `
       <h2>Connection</h2>
       <table>
