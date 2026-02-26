@@ -4614,7 +4614,7 @@ mkdir -p ~/.claude/skills/continue/rules
 curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/continue/SKILL.md -o ~/.claude/skills/continue/SKILL.md
 curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/continue/rules/setup.md -o ~/.claude/skills/continue/rules/setup.md
 
-2. Add a "Continue / Resume" section to my global ~/.claude/CLAUDE.md (create the file if it does not exist). The section should contain a rule that when the user says "continue", "continue from where we left off", "pick up where we left off", "resume", or "read the continue prompt" at the START of a session or after a /clear, Claude should: (a) check if ~/.claude/continue-prompt.md exists, (b) if it exists, read the file, read the key files listed in "Files Being Worked On", delete the continue prompt file, confirm to the user what the task is, and resume working, (c) if it does not exist, tell the user no continue prompt was found and ask what they would like to work on. Also note that to GENERATE a continue prompt, the user should use /continue.
+2. Add a "Continue / Resume" section to my global ~/.claude/CLAUDE.md (create the file if it does not exist). The section should contain a rule that when the user says "continue", "continue from where we left off", "pick up where we left off", "resume", or "read the continue prompt" at the START of a session or after a /clear, Claude should: (a) list all .md files in ~/.claude/continue-prompts/, (b) if none exist, tell the user no continue prompts were found and ask what they would like to work on, (c) if exactly one exists, read it, read the key files listed in "Files Being Worked On", delete that file, confirm to the user what the task is, and resume working, (d) if multiple exist, list them with numbers (show the filename without .md as a human readable label), ask the user which session they want to resume, then read the chosen file, read the key files, delete only that file, confirm, and resume working. Also note that to GENERATE a continue prompt, the user should use /continue.
 
 3. Tell me to restart Claude Code.`,
     content: `
@@ -4622,9 +4622,11 @@ curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/m
       <p>Generates a structured continue prompt file when the context window is running low, so work can be seamlessly resumed in a fresh session.</p>
       <h2>Two Parts</h2>
       <ul>
-        <li><strong>Save (<code>/continue</code>):</strong> Captures current task state, progress, next steps, and relevant file paths into <code>~/.claude/continue-prompt.md</code></li>
-        <li><strong>Resume ("continue"):</strong> A CLAUDE.md rule checks for the saved file and picks up where the last session left off</li>
+        <li><strong>Save (<code>/continue</code>):</strong> Captures current task state into a named file in <code>~/.claude/continue-prompts/</code></li>
+        <li><strong>Resume ("continue"):</strong> A CLAUDE.md rule lists all saved sessions and lets you pick which one to load</li>
       </ul>
+      <h2>Multi-Session Support</h2>
+      <p>You can <code>/continue</code> from multiple sessions. Each gets a descriptive filename based on context. When you say "continue" later, Claude lists all saved prompts and lets you choose which to resume.</p>
       <h2>Why Two Parts?</h2>
       <p>Skills are only triggered deterministically by <code>/skill-name</code>. Natural language like "continue" uses probabilistic matching, which is unreliable after <code>/clear</code> or in fresh sessions. The CLAUDE.md rule makes the resume path deterministic and reliable.</p>
       <h2>When to Use</h2>

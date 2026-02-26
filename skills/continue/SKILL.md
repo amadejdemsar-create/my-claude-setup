@@ -8,20 +8,32 @@ user_invocable: true
 
 You are generating a continuation prompt so work can be seamlessly resumed in a new Claude Code session.
 
-## File Location
+## Directory
 
-Always write the continue prompt to: `~/.claude/continue-prompt.md`
+All continue prompts are stored in: `~/.claude/continue-prompts/`
+
+Create the directory if it does not exist: `mkdir -p ~/.claude/continue-prompts`
+
+## File Naming
+
+Name the file based on the session context using a short, descriptive kebab-case slug. Examples:
+- `jwt-refresh-token-rotation.md`
+- `recipe-detail-inline-editing.md`
+- `nevron-landing-page-redesign.md`
+- `coachmeai-rest-timer-feature.md`
+
+The name should be immediately recognizable so the user can pick it from a list later.
 
 ## When `/continue` is invoked
 
-Analyze the full conversation history and create a comprehensive continue prompt file. The file must contain everything the next session needs to pick up exactly where this one left off.
+Analyze the full conversation history and create a comprehensive continue prompt file.
 
 ### Structure of the continue prompt file:
 
 ```markdown
 # Continue Prompt
 
-> **INSTRUCTIONS FOR NEW SESSION:** Read this file carefully, then resume the work described below. After you have fully read and understood this file, DELETE it (`rm ~/.claude/continue-prompt.md`). Confirm to the user that you've loaded the context and are ready to continue.
+> **INSTRUCTIONS FOR NEW SESSION:** Read this file carefully, then resume the work described below. After you have fully read and understood this file, confirm to the user that you've loaded the context and are ready to continue.
 
 ## Task Description
 [What the user originally asked for / the overall goal]
@@ -58,5 +70,5 @@ Analyze the full conversation history and create a comprehensive continue prompt
 5. **Keep it concise but complete.** Don't pad with filler. Every line should carry information.
 
 After writing the file, tell the user:
-- The continue prompt has been saved to `~/.claude/continue-prompt.md`
-- In their next session, they just need to say: **"continue"** or **"continue from where we left off"**
+- The continue prompt has been saved (show the full path)
+- In their next session, they just need to say **"continue"** and they'll be able to pick which session to resume
