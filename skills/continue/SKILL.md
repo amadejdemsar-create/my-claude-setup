@@ -1,6 +1,6 @@
 ---
 name: continue
-description: "Generate a continue prompt file so work can be resumed in a new session when context window is running low. Also handles resuming from a previous continue prompt.\n\n<example>\nuser: \"/continue\"\nassistant: Creates a continue prompt file summarizing current state\n</example>\n\n<example>\nuser: \"continue from where we left off\"\nassistant: Reads the continue prompt, resumes work, then deletes the file\n</example>"
+description: "Generate a continue prompt file so work can be resumed in a new session when context window is running low.\n\n<example>\nuser: \"/continue\"\nassistant: Creates a continue prompt file summarizing current state\n</example>"
 user_invocable: true
 ---
 
@@ -12,7 +12,7 @@ You are generating a continuation prompt so work can be seamlessly resumed in a 
 
 Always write the continue prompt to: `~/.claude/continue-prompt.md`
 
-## When `/continue` is invoked (GENERATING a continue prompt)
+## When `/continue` is invoked
 
 Analyze the full conversation history and create a comprehensive continue prompt file. The file must contain everything the next session needs to pick up exactly where this one left off.
 
@@ -59,14 +59,4 @@ Analyze the full conversation history and create a comprehensive continue prompt
 
 After writing the file, tell the user:
 - The continue prompt has been saved to `~/.claude/continue-prompt.md`
-- In their next session, they just need to say: **"continue from where we left off"** or **"read ~/.claude/continue-prompt.md and continue"**
-
-## When user wants to RESUME from a continue prompt
-
-If the user says anything like "continue from where we left off", "pick up where we left off", "resume", or "read the continue prompt":
-
-1. **Read** `~/.claude/continue-prompt.md`
-2. **Read the key files** listed in the "Files Being Worked On" section to load current state
-3. **Delete** the continue prompt file: `rm ~/.claude/continue-prompt.md`
-4. **Confirm** to the user: briefly state what the task is and what you're about to do next
-5. **Continue working** on the remaining tasks
+- In their next session, they just need to say: **"continue"** or **"continue from where we left off"**

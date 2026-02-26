@@ -2445,7 +2445,7 @@
     <div class="card card-pink">
       <div class="card-icon">&#128260;</div>
       <h3>/continue</h3>
-      <p>Generate a continue prompt file so work can be resumed in a new session. Also handles resuming from a previous continue prompt.</p>
+      <p>Generate a continue prompt file so work can be resumed in a new session. Just say "continue" to resume.</p>
       <div class="card-tags">
         <span class="tag tag-highlight">Custom Skill</span>
         <span class="tag">Workflow</span>
@@ -4609,23 +4609,30 @@ Then tell me to restart Claude Code. After that I can use it by typing /market-b
     icon: '&#128260;', iconBg: 'var(--pink-dim)', color: 'pink',
     installPrompt: `Install the /continue skill in my Claude Code setup.
 
-Run these commands:
-mkdir -p ~/.claude/skills/continue
+1. Download the skill file:
+mkdir -p ~/.claude/skills/continue/rules
 curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/continue/SKILL.md -o ~/.claude/skills/continue/SKILL.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/continue/rules/setup.md -o ~/.claude/skills/continue/rules/setup.md
 
-Then tell me to restart Claude Code. After that I can use it by typing /continue in Claude Code.`,
+2. Add a "Continue / Resume" section to my global ~/.claude/CLAUDE.md (create the file if it does not exist). The section should contain a rule that when the user says "continue", "continue from where we left off", "pick up where we left off", "resume", or "read the continue prompt" at the START of a session or after a /clear, Claude should: (a) check if ~/.claude/continue-prompt.md exists, (b) if it exists, read the file, read the key files listed in "Files Being Worked On", delete the continue prompt file, confirm to the user what the task is, and resume working, (c) if it does not exist, tell the user no continue prompt was found and ask what they would like to work on. Also note that to GENERATE a continue prompt, the user should use /continue.
+
+3. Tell me to restart Claude Code.`,
     content: `
       <h2>What It Does</h2>
       <p>Generates a structured continue prompt file when the context window is running low, so work can be seamlessly resumed in a fresh session.</p>
-      <h2>Two Modes</h2>
+      <h2>Two Parts</h2>
       <ul>
-        <li><strong>Save:</strong> Captures current task state, progress, next steps, and relevant file paths into a continue prompt file</li>
-        <li><strong>Resume:</strong> Reads a previous continue prompt file and picks up where the last session left off</li>
+        <li><strong>Save (<code>/continue</code>):</strong> Captures current task state, progress, next steps, and relevant file paths into <code>~/.claude/continue-prompt.md</code></li>
+        <li><strong>Resume ("continue"):</strong> A CLAUDE.md rule checks for the saved file and picks up where the last session left off</li>
       </ul>
+      <h2>Why Two Parts?</h2>
+      <p>Skills are only triggered deterministically by <code>/skill-name</code>. Natural language like "continue" uses probabilistic matching, which is unreliable after <code>/clear</code> or in fresh sessions. The CLAUDE.md rule makes the resume path deterministic and reliable.</p>
       <h2>When to Use</h2>
       <p>When the status line shows context remaining below 20%, or when you need to switch to a different task and want to come back later.</p>
+      <h2>Setup</h2>
+      <p>Requires both the SKILL.md file <strong>and</strong> a section in your global <code>~/.claude/CLAUDE.md</code>. See the install prompt for full instructions.</p>
       <hr>
-      <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/continue/SKILL.md</code></p>
+      <p><strong>Type:</strong> Custom Skill + CLAUDE.md Rule &middot; <strong>Location:</strong> <code>~/.claude/skills/continue/</code></p>
     `
   },
   '/todoist': {
