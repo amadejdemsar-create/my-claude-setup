@@ -19,8 +19,8 @@ Create the directory if it does not exist: `mkdir -p ~/.claude/continue-prompts`
 Name the file based on the session context using a short, descriptive kebab-case slug. Examples:
 - `jwt-refresh-token-rotation.md`
 - `recipe-detail-inline-editing.md`
-- `nevron-landing-page-redesign.md`
-- `coachmeai-rest-timer-feature.md`
+- `landing-page-redesign.md`
+- `rest-timer-feature.md`
 
 The name should be immediately recognizable so the user can pick it from a list later.
 

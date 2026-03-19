@@ -38,123 +38,48 @@ ToolSearch query: "+todoist update" (for updating)
 
 **NEVER call find-projects or find-sections to look these up. Use the IDs directly.**
 
+Configure your project structure below. Run `mcp__todoist__find-projects` once to get your IDs, then hardcode them here for fast access.
+
 ```
-Nevron (board)                        6g2wX8hQwGGGmVP3
-├── Scrape (list)                     6g2wXCwc87RPvXGM
-│   ├── P0: Critical Bugs & Blockers  6g2wjxVRJ6c8f26v
-│   ├── P1: MVP Core Functionality    6g2wjxQmwvfhhm9v
-│   ├── P2: Frontend & UX             6g2wjxV8H8pWh9MM
-│   ├── P3: Quality & Reliability     6g2wjxQpWX6G4HMM
-│   ├── P4: DevOps & Deployment       6g2wjxRcvMqVgGpM
-│   └── P5: Future / Self-Service     6g2wjxQjchMMmMXM
-├── Nevron NativeAI (list)            6g37WWh9P8Qh9wFg
-│   └── (no sections yet)
-└── Context (list)                    6g37WqHm5pqr3rmH
-    └── (no sections yet)
+# Example structure - replace with your actual projects and IDs:
+My Project (board)                     PROJECT_ID_HERE
+├── Feature Work (list)                SUBPROJECT_ID_1
+│   ├── P0: Critical Bugs             SECTION_ID_1
+│   ├── P1: Core Functionality         SECTION_ID_2
+│   ├── P2: Frontend & UX             SECTION_ID_3
+│   └── P3: Future Ideas              SECTION_ID_4
+└── Side Projects (list)               SUBPROJECT_ID_2
 ```
-
-### Nevron (Parent Project)
-- **Project ID:** `6g2wX8hQwGGGmVP3`
-- **View:** Board
-- **Purpose:** Top-level container for all Nevron related work
-
-### Nevron > Scrape (Sub-project)
-- **Project ID:** `6g2wXCwc87RPvXGM`
-- **View:** List
-- **Purpose:** Web scraping product (MVP focus)
-- **Sections:**
-
-| Section | ID | Todoist Priority | Description |
-|---------|-----|-----------------|-------------|
-| P0: Critical Bugs & Blockers | `6g2wjxVRJ6c8f26v` | p1 (highest) | Showstoppers, crashes, data loss |
-| P1: MVP Core Functionality | `6g2wjxQmwvfhhm9v` | p1 (highest) | Must work for MVP launch |
-| P2: Frontend & UX | `6g2wjxV8H8pWh9MM` | p2 (high) | UI polish, UX improvements |
-| P3: Quality & Reliability | `6g2wjxQpWX6G4HMM` | p3 (medium) | Error handling, monitoring, testing |
-| P4: DevOps & Deployment | `6g2wjxRcvMqVgGpM` | p3 (medium) | CI/CD, hosting, infrastructure |
-| P5: Future / Self-Service | `6g2wjxQjchMMmMXM` | p4 (lowest) | Post-MVP features, self-service vision |
-
-### Nevron > Nevron NativeAI (Sub-project)
-- **Project ID:** `6g37WWh9P8Qh9wFg`
-- **View:** List
-- **Purpose:** NativeAI product development
-- **Sections:** None yet (add as needed with `mcp__todoist__add-sections`)
-
-### Nevron > Context (Sub-project)
-- **Project ID:** `6g37WqHm5pqr3rmH`
-- **View:** List
-- **Purpose:** Context/content management work
-- **Sections:** None yet (add as needed with `mcp__todoist__add-sections`)
 
 ### Inbox
-- **Project ID:** `6fXXg25grqx9RQPM`
-- **View:** List
+- **Project ID:** `YOUR_INBOX_ID`
 - **Purpose:** Quick capture, unsorted tasks
 
 ## Labels (use exact strings)
+
+Configure your labels here. Common examples:
 - `bug` : Bug reports and fixes
 - `backend` : Server side work
 - `frontend` : Client side work
-- `mvp` : MVP scope items
-- `testing` : Test related tasks
 - `feature` : New features
+- `testing` : Test related tasks
 - `design` : UI/UX design work
 - `database` : Database changes
-- `config` : Configuration tasks
-- `n8n` : n8n integration work
-- `ai` : AI/LLM related
 - `devops` : Infrastructure/deployment
-- `deployment` : Deployment specific
-- `security` : Security related
-- `performance` : Performance optimization
-- `quality` : Quality assurance
-- `reliability` : Reliability improvements
-- `monitoring` : Monitoring/alerting
-- `enhancement` : Improvements to existing features
 - `research` : Research/investigation tasks
-- `integration` : External integrations
-- `self-service` : Self-service features
-- `payments` : Payment integration
-- `ci-cd` : CI/CD pipeline
-- `admin` : Admin dashboard
 
 ## Task Creation Patterns
 
-### Creating tasks in Nevron Scrape (most common for scraping work)
+### Creating tasks in a project
 ```json
 {
   "tasks": [{
     "content": "Verb-first task title",
     "description": "Details, file paths, acceptance criteria",
-    "projectId": "6g2wXCwc87RPvXGM",
-    "sectionId": "<section_id from table above>",
+    "projectId": "YOUR_PROJECT_ID",
+    "sectionId": "YOUR_SECTION_ID",
     "priority": "<p1|p2|p3|p4>",
-    "labels": ["backend", "mvp"]
-  }]
-}
-```
-
-### Creating tasks in NativeAI
-```json
-{
-  "tasks": [{
-    "content": "Verb-first task title",
-    "description": "Details",
-    "projectId": "6g37WWh9P8Qh9wFg",
-    "priority": "<p1|p2|p3|p4>",
-    "labels": ["feature"]
-  }]
-}
-```
-
-### Creating tasks in Context
-```json
-{
-  "tasks": [{
-    "content": "Verb-first task title",
-    "description": "Details",
-    "projectId": "6g37WqHm5pqr3rmH",
-    "priority": "<p1|p2|p3|p4>",
-    "labels": ["research"]
+    "labels": ["backend", "feature"]
   }]
 }
 ```
@@ -172,7 +97,7 @@ Pass an array of task objects to `mcp__todoist__add-tasks`. All tasks in one cal
 ### Finding tasks by project
 ```json
 {
-  "projectId": "<project_id>"
+  "projectId": "YOUR_PROJECT_ID"
 }
 ```
 Filter further with `sectionId`, `labels`, `searchText`.
@@ -182,10 +107,7 @@ Filter further with `sectionId`, `labels`, `searchText`.
 - Bug tasks: Always include `bug` label and file path in description
 - Code tasks: Include relevant file path(s) in description
 - When working on a task: find it, check its description, then complete it when done
-- Default project for Nevron scraping work: `6g2wXCwc87RPvXGM` (Scrape sub-project)
-- Default project for NativeAI work: `6g37WWh9P8Qh9wFg`
-- Default project for content/context work: `6g37WqHm5pqr3rmH`
 
 ## Adding New Projects
 
-When the user creates a new project or sub-project in Todoist, update this skill file with the new project ID and section IDs so they are pre-resolved for future sessions.
+When you create a new project or sub-project in Todoist, update this skill file with the new project ID and section IDs so they are pre-resolved for future sessions.
