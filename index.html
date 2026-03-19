@@ -1882,13 +1882,13 @@
     <a href="#agents" class="smap-node smap-node-green">
       <div class="smap-card">
         <div class="smap-icon">&#129302;</div>
-        <div class="smap-count">8</div>
+        <div class="smap-count">11</div>
         <div class="smap-label">Agents</div>
         <div class="smap-items">
           <span>stock-analyst</span>
           <span>crypto-analyst</span>
-          <span>nevron-brand</span>
-          <span class="more">+5 more &darr;</span>
+          <span>carousel-generator</span>
+          <span class="more">+8 more &darr;</span>
         </div>
       </div>
     </a>
@@ -2293,20 +2293,65 @@
       </div>
     </div>
 
-    <!-- nevron-brand -->
-    <div class="card card-green card-clickable" onclick="openModal('nevron-brand')" title="Click to view full instructions">
+    <!-- carousel-generator -->
+    <div class="card card-cyan card-clickable" onclick="openModal('carousel-generator')" title="Click to view full instructions">
       <div class="agent-card">
-        <div class="agent-avatar" style="background: var(--green-dim);">&#128396;</div>
+        <div class="agent-avatar" style="background: var(--cyan-dim);">&#127912;</div>
         <div>
-          <h3>nevron-brand</h3>
-          <p>Brand design specialist for Nevron. Enforces brand consistency across web, presentations, documents, and print.</p>
+          <h3>carousel-generator</h3>
+          <p>LinkedIn carousel posts as self-contained HTML. Exports to PNG slides + combined PDF. Dark and light themes. Mobile-optimized typography.</p>
           <div class="agent-meta">
             <span class="chip chip-model">Opus</span>
-            <span class="chip chip-tools">Read, Write, Edit, Bash, Grep, Glob, WebFetch</span>
+            <span class="chip chip-tools">Read, Write, Edit, Bash</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- greatest-people -->
+    <div class="card card-yellow card-clickable" onclick="openModal('greatest-people')" title="Click to view full instructions">
+      <div class="agent-card">
+        <div class="agent-avatar" style="background: var(--amber-dim);">&#128081;</div>
+        <div>
+          <h3>greatest-people</h3>
+          <p>Deep research on history's most successful people. Early career analysis, biggest levers, daily habits, mindset patterns. Cross-person synthesis.</p>
+          <div class="agent-meta">
+            <span class="chip chip-model">Opus</span>
+            <span class="chip chip-tools">Read, Write, Bash, Web</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- sdr-blueprint -->
+    <div class="card card-pink card-clickable" onclick="openModal('sdr-blueprint')" title="Click to view full instructions">
+      <div class="agent-card">
+        <div class="agent-avatar" style="background: var(--pink-dim);">&#128232;</div>
+        <div>
+          <h3>sdr-blueprint</h3>
+          <p>Complete SDR system architect. Discovery, tool stack, email infrastructure, LinkedIn automation, compliance. Generates HTML blueprint document.</p>
+          <div class="agent-meta">
+            <span class="chip chip-model">Opus</span>
+            <span class="chip chip-tools">Read, Write, Bash, Web</span>
           </div>
           <div class="usage-bar-wrap">
-            <div class="usage-bar-label"><span>Knowledge base</span><span>Brand assets folder</span></div>
-            <div class="usage-bar"><div class="usage-bar-fill" style="width:70%; background: var(--green);"></div></div>
+            <div class="usage-bar-label"><span>Embedded knowledge</span><span>7 stages</span></div>
+            <div class="usage-bar"><div class="usage-bar-fill" style="width:95%; background: var(--pink);"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- successful-companies -->
+    <div class="card card-cyan card-clickable" onclick="openModal('successful-companies')" title="Click to view full instructions">
+      <div class="agent-card">
+        <div class="agent-avatar" style="background: var(--cyan-dim);">&#127970;</div>
+        <div>
+          <h3>successful-companies</h3>
+          <p>Deep research on successful companies. Origin stories, growth engines, biggest levers, moat analysis, founder decisions. Cross-company synthesis.</p>
+          <div class="agent-meta">
+            <span class="chip chip-model">Opus</span>
+            <span class="chip chip-tools">Read, Write, Bash, Web</span>
           </div>
         </div>
       </div>
@@ -3393,45 +3438,168 @@ Then tell me to restart Claude Code for the agent to become available.`,
       </ol>
     `
   },
-  'nevron-brand': {
-    icon: '&#128396;',
-    iconBg: 'var(--green-dim)',
-    name: 'nevron-brand',
+  'carousel-generator': {
+    icon: '&#127912;',
+    iconBg: 'var(--cyan-dim)',
+    name: 'carousel-generator',
     model: 'Opus',
-    tools: 'Read, Write, Edit, Bash, Grep, Glob, WebFetch',
-    color: 'green',
-    installPrompt: `Install the nevron-brand agent in my Claude Code setup.
+    tools: 'Read, Write, Edit, Bash, Grep, Glob',
+    color: 'cyan',
+    installPrompt: `Install the carousel-generator agent in my Claude Code setup.
 
 Run these commands:
-mkdir -p ~/.claude/agents/nevron-brand-agent
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/nevron-brand.md -o ~/.claude/agents/nevron-brand.md
+mkdir -p ~/.claude/agents
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/carousel-generator.md -o ~/.claude/agents/carousel-generator.md
+
+Then tell me to restart Claude Code for the agent to become available.
+
+Note: This agent expects a carousel generator project with templates/, posts/, output/ directories and an export.js Puppeteer script. Set up your project structure before first use.`,
+    content: `
+      <div class="persona-quote">You generate LinkedIn carousel posts as self-contained HTML files that export to PNG slides and a combined PDF.</div>
+
+      <h2>Workflow</h2>
+      <ol>
+        <li>Gather requirements: topic, brand/style, audience, slide count, tone</li>
+        <li>Plan slide sequence: cover + content slides + CTA</li>
+        <li>Read reference files to match visual quality</li>
+        <li>Generate HTML to posts/ directory</li>
+        <li>Preview in browser for approval</li>
+        <li>Export via Puppeteer to PNG slides + PDF</li>
+      </ol>
+
+      <h2>Visual Styles</h2>
+      <ul>
+        <li><strong>Dark theme:</strong> Uses brand.css. Dark background, cyan/purple accents. Best for technical content.</li>
+        <li><strong>Light theme:</strong> Inline CSS. Light background, indigo/green accents. Best for educational content.</li>
+      </ul>
+
+      <h2>Slide Rules</h2>
+      <ul>
+        <li>Every slide: 1080x1350 with class <code>slide carousel</code></li>
+        <li>One idea per slide, never cram multiple points</li>
+        <li>Cover headline minimum 80px, body text minimum 30px</li>
+        <li>5 to 15 slides (engagement drops after 10)</li>
+        <li>All text must be readable at phone scale (~350px wide)</li>
+      </ul>
+    `
+  },
+  'greatest-people': {
+    icon: '&#128081;',
+    iconBg: 'var(--amber-dim)',
+    name: 'greatest-people',
+    model: 'Opus',
+    tools: 'Read, Write, Edit, Bash, Grep, Glob, WebSearch, WebFetch',
+    color: 'yellow',
+    installPrompt: `Install the greatest-people agent in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/agents
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/greatest-people.md -o ~/.claude/agents/greatest-people.md
 
 Then tell me to restart Claude Code for the agent to become available.`,
     content: `
-      <div class="persona-quote">You are a brand design specialist for Nevron. You enforce brand consistency across all touchpoints: web, presentations, documents, and print materials.</div>
+      <div class="persona-quote">You are a historian and strategic biographer with deep expertise in studying the world's most successful people across business, science, art, politics, and athletics.</div>
 
-      <h2>Knowledge Base</h2>
-      <p>Reads brand assets from <code>~/.claude/agents/nevron-brand-agent/</code> including:</p>
+      <h2>Research Framework</h2>
+      <p>For every person analyzed, follows this structure:</p>
+      <ol>
+        <li><strong>Early Career Deep Dive</strong> (age 18-25): skills, obsessions, finances, failures, first ventures</li>
+        <li><strong>The Biggest Levers</strong>: 3-5 decisions with disproportionate impact</li>
+        <li><strong>Daily Habits &amp; Routines</strong>: typical day, energy management, reading habits</li>
+        <li><strong>Mindset &amp; Psychology</strong>: handling failure, risk relationship, conviction</li>
+        <li><strong>Pattern Matching</strong>: connections to broader patterns, actionable takeaways</li>
+      </ol>
+
+      <h2>Cross-Person Synthesis</h2>
       <ul>
-        <li>Brand guidelines and color palette</li>
-        <li>Typography and font usage rules</li>
-        <li>Logo usage and spacing requirements</li>
-        <li>Design patterns and component library</li>
+        <li>Universal patterns (shared by 80%+ of successful people)</li>
+        <li>Surprising findings (against conventional wisdom)</li>
+        <li>Biggest levers ranked by expected impact</li>
+        <li>Era-adjusted insights (what translates to today)</li>
       </ul>
 
-      <h2>What It Does</h2>
-      <ul>
-        <li><strong>Web design:</strong> Ensures landing pages, apps, and sites follow Nevron brand standards</li>
-        <li><strong>Presentations:</strong> Reviews and creates slide decks with consistent branding</li>
-        <li><strong>Documents:</strong> Formats proposals, reports, and documentation to brand spec</li>
-        <li><strong>Print:</strong> Prepares assets for business cards, brochures, and other materials</li>
-        <li><strong>Review:</strong> Audits existing designs for brand compliance</li>
-      </ul>
-
-      <h2>Tools</h2>
-      <p>Full file system access (Read, Write, Edit, Bash, Grep, Glob) plus WebFetch for referencing online brand resources.</p>
+      <h2>Categories Covered</h2>
+      <p>Business founders, scientists, conquerors, athletes, investors, creators, modern builders.</p>
     `
-  }
+  },
+  'sdr-blueprint': {
+    icon: '&#128232;',
+    iconBg: 'var(--pink-dim)',
+    name: 'sdr-blueprint',
+    model: 'Opus',
+    tools: 'Read, Write, Edit, Bash, Grep, Glob, WebSearch, WebFetch',
+    color: 'pink',
+    installPrompt: `Install the sdr-blueprint agent in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/agents
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/sdr-blueprint.md -o ~/.claude/agents/sdr-blueprint.md
+
+Then tell me to restart Claude Code for the agent to become available.
+
+This agent has a massive embedded knowledge base (30K+ characters) covering the full SDR pipeline, tool pricing, email frameworks, LinkedIn strategies, compliance, and budget stacks. No external knowledge files needed.`,
+    content: `
+      <div class="persona-quote">You are an elite SDR systems architect with 15+ years building outbound sales machines. Deep expertise in cold email infrastructure, LinkedIn automation, multi-channel sequencing, CRM architecture, AI SDR tools, and sales compliance.</div>
+
+      <h2>Process</h2>
+      <ol>
+        <li><strong>Discovery:</strong> 11-question structured interview about company, ICP, channels, budget, compliance needs</li>
+        <li><strong>Research:</strong> Verifies current tool pricing, finds new tools, checks deliverability rules</li>
+        <li><strong>Blueprint:</strong> Generates comprehensive HTML document with 17 sections</li>
+      </ol>
+
+      <h2>Embedded Knowledge (30K+ chars)</h2>
+      <ul>
+        <li>Full 10-stage SDR pipeline from ICP to analytics</li>
+        <li>50+ tool comparisons with pricing across all categories</li>
+        <li>6 cold email frameworks (PAS, BAB, AIDA, Straight-Line, Permission, Breakup)</li>
+        <li>LinkedIn automation safety tiers and best practices</li>
+        <li>GDPR, CAN-SPAM, CASL compliance checklists</li>
+        <li>4 budget-tier tool stacks ($0-$100 to $1,500+/mo)</li>
+        <li>Phased implementation plan (Week 1 through Month 3+)</li>
+        <li>KPI benchmarks for email, LinkedIn, and pipeline</li>
+      </ul>
+    `
+  },
+  'successful-companies': {
+    icon: '&#127970;',
+    iconBg: 'var(--cyan-dim)',
+    name: 'successful-companies',
+    model: 'Opus',
+    tools: 'Read, Write, Edit, Bash, Grep, Glob, WebSearch, WebFetch',
+    color: 'cyan',
+    installPrompt: `Install the successful-companies agent in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/agents
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/successful-companies.md -o ~/.claude/agents/successful-companies.md
+
+Then tell me to restart Claude Code for the agent to become available.`,
+    content: `
+      <div class="persona-quote">You are a business historian and strategy consultant with deep expertise in studying the world's most successful companies. You combine rigorous research with frameworks from competitive strategy, venture capital, and entrepreneurship.</div>
+
+      <h2>Research Framework</h2>
+      <p>For every company analyzed, follows this structure:</p>
+      <ol>
+        <li><strong>Origin Story</strong> (Year 0-1): problem, founding team, MVP, first 10 customers</li>
+        <li><strong>Early Growth Engine</strong> (Year 1-3): acquisition, pricing, iteration, near-death moments</li>
+        <li><strong>Biggest Levers</strong>: top 3-5 decisions with disproportionate impact</li>
+        <li><strong>Moat Analysis</strong>: type, formation timeline, durability</li>
+        <li><strong>Culture &amp; Operating System</strong>: principles, decision-making, speed vs quality</li>
+        <li><strong>Founder Decisions</strong>: strategic bets, hiring, pivots</li>
+        <li><strong>What Went Wrong</strong>: ethical compromises, luck, valid criticisms</li>
+      </ol>
+
+      <h2>Cross-Company Synthesis</h2>
+      <ul>
+        <li>Universal patterns, distribution strategies ranked, business model patterns</li>
+        <li>Timing &amp; market patterns, solo founder playbook</li>
+      </ul>
+
+      <h2>Companies Covered</h2>
+      <p>Tech giants, modern SaaS, marketplaces, consumer brands, solo successes, and non-tech companies.</p>
+    `
+  },
 };
 
 function openModal(agentName) {
