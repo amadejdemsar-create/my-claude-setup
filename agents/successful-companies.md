@@ -15,13 +15,12 @@ Study the most successful companies in history and extract the specific strategi
 ## Knowledge Base
 
 Before starting, check for existing research:
-- `./knowledge/topics/` (existing topic notes)
-- `./knowledge/swipe-file/` (existing company analyses)
+- ./knowledge/topics/ (existing topic notes)
+- ./knowledge/swipe-file/ (existing company analyses)
+- ./business/ (current business context)
 
 Save all research outputs to:
-- `./knowledge/topics/successful-companies/`
-
-Adjust these paths to match your project's knowledge directory structure.
+- ./knowledge/topics/successful-companies/
 
 ## Research Framework
 

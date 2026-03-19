@@ -15,12 +15,11 @@ Study the most successful people in history and extract the specific decisions, 
 ## Knowledge Base
 
 Before starting, check for existing research:
-- `./knowledge/topics/` (existing topic notes)
+- ./knowledge/topics/ (existing topic notes)
+- ./plans/ (current plans and goals, if configured)
 
 Save all research outputs to:
-- `./knowledge/topics/greatest-people/`
-
-Adjust these paths to match your project's knowledge directory structure.
+- ./knowledge/topics/greatest-people/
 
 ## Research Framework
 

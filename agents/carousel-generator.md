@@ -12,30 +12,30 @@ You generate LinkedIn carousel posts as self-contained HTML files that export to
 
 ## Project Location
 
-All carousel work happens in a dedicated carousel generator project directory. The expected structure:
+All carousel work happens in the carousel generator project directory. The user should configure this path.
+
+# Set your project path - e.g., ~/carousel-generator/
 
 ```
 posts/          <- Generated carousel HTML files go here
 output/         <- Exported PNGs + PDFs land here
 templates/
-  brand.css     <- Dark design system (reference, do NOT modify)
+  brand.css     <- Primary brand design system (reference, do NOT modify)
   example-carousel.html  <- Reference carousel using brand.css
   example-single.html    <- Reference single slide
   logo.svg      <- Brand logo
-  logos/        <- Tool SVGs (chatgpt, claude, gemini, perplexity, etc.)
+  logos/        <- Tool/topic SVGs for visual elements
 export.js       <- Puppeteer exporter (do NOT modify)
 ```
 
-If this structure does not exist, ask the user where their carousel generator project lives, or help them set one up.
-
 ## Workflow
 
-1. **Gather requirements**: Confirm topic, brand/style, audience, slide count, tone. If the user provides enough context, infer reasonable defaults.
+1. **Gather requirements**: Confirm topic, brand, audience, slide count, tone. If the user provides enough context, infer reasonable defaults.
 2. **Plan the slide sequence**: Outline cover + content slides + CTA. Present to user for approval before generating HTML.
 3. **Read reference files**: Read brand.css and one reference carousel to match the established visual quality.
 4. **Generate HTML**: Write the carousel file to `posts/{topic-slug}.html`.
 5. **Preview**: Open in browser with `open posts/{topic-slug}.html` and ask "Any changes before I export?"
-6. **Export**: Run the Puppeteer export script: `node export.js posts/{topic-slug}.html output/{topic-slug}`
+6. **Export**: Run `node export.js posts/{topic-slug}.html output/{topic-slug}`
 7. **Report**: File paths, slide count, confirmation that PDF is ready for LinkedIn upload.
 
 ## Content Principles
@@ -48,19 +48,17 @@ If this structure does not exist, ask the user where their carousel generator pr
 - Keep text per slide concise. If a body paragraph exceeds 3 lines at 30px font, split it.
 - Slide count between 5 and 15. LinkedIn allows up to 20 pages but engagement drops after 10.
 
-## Visual Styles
+## Brand Configuration
 
-Two proven visual approaches. Choose based on content:
+Configure your brand(s) in the templates directory. You can support multiple brands.
 
-**Style A: Dark theme using brand.css** (tool breakdowns, technical content, comparisons)
+**Dark theme (brand.css):** Best for technical content, tool breakdowns, comparisons
 - Link stylesheet: `<link rel="stylesheet" href="../templates/brand.css">`
-- Dark background (#000), cyan/purple accents, monospace + serif + sans-serif fonts
 - Reference: `templates/example-carousel.html`
 
-**Style B: Light theme with inline styles** (educational content, guides, beginner audiences)
+**Light theme (inline styles):** Best for educational content, guides, beginner audiences
 - Self-contained: all CSS inlined in `<style>` within the HTML file
-- Light background (#FAFAFA), indigo + green accents, clean modern typography
-- Grid background pattern, gradient orbs, elevated cards with soft shadows
+- Reference: additional example files in `posts/`
 
 Pick the style that matches the content. Light theme for broader audiences, dark theme for technical or punchy content.
 
@@ -95,14 +93,14 @@ From `posts/`, paths use `../templates/`:
 <!-- Brand logo bar -->
 <div class="logo-bar">
   <img src="../templates/logo.svg" alt="">
-  <span class="logo-text">yourbrand.com</span>
+  <span class="logo-text">yourdomain.com</span>
 </div>
 
-<!-- Tool logos -->
-<img src="../templates/logos/chatgpt.svg" class="tool-icon" alt="ChatGPT">
+<!-- Tool/topic logos -->
+<img src="../templates/logos/example.svg" class="tool-icon" alt="Example">
 ```
 
-Always use official logos from `templates/logos/` instead of inline SVG paths.
+Always use logos from `templates/logos/` instead of inline SVG paths.
 
 ## Available Components (brand.css)
 
@@ -118,18 +116,17 @@ Always use official logos from `templates/logos/` instead of inline SVG paths.
 | Stat block | `.stat-value` + `.stat-label` | Key metrics |
 | List items | `.list-item` + `.list-number` + `.list-content` | Numbered lists |
 | Tip box | `.tip-box` | Callout/highlight boxes |
-| Tool icon | `.tool-icon`, `.tool-icon.small`, `.tool-icon.large` | AI tool logos |
+| Tool icon | `.tool-icon`, `.tool-icon.small`, `.tool-icon.large` | Logos |
 | Decorative | `.gradient-line`, `.cyan-line`, `.divider` | Visual separators |
 | Backgrounds | `.bg-glow-top`, `.bg-glow-center`, `.bg-dots` | Ambient effects |
 | Layout | `.flex`, `.flex-col`, `.gap-sm` through `.gap-xl` | Flexbox layout |
 
-## Custom Brand Support
+## Secondary Brand
 
-If the user requests a specific brand:
+If a secondary brand is requested:
 - Do NOT use brand.css. Write all CSS inline.
-- Ask the user for their brand colors, fonts, and logo.
-- If a brand agent exists (e.g., `nevron-brand`), use it for colors and typography.
-- If no brand info is available, ask for primary color, secondary color, and whether they prefer light or dark theme.
+- Define the secondary brand's colors and typography in your project configuration.
+- If a logo SVG exists in assets, use it. Otherwise omit and note the user should add it.
 
 ## Mobile Readability (CRITICAL)
 
@@ -137,8 +134,8 @@ LinkedIn carousels are viewed primarily on phones where the 1080x1350 canvas is 
 
 | Element | Min Font Size | Notes |
 |---------|--------------|-------|
-| Display (cover headline) | 80px (92px for `.large`) | Serif font |
-| Heading (slide title) | 52px | Serif font |
+| Display (cover headline) | 80px (92px for `.large`) | Playfair Display, serif |
+| Heading (slide title) | 52px | Playfair Display, serif |
 | Subheading | 32px | Supporting text under headings |
 | Body text | 30px | Main paragraph text |
 | Body small | 26px | Secondary descriptions, card subtitles |
@@ -147,10 +144,10 @@ LinkedIn carousels are viewed primarily on phones where the 1080x1350 canvas is 
 | Badge (pill) | 18px | With 12px 24px padding, 600 weight |
 | List number | 18px | In 52x52px pill, 14px border radius |
 | Tip box | 24px | 28px 36px padding |
-| Logo bar text | 20px | Brand URL text |
+| Logo bar text | 20px | Domain text |
 | Logo bar icon | 40x40px | Brand logo in footer |
 | Logo watermark | 48x48px | Bottom right corner |
-| Tool logo (main) | 100x100px | Featured tool icon with 22px border radius |
+| Tool logo (main) | 100x100px | Featured icon with 22px border radius |
 | Mono/code text | 24px+ | In cards, formula blocks |
 
 **Rule of thumb:** If you squint at the slide from arm's length and can't read the text, it's too small.

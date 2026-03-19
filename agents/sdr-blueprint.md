@@ -39,17 +39,19 @@ Do NOT proceed to Phase 2 until you have answers to at least questions 1, 2, 4, 
 
 ### Phase 2: Research (Supplement Your Knowledge)
 
-Use web search and scraping tools to:
+Use web search tools to:
 - Verify current pricing for tools relevant to the user's stack
 - Find any new tools that have launched recently in the user's specific niche
 - Check for any recent changes to email deliverability rules (Google/Yahoo policies, etc.)
 - Research the user's specific industry for outreach angle ideas
 
+Use multiple search sources to verify pricing.
+
 **Important:** Your embedded knowledge (below) is your primary source. Research is for supplementing with latest pricing, new tools, and company-specific angles. Do not waste time re-researching things you already know.
 
 ### Phase 3: Build the Blueprint (HTML Document)
 
-Generate a comprehensive, single-file HTML document and save it to the user's preferred location (ask them where to save it). The document should follow the design specifications in the "HTML Blueprint Template" section below.
+Generate a comprehensive, single-file HTML document and save it to the user's preferred location (ask them, or default to their Desktop). The document should follow the design specifications in the "HTML Blueprint Template" section below.
 
 ---
 
@@ -192,7 +194,7 @@ LinkedIn is the highest-converting B2B outbound channel (3-5x higher reply rates
 | Safest | Manual with templates + Sales Nav | LinkedIn Sales Navigator, no automation |
 | Low Risk | Cloud-based with human-like behavior | Expandi, HeyReach, Dripify, We-Connect |
 | Medium Risk | Browser extensions | LinkedIn Helper 2, Linked Helper |
-| Higher Risk | Browser automation | Custom automation, PhantomBuster |
+| Higher Risk | Browser automation (Claude in Chrome) | Custom automation, PhantomBuster |
 
 **LinkedIn Automation Tools:**
 
@@ -210,6 +212,7 @@ LinkedIn is the highest-converting B2B outbound channel (3-5x higher reply rates
 | Zopto | Cloud-based | From $197/mo | Enterprise LinkedIn automation |
 | MeetAlfred | Cloud-based | From $49/mo | Multi-channel campaigns |
 | Octopus CRM | Browser extension | From $10/mo | Simple, budget |
+| Claude in Chrome MCP | Browser automation | Free (needs Chrome MCP setup) | Fully custom, no limits, but requires technical setup and carries ban risk |
 
 **LinkedIn Best Practices:**
 - Maximum 80-100 connection requests per week (LinkedIn's soft limit)
@@ -240,7 +243,8 @@ Day 17: LinkedIn InMail (if not connected, use Sales Nav credits)
 **Multi-Channel Orchestration Platforms:**
 
 | Platform | Channels | Pricing (approx.) |
-|----------|----------|--------------------|n| Reply.io | Email, LinkedIn, Calls, SMS, WhatsApp | From $59/mo |
+|----------|----------|--------------------||
+| Reply.io | Email, LinkedIn, Calls, SMS, WhatsApp | From $59/mo |
 | Lemlist | Email, LinkedIn, Calls | From $69/mo (multi-channel plan) |
 | Outreach.io | Email, LinkedIn, Calls, SMS | Enterprise pricing ($100+/user/mo) |
 | Salesloft | Email, LinkedIn, Calls, SMS | Enterprise pricing ($100+/user/mo) |
@@ -256,13 +260,15 @@ A new category of tools that use AI to automate parts or all of the SDR function
 
 | Tool | What It Does | Pricing (approx.) | Autonomy Level |
 |------|-------------|-------------------|----------------|
-| 11x.ai (Alice) | Fully autonomous AI SDR | From $5K/mo | Full autonomy |
-| AiSDR | AI-powered email sequences | From $750/mo | High autonomy |
+| 11x.ai (Alice) | Fully autonomous AI SDR (finds leads, writes emails, follows up) | From $5K/mo | Full autonomy |
+| AiSDR | AI-powered email sequences with personalization | From $750/mo | High autonomy |
 | Artisan (Ava) | AI BDR that researches and sends personalized outbound | From $2K/mo | High autonomy |
 | Regie.ai | AI content + sequencing for sales teams | From $50/user/mo | Assist mode |
-| Lavender | AI email coach (real-time scoring) | From $29/mo | Assist mode |
-| Instantly AI | AI email writer within Instantly | Included in Instantly plans | Assist mode |
+| Lavender | AI email coach (real-time scoring and suggestions) | From $29/mo | Assist mode |
+| Instantly AI | AI email writer within Instantly platform | Included in Instantly plans | Assist mode |
 | Clay AI | AI enrichment and personalization at scale | Included in Clay plans | Assist mode |
+| Jasper (Sales use case) | AI copywriting for sales content | From $49/mo | Assist mode |
+| SalesGPT / ChatGPT | General AI for drafting, research | $20/mo (Plus) | Manual, flexible |
 | Humanlinker | AI personalization + multi-channel | From EUR 39/mo | Semi-autonomous |
 | Amplemarket | AI-powered sales platform | Custom pricing (~$1K+/mo) | High autonomy |
 | Oneshot.ai | AI prospecting and messaging | From $499/mo | Semi-autonomous |
@@ -481,7 +487,7 @@ Would you be open to a quick conversation about it?
 
 **Email Metrics:**
 | Metric | Poor | Decent | Good | Excellent |
-|--------|------|--------|------|----------|
+|--------|------|--------|------|-----------||
 | Open Rate | <30% | 30-50% | 50-70% | 70%+ |
 | Reply Rate | <1% | 2-5% | 5-10% | 10%+ |
 | Positive Reply Rate | <0.5% | 1-2% | 2-5% | 5%+ |
@@ -491,7 +497,7 @@ Would you be open to a quick conversation about it?
 
 **LinkedIn Metrics:**
 | Metric | Poor | Decent | Good | Excellent |
-|--------|------|--------|------|----------|
+|--------|------|--------|------|-----------||
 | Connection Accept Rate | <15% | 15-30% | 30-50% | 50%+ |
 | Message Reply Rate | <5% | 5-15% | 15-30% | 30%+ |
 | InMail Response Rate | <5% | 5-10% | 10-20% | 20%+ |
