@@ -1895,13 +1895,13 @@
     <a href="#skills" class="smap-node smap-node-pink">
       <div class="smap-card">
         <div class="smap-icon">&#9889;</div>
-        <div class="smap-count">10</div>
+        <div class="smap-count">11</div>
         <div class="smap-label">Commands</div>
         <div class="smap-items">
           <span>/prompt-writer</span>
-          <span>/pda</span>
+          <span>/visualize</span>
           <span>/continue</span>
-          <span class="more">+7 more &darr;</span>
+          <span class="more">+8 more &darr;</span>
         </div>
       </div>
     </a>
@@ -2516,6 +2516,16 @@
         <span class="tag">Configuration</span>
       </div>
     </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#127912;</div>
+      <h3>/visualize</h3>
+      <p>Transform any text source (book, article, essay) into a premium visual HTML page. Converts non-MD formats first. Optional personalization.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Custom Skill</span>
+        <span class="tag">Knowledge</span>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -2715,7 +2725,7 @@
       <div class="config-num">5</div>
       <h4>Skills Directory</h4>
       <div class="config-path">~/.claude/skills/</div>
-      <p>6 custom skills: prompt-writer, pda, notebooklm, continue, todoist, keybindings-help. Each in its own subfolder with a SKILL.md file inside.</p>
+      <p>7 custom skills: prompt-writer, pda, notebooklm, continue, todoist, keybindings-help, visualize. Each in its own subfolder with a SKILL.md file inside.</p>
     </div>
 
     <div class="config-card">
@@ -4852,6 +4862,39 @@ Then tell me to restart Claude Code. After that I can use it by typing /keybindi
       </ul>
       <hr>
       <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/keybindings-help/SKILL.md</code></p>
+    `
+  },
+  '/visualize': {
+    icon: '&#127912;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /visualize skill in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/skills/visualize
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/visualize/SKILL.md -o ~/.claude/skills/visualize/SKILL.md
+
+Then tell me to restart Claude Code. After that I can use it by typing /visualize <source> in Claude Code.`,
+    content: `
+      <h2>What It Does</h2>
+      <p>Transforms any text source (book, article, essay, notes) into a premium visual HTML page that explains key principles, frameworks, and ideas. Optionally personalized to the reader based on available context.</p>
+
+      <h2>Workflow</h2>
+      <ol>
+        <li><strong>Ingest source:</strong> Accepts .md, .txt, .pdf, URLs, or other formats. Converts non-MD formats to .md first and saves alongside the original.</li>
+        <li><strong>Ask mode and depth:</strong> Principles only vs. personalized. Executive summary vs. comprehensive vs. deep dive.</li>
+        <li><strong>Extract content:</strong> Central thesis, key frameworks, core principles, memorable quotes, actionable techniques, contrasts.</li>
+        <li><strong>Generate HTML:</strong> Single self-contained file with dark theme, Inter + Playfair Display typography, responsive design, CSS-only diagrams.</li>
+      </ol>
+
+      <h2>Design System</h2>
+      <ul>
+        <li>Dark background with themed accent color (gold for self-improvement, purple for philosophy, teal for science, etc.)</li>
+        <li>Card-based layouts with hover effects</li>
+        <li>Hero section, principle sections, quote blocks, prescription cards</li>
+        <li>Fully responsive (768px and 380px breakpoints)</li>
+        <li>No external dependencies beyond Google Fonts</li>
+      </ul>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/visualize/SKILL.md</code></p>
     `
   }
 };
