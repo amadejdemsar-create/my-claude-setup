@@ -1895,13 +1895,13 @@
     <a href="#skills" class="smap-node smap-node-pink">
       <div class="smap-card">
         <div class="smap-icon">&#9889;</div>
-        <div class="smap-count">11</div>
+        <div class="smap-count">12</div>
         <div class="smap-label">Commands</div>
         <div class="smap-items">
           <span>/prompt-writer</span>
           <span>/visualize</span>
           <span>/continue</span>
-          <span class="more">+8 more &darr;</span>
+          <span class="more">+9 more &darr;</span>
         </div>
       </div>
     </a>
@@ -2524,6 +2524,16 @@
       <div class="card-tags">
         <span class="tag tag-highlight">Custom Skill</span>
         <span class="tag">Knowledge</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#128209;</div>
+      <h3>/content-skill-graph</h3>
+      <p>9-step onboarding that builds a personalized content creation system. Configures voice, audience, pillars, brand, and workflows.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Custom Skill</span>
+        <span class="tag">Content</span>
       </div>
     </div>
   </div>
@@ -4895,6 +4905,47 @@ Then tell me to restart Claude Code. After that I can use it by typing /visualiz
       </ul>
       <hr>
       <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/visualize/SKILL.md</code></p>
+    `
+  },
+  '/content-skill-graph': {
+    icon: '&#128209;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /content-skill-graph skill and its framework in my Claude Code setup.
+
+Run these commands:
+git clone --depth 1 https://github.com/amadejdemsar-create/my-claude-setup.git /tmp/csg-install
+cp -r /tmp/csg-install/skills/content-skill-graph ~/.claude/skills/content-skill-graph
+rm -rf /tmp/csg-install
+
+Then tell me to restart Claude Code. After that I can use it by typing /content-skill-graph in Claude Code to start the onboarding.`,
+    content: `
+      <h2>What It Does</h2>
+      <p>A complete content creation system for Claude Code. Runs a 9-step interactive onboarding that configures your brand voice, target audience, content pillars, visual brand, and workflows. After onboarding, you get four content creation commands: <code>/article</code>, <code>/repurpose</code>, <code>/tool-review</code>, and <code>/new-tool</code>.</p>
+      <h2>The 9 Onboarding Steps</h2>
+      <ol>
+        <li><strong>Who Are You</strong>: Brand basics (name, description, industry, differentiator)</li>
+        <li><strong>Platforms</strong>: Which platforms you publish to and in what language</li>
+        <li><strong>Tone of Voice</strong>: Core voice definition with 5 presets or custom extraction</li>
+        <li><strong>Anti-Patterns</strong>: 12 &ldquo;Don&rsquo;t Sound Like AI&rdquo; patterns plus custom quality gates</li>
+        <li><strong>Audience</strong>: Target reader profiles with pain points and language</li>
+        <li><strong>Content Pillars</strong>: 3 to 7 recurring themes that build authority</li>
+        <li><strong>Brand Design</strong>: Colors, fonts, visual style for asset generation</li>
+        <li><strong>Workflow Selection</strong>: Which content workflows to activate</li>
+        <li><strong>Proof Points</strong>: Credentials, stats, and case patterns</li>
+      </ol>
+      <h2>Framework (36 Files)</h2>
+      <table>
+        <tr><th>Directory</th><th>Files</th><th>Purpose</th></tr>
+        <tr><td>engine/</td><td>7</td><td>Hooks, scheduling, power law, hit detection, repurposing</td></tr>
+        <tr><td>platforms/</td><td>8</td><td>X, LinkedIn, blog format specs</td></tr>
+        <tr><td>workflows/</td><td>7</td><td>Article creation, repurposing, tool reviews, images</td></tr>
+        <tr><td>quality/</td><td>2</td><td>Calibration questions, content standards</td></tr>
+        <tr><td>templates/</td><td>8</td><td>Post scaffolds, announcements, reviews</td></tr>
+        <tr><td>skills/</td><td>4</td><td>/article, /repurpose, /new-tool, /tool-review</td></tr>
+      </table>
+      <h2>After Onboarding</h2>
+      <p>The system generates config files (voice, audience, pillars, brand guidelines, proof points) that the four content commands read alongside the framework templates. Every piece of content follows your voice, targets your audience, and maintains quality standards.</p>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/content-skill-graph/</code> &middot; <strong>Framework:</strong> 36 template files + 4 sub-skills</p>
     `
   }
 };
