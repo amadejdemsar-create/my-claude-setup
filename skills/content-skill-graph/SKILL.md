@@ -19,7 +19,7 @@ Read the onboarding flow in `onboarding.md` (same directory as this file) and fo
 
 ### Before Starting
 
-1. Confirm the **template location**: the content skill graph template files should be at a known path. Ask the user where they are. Default: `~/.claude/skills/content-skill-graph/framework/`
+1. Confirm the **template location**: the content skill graph template files should be at a known path. Ask the user where they are. Default for this setup: `/Users/Shared/Domain/Context/Business/nativeai/claude-code-toolkit/content-skill-graph/`
 
 2. Confirm the **output location**: where the generated config files will be saved. Ask the user to choose a directory. This is where their personalized content system will live. Suggest a sensible default based on their project context.
 
@@ -44,7 +44,8 @@ The onboarding generates these files in the user's output directory:
 
 ```
 <output-directory>/
-├── config.md              ← Brand basics, platforms, languages, workflow selections
+├── config.md              ← Brand basics, platforms, pipeline, distribution settings
+├── pipeline.md            ← Visual map of your content flow (primary → derived → assets)
 ├── philosophy.md          ← Positions, arguments, recurring themes (starts as scaffold)
 ├── voice/
 │   ├── brand-voice.md     ← Core tone of voice

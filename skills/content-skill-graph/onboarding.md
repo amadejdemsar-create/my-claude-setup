@@ -100,24 +100,31 @@ Tell the user:
 - X (formerly Twitter): short posts, long posts, articles
 - LinkedIn: posts, articles, carousels
 - Blog/Website: articles, resource pages
+- Email/Newsletter: newsletters, sequences, announcements, nurture campaigns
 - Instagram: posts, stories, reels (format spec can be extended)
 - TikTok: scripts (format spec can be extended)
-- Newsletter: email content (format spec can be extended)
+- YouTube: scripts, descriptions (format spec can be extended)
 
 **How to present:**
 
 List the platforms and ask which ones the user is active on or wants to be active on. For each selected platform, ask what language they publish in.
 
 Example dialogue:
-> "Which platforms do you create content for? Here are the ones the system supports out of the box:
+> "Which platforms do you create content for? Here are the ones the system supports:
 > 1. X (short posts, long posts, articles)
 > 2. LinkedIn (posts, articles, carousels)
 > 3. Blog/Website (articles, resource pages)
-> 4. Instagram
-> 5. TikTok
-> 6. Newsletter
+> 4. Email/Newsletter (newsletters, sequences, announcements)
+> 5. Instagram
+> 6. TikTok
+> 7. YouTube
 >
 > Pick the ones you use, and I will ask about language for each."
+
+If the user selects Email/Newsletter, also ask:
+- What type of emails? (Newsletter, product updates, nurture sequences, cold outreach, announcements)
+- What tool do you use? (Mailchimp, ConvertKit, Beehiiv, Substack, Ghost, Resend, other)
+- How often do you send? (Weekly, biweekly, monthly, campaign-based)
 
 **After confirmation, update:** `config.md` (add platforms section)
 
@@ -346,46 +353,224 @@ Include: color palette (hex codes for primary, secondary, accent, background, te
 
 ---
 
-## Step 8: Workflow Selection
+## Step 8: Content Pipeline & Workflows
 
-**Purpose:** Determine which content workflows to activate. Not everyone needs all of them.
+**Purpose:** Configure the content creation pipeline: what you create first, what gets derived from it, how assets flow through the chain, and how content gets distributed. This is the system architecture of your content operation.
 
-**Available workflows** (from the template system):
+This step has four parts. Walk through them in order.
 
-| # | Workflow | What it does | Skill command |
-|---|----------|-------------|---------------|
-| 1 | **Article writing** | Full 10-phase blog article pipeline | `/article` |
-| 2 | **Article repurposing** | Turn published articles into platform-native social posts | `/repurpose` |
-| 3 | **Tool/product reviews** | Deep-dive reviews after 2+ weeks of real use | `/tool-review` |
-| 4 | **New tool/resource publishing** | Add a new tool or resource to your site and announce it | `/new-tool` |
-| 5 | **Social post creation** | Standalone social posts (not derived from articles) | direct |
-| 6 | **Carousel/visual creation** | Slide-based visual content for LinkedIn or Instagram | direct |
-| 7 | **Content scheduling** | Queue and schedule posts via Buffer or other tools | integrated |
+---
+
+### Part A: Primary Content Format
+
+**Purpose:** Establish what the user creates first. Everything else derives from this.
+
+Ask: "What is the content you typically create first, that other content gets derived from? For most people this is one primary format, but some people have two."
+
+**Options:**
+
+| # | Primary Format | Description |
+|---|----------------|-------------|
+| 1 | **Blog article** | Long-form written content on your site |
+| 2 | **Email/newsletter** | Regular emails to a subscriber list |
+| 3 | **Social post** | Short-form content on X, LinkedIn, or other platforms |
+| 4 | **Video script** | Scripts for YouTube, TikTok, Reels, or other video |
+| 5 | **Tool/product review** | In-depth reviews or comparisons |
+
+Most users pick one primary format. Some have two (e.g., articles AND newsletters as independent primary formats, not derived from each other).
+
+**Follow-up question:** "Do you also create [other formats] independently, or do those always come from your [primary format]?"
+
+This distinction matters: an article that gets summarized into an email is a different workflow than an article AND a newsletter that are both created from scratch.
+
+---
+
+### Part B: Content Flow (Pipeline Configuration)
+
+**Purpose:** Map how content flows from primary format to derived formats. This is the core of the system.
+
+Based on the primary format from Part A, present the relevant flow options. The user selects which derivations they want active.
+
+**If primary is Article:**
+```
+Article
+  ├── → Social posts (extract insights, one per platform)
+  ├── → Email/newsletter (summarize or announce to subscribers)
+  ├── → Carousel (visual summary of key points)
+  └── → Video script (convert to talking points)
+```
+
+**If primary is Email/Newsletter:**
+```
+Email
+  ├── → Social posts (teasers, key insights, or quotes)
+  ├── → Blog article (expand deeper topics into full articles)
+  ├── → Carousel (visual version of email content)
+  └── → Email sequence (turn one-off into nurture series)
+```
+
+**If primary is Social Post:**
+```
+Social post
+  ├── → Blog article (compile popular posts into long-form)
+  ├── → Email/newsletter (roundup of best posts)
+  ├── → Carousel (expand a text post into visual slides)
+  └── → Email sequence (turn a thread into a drip)
+```
+
+**If primary is Video Script:**
+```
+Video script
+  ├── → Social posts (key quotes, clips, takeaways)
+  ├── → Blog article (written version of the content)
+  ├── → Email (announce or summarize for subscribers)
+  └── → Carousel (visual highlights)
+```
+
+**If primary is Tool/Product Review:**
+```
+Review
+  ├── → Social posts (verdict, key findings, comparisons)
+  ├── → Email (review digest to subscribers)
+  ├── → Blog article (the full review itself, if not already an article)
+  └── → Carousel (comparison slides, ratings breakdown)
+```
 
 **How to present:**
 
-Show the workflows and ask which ones the user wants. For most users, workflows 1, 2, and 5 are the core. Workflows 3 and 4 are relevant if they review tools or products. Workflow 6 depends on whether they do visual content. Workflow 7 depends on their scheduling setup.
+Show the flow diagram for their primary format. Ask them to select which derivations they want. Example:
 
-Ask: "Which of these workflows do you want active? You can always add more later."
+> "Your primary format is blog articles. Here is what the system can derive from each article. Which of these do you want active?"
 
-Also ask about scheduling preferences:
-- Do you use a scheduling tool? (Buffer, Hootsuite, manual, etc.)
-- Do you want Claude to help with scheduling, or just draft content?
+Then ask if there are any **reverse flows** or **independent formats** they also need. Example: "Do you also write standalone social posts that are NOT derived from articles? Do you write emails independently?"
 
-**After confirmation, update:** `config.md` (add workflows section)
+For each active flow, note whether it is:
+- **Automatic** (every time you create the primary, the derived content gets created too)
+- **On demand** (you trigger it when you want, not every time)
+
+---
+
+### Part C: Asset Generation
+
+**Purpose:** Configure what visual assets get generated for each content type in the pipeline.
+
+Ask: "For each content type in your pipeline, what visual assets do you need?"
+
+**Asset types:**
+
+| Asset | Description | Typical use |
+|-------|-------------|-------------|
+| **Cover image** | Hero/banner image for the content | Blog articles, email headers |
+| **Social image** | Platform-sized image with a key quote or stat | X posts, LinkedIn posts |
+| **Carousel slides** | Multi-slide visual content | LinkedIn carousels, Instagram |
+| **Infographic** | Data visualization or process diagram | Blog articles, social sharing |
+| **Email header** | Branded header for newsletters | Email/newsletter |
+| **Thumbnail** | Small preview image | Video thumbnails, link previews |
+
+**How to present:**
+
+For each content type the user activated in Part B, ask what assets they want generated. Example:
+
+> "For your blog articles, do you want: cover image, social sharing images, infographics? For your social posts: standalone images, carousels?"
+
+Some users want heavy visual content (an asset for every post). Others are text-focused and only want cover images for articles. Match their preference.
+
+Also ask about asset generation approach:
+- **AI-generated images** (DALL-E, Midjourney, etc.)
+- **Template-based** (HTML to image with brand colors/fonts)
+- **Manual** (user provides or sources images themselves)
+- **Mix** (templates for social, AI for articles, manual for specific needs)
+
+---
+
+### Part D: Distribution & Scheduling
+
+**Purpose:** Configure how finished content gets distributed.
+
+**Questions to ask:**
+
+1. **Social scheduling:** "Do you use a scheduling tool?"
+   - Buffer, Hootsuite, Later, Publer, native platform scheduling, manual posting
+   - "Do you want Claude to help with scheduling, or just draft the content?"
+
+2. **Email distribution:** "How do you send emails?" (only if email is in the pipeline)
+   - Mailchimp, ConvertKit, Beehiiv, Resend, Substack, Ghost, manual
+   - "Do you want Claude to draft emails ready to paste into your tool, or just the content?"
+
+3. **Publishing:** "How do you publish articles?" (only if articles are in the pipeline)
+   - CMS (WordPress, Ghost, Webflow, custom)
+   - Markdown files (static site, GitHub)
+   - Manual copy/paste
+
+4. **Cadence:** "How often do you want to publish?"
+   - Per content type: articles (weekly, biweekly, monthly), social (daily, 3x/week), email (weekly, biweekly)
+   - Or: "I do not have a fixed schedule, I publish when content is ready"
+
+5. **Batch vs. continuous:** "Do you prefer to batch-create content (e.g., write 5 posts in one session) or create one piece at a time?"
+
+---
+
+### After confirmation, write: update `config.md` with full pipeline configuration
 
 ```markdown
-## Workflows
+## Content Pipeline
 
-| Workflow | Active | Skill |
-|----------|--------|-------|
-| Article writing | Yes | /article |
-| Article repurposing | Yes | /repurpose |
-| Tool/product reviews | No | /tool-review |
-| New tool publishing | No | /new-tool |
-| Social post creation | Yes | direct |
-| Carousel creation | Yes | direct |
-| Content scheduling | Yes (Buffer) | integrated |
+### Primary Format
+- **Type:** Blog article
+- **Cadence:** Weekly
+
+### Content Flow
+| Source | Derived | Mode | Assets |
+|--------|---------|------|--------|
+| Article | Social posts (X, LinkedIn) | Automatic | Social images |
+| Article | Email newsletter | On demand | Email header |
+| Article | LinkedIn carousel | On demand | Carousel slides |
+
+### Independent Formats
+| Format | Cadence | Assets |
+|--------|---------|--------|
+| Standalone social posts | 3x/week | Optional social image |
+
+### Asset Generation
+- **Approach:** Template-based (HTML to image) for social, AI-generated for article covers
+- **Brand assets:** Read from brand/guidelines.md
+
+### Distribution
+| Channel | Tool | Claude's Role |
+|---------|------|---------------|
+| Social | Buffer | Draft + schedule |
+| Email | ConvertKit | Draft only |
+| Blog | WordPress | Draft as markdown |
+
+### Scheduling
+- **Style:** Batch (weekly content session)
+- **Article day:** Monday
+- **Social drip:** Tue, Thu, Sat
+- **Email:** Friday
+```
+
+Also write: `pipeline.md` in the output directory
+
+```markdown
+# Content Pipeline
+
+> Visual map of your content flow. Reference this when creating content to remember what gets derived from what.
+
+## Flow
+
+[Primary] → [Derived 1] → [Assets]
+         → [Derived 2] → [Assets]
+         → [Derived 3] → [Assets]
+
+## When you create a new [primary format]:
+1. Create the [primary] using /[skill]
+2. Run /repurpose to generate [derived formats]
+3. Review and adjust each derived piece
+4. Schedule via [tool]
+
+## Standalone content:
+- [Independent formats] are created directly, not derived
+- Use the appropriate platform spec from the framework
 ```
 
 ---
@@ -464,12 +649,14 @@ Content Skill Graph setup complete.
 Config files saved to: [output directory]
 
 Generated files:
-  config.md              — Brand basics, platforms, workflows
+  config.md              — Brand basics, platforms, pipeline, distribution
+  pipeline.md            — Visual map of your content flow
   philosophy.md          — Positions scaffold (fill in over time)
   voice/brand-voice.md   — Core tone of voice
   voice/anti-patterns.md — Content quality gates
   voice/x-tone.md        — X platform tone [if selected]
   voice/linkedin-tone.md — LinkedIn platform tone [if selected]
+  voice/email-tone.md    — Email tone [if selected]
   audience/[name].md     — [N] audience segments
   pillars/[name].md      — [N] content pillars
   brand/guidelines.md    — Visual brand identity
@@ -480,8 +667,9 @@ Generated files:
 Next steps:
 1. Review the generated files and make any adjustments
 2. Fill in philosophy.md with your core positions over time
-3. Use /article, /repurpose, /tool-review, /new-tool to create content
-4. The content creation skills read from both the template files
+3. Review pipeline.md to confirm your content flow
+4. Use the content creation skills to produce on-brand content
+5. The skills read from both the template files
    and your generated config to produce on-brand content
 ```
 
