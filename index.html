@@ -1835,6 +1835,69 @@
     color: var(--text-bright);
     background: rgba(255,255,255,0.06);
   }
+
+  /* ===== COLLAPSIBLE CARDS ===== */
+  .card-extra, .mcp-card-extra {
+    display: none;
+  }
+
+  .section-expanded .card-extra,
+  .section-expanded .mcp-card-extra,
+  .category-expanded .card-extra,
+  .category-expanded .mcp-card-extra {
+    display: flex;
+  }
+
+  .toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+    padding: 8px 18px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-sm);
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    letter-spacing: -0.01em;
+  }
+
+  .toggle-btn:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.12);
+    color: var(--text-bright);
+  }
+
+  .toggle-arrow {
+    display: inline-block;
+    transition: transform 0.25s ease;
+    font-size: 0.7rem;
+  }
+
+  .category-expanded .toggle-arrow,
+  .section-expanded .toggle-arrow {
+    transform: rotate(180deg);
+  }
+
+  .toggle-wrap {
+    text-align: center;
+    width: 100%;
+  }
+
+  .collapsed-sub-header {
+    display: none;
+  }
+
+  .section-expanded .collapsed-sub-header {
+    display: flex;
+  }
+
+  .section-expanded p.collapsed-sub-header {
+    display: block;
+  }
 </style>
 </head>
 <body>
@@ -1861,58 +1924,58 @@
   <div class="smap-root">
     <div class="smap-root-icon">&gt;_</div>
     <h1><span class="gradient">Claude Code</span></h1>
-    <div class="smap-root-sub">Opus 4.6 &middot; 231 sessions &middot; click any node to explore</div>
+    <div class="smap-root-sub">Opus 4.6 &middot; click any node to explore</div>
   </div>
   <div class="smap-trunk"></div>
   <div class="smap-branches">
     <a href="#mcp" class="smap-node smap-node-amber">
       <div class="smap-card">
         <div class="smap-icon">&#128268;</div>
-        <div class="smap-count">22</div>
+        <div class="smap-count">31</div>
         <div class="smap-label">MCP Servers</div>
         <div class="smap-items">
-          <span>GitHub</span>
           <span>Notion</span>
           <span>Firecrawl</span>
-          <span>Figma</span>
-          <span class="more">+18 more &darr;</span>
+          <span>Ahrefs</span>
+          <span>Paper</span>
+          <span class="more">+27 more &darr;</span>
         </div>
       </div>
     </a>
     <a href="#agents" class="smap-node smap-node-green">
       <div class="smap-card">
         <div class="smap-icon">&#129302;</div>
-        <div class="smap-count">11</div>
+        <div class="smap-count">12</div>
         <div class="smap-label">Agents</div>
         <div class="smap-items">
           <span>stock-analyst</span>
-          <span>crypto-analyst</span>
-          <span>carousel-generator</span>
-          <span class="more">+8 more &darr;</span>
+          <span>senior-architect</span>
+          <span>sdr-blueprint</span>
+          <span class="more">+10 more &darr;</span>
         </div>
       </div>
     </a>
     <a href="#skills" class="smap-node smap-node-pink">
       <div class="smap-card">
         <div class="smap-icon">&#9889;</div>
-        <div class="smap-count">12</div>
+        <div class="smap-count">23</div>
         <div class="smap-label">Commands</div>
         <div class="smap-items">
-          <span>/prompt-writer</span>
-          <span>/visualize</span>
-          <span>/continue</span>
-          <span class="more">+9 more &darr;</span>
+          <span>/prd</span>
+          <span>/content-skill-graph</span>
+          <span>/analyze-stock</span>
+          <span class="more">+20 more &darr;</span>
         </div>
       </div>
     </a>
     <a href="#automation" class="smap-node smap-node-blue">
       <div class="smap-card">
         <div class="smap-icon">&#9881;&#65039;</div>
-        <div class="smap-count">3</div>
+        <div class="smap-count">5</div>
         <div class="smap-label">Automation</div>
         <div class="smap-items">
-          <span>Session Hook</span>
-          <span>Git Hook</span>
+          <span>Session Hooks</span>
+          <span>Tool Hooks</span>
           <span>Status Line</span>
         </div>
       </div>
@@ -1966,14 +2029,6 @@
       </div>
     </div>
     <div class="mcp-card" style="--card-accent:var(--amber);">
-      <div class="mcp-icon">&#128269;</div>
-      <div class="mcp-info">
-        <h3>Perplexity</h3>
-        <div class="mcp-desc">AI search and deep research with sourced answers.</div>
-        <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">@perplexity-ai</span></div>
-      </div>
-    </div>
-    <div class="mcp-card" style="--card-accent:var(--amber);">
       <div class="mcp-icon">&#128526;</div>
       <div class="mcp-info">
         <h3>Brave Search</h3>
@@ -2005,17 +2060,41 @@
         <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">@modelcontextprotocol</span></div>
       </div>
     </div>
+    <div class="mcp-card" style="--card-accent:var(--amber);">
+      <div class="mcp-icon">&#127917;</div>
+      <div class="mcp-info">
+        <h3>Playwright</h3>
+        <div class="mcp-desc">Browser testing and automation via Playwright.</div>
+        <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">@playwright/mcp</span></div>
+      </div>
+    </div>
+    <div class="mcp-card" style="--card-accent:var(--amber);">
+      <div class="mcp-icon">&#128295;</div>
+      <div class="mcp-info">
+        <h3>Chrome DevTools</h3>
+        <div class="mcp-desc">Direct Chrome DevTools Protocol automation.</div>
+        <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">@anthropic</span></div>
+      </div>
+    </div>
   </div>
 
   <!-- Development & Infrastructure -->
   <div class="mcp-category"><span class="cat-dot" style="background:var(--green);"></span> Development &amp; Infrastructure</div>
   <div class="mcp-grid">
     <div class="mcp-card" style="--card-accent:var(--green);">
-      <div class="mcp-icon" style="background:var(--green-dim);">&#128025;</div>
+      <div class="mcp-icon" style="background:var(--green-dim);">&#128640;</div>
       <div class="mcp-info">
-        <h3>GitHub</h3>
-        <div class="mcp-desc">Repos, PRs, issues, code search, releases.</div>
-        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">Bearer token</span></div>
+        <h3>Dokploy Personal</h3>
+        <div class="mcp-desc">Deploy apps on Hostinger VPS (NativeAI, personal projects).</div>
+        <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">@ahdev/dokploy-mcp</span></div>
+      </div>
+    </div>
+    <div class="mcp-card" style="--card-accent:var(--green);">
+      <div class="mcp-icon" style="background:var(--green-dim);">&#127968;</div>
+      <div class="mcp-info">
+        <h3>Hostinger</h3>
+        <div class="mcp-desc">VPS, domains, DNS, SSL certificates.</div>
+        <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">hostinger-api-mcp</span></div>
       </div>
     </div>
     <div class="mcp-card" style="--card-accent:var(--green);">
@@ -2035,18 +2114,10 @@
       </div>
     </div>
     <div class="mcp-card" style="--card-accent:var(--green);">
-      <div class="mcp-icon" style="background:var(--green-dim);">&#127968;</div>
-      <div class="mcp-info">
-        <h3>Hostinger</h3>
-        <div class="mcp-desc">VPS, domains, DNS, SSL certificates.</div>
-        <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">hostinger-api-mcp</span></div>
-      </div>
-    </div>
-    <div class="mcp-card" style="--card-accent:var(--green);">
       <div class="mcp-icon" style="background:var(--green-dim);">&#128640;</div>
       <div class="mcp-info">
-        <h3>Dokploy</h3>
-        <div class="mcp-desc">Deploy and manage apps on VPS.</div>
+        <h3>Dokploy Nevron</h3>
+        <div class="mcp-desc">Deploy apps on Hetzner server (Nevron company projects).</div>
         <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">@ahdev/dokploy-mcp</span></div>
       </div>
     </div>
@@ -2059,11 +2130,11 @@
       </div>
     </div>
     <div class="mcp-card" style="--card-accent:var(--green);">
-      <div class="mcp-icon" style="background:var(--green-dim);">&#9889;</div>
+      <div class="mcp-icon" style="background:var(--green-dim);">&#128241;</div>
       <div class="mcp-info">
-        <h3>Supabase</h3>
-        <div class="mcp-desc">Backend database for Fitness App.</div>
-        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">Project-specific</span></div>
+        <h3>Maestro</h3>
+        <div class="mcp-desc">Mobile app testing and automation.</div>
+        <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">maestro</span></div>
       </div>
     </div>
   </div>
@@ -2080,14 +2151,6 @@
       </div>
     </div>
     <div class="mcp-card" style="--card-accent:var(--purple);">
-      <div class="mcp-icon" style="background:var(--purple-dim);">&#128197;</div>
-      <div class="mcp-info">
-        <h3>Google Workspace</h3>
-        <div class="mcp-desc">Calendar events, scheduling, free time.</div>
-        <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">@dguido</span></div>
-      </div>
-    </div>
-    <div class="mcp-card" style="--card-accent:var(--purple);">
       <div class="mcp-icon" style="background:var(--purple-dim);">&#9989;</div>
       <div class="mcp-info">
         <h3>Todoist</h3>
@@ -2101,6 +2164,46 @@
         <h3>Figma</h3>
         <div class="mcp-desc">Inspect designs, screenshots, variables.</div>
         <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span></div>
+      </div>
+    </div>
+    <div class="mcp-card" style="--card-accent:var(--purple);">
+      <div class="mcp-icon" style="background:var(--purple-dim);">&#128203;</div>
+      <div class="mcp-info">
+        <h3>Miro</h3>
+        <div class="mcp-desc">Visual collaboration boards and whiteboarding.</div>
+        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span></div>
+      </div>
+    </div>
+    <div class="mcp-card" style="--card-accent:var(--purple);">
+      <div class="mcp-icon" style="background:var(--purple-dim);">&#128228;</div>
+      <div class="mcp-info">
+        <h3>Buffer</h3>
+        <div class="mcp-desc">Social media publishing and scheduling.</div>
+        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">buffer</span></div>
+      </div>
+    </div>
+    <div class="mcp-card" style="--card-accent:var(--purple);">
+      <div class="mcp-icon" style="background:var(--purple-dim);">&#127912;</div>
+      <div class="mcp-info">
+        <h3>Stitch</h3>
+        <div class="mcp-desc">UI design and screen generation.</div>
+        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">stitch</span></div>
+      </div>
+    </div>
+    <div class="mcp-card" style="--card-accent:var(--purple);">
+      <div class="mcp-icon" style="background:var(--purple-dim);">&#9998;</div>
+      <div class="mcp-info">
+        <h3>Excalidraw</h3>
+        <div class="mcp-desc">Diagram creation and manipulation.</div>
+        <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">excalidraw-mcp</span></div>
+      </div>
+    </div>
+    <div class="mcp-card" style="--card-accent:var(--purple);">
+      <div class="mcp-icon" style="background:var(--purple-dim);">&#127919;</div>
+      <div class="mcp-info">
+        <h3>Ascend</h3>
+        <div class="mcp-desc">Personal dashboard: goals, habits, todos.</div>
+        <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">ascend</span></div>
       </div>
     </div>
   </div>
@@ -2130,22 +2233,6 @@
   <div class="mcp-category"><span class="cat-dot" style="background:var(--teal);"></span> Knowledge &amp; Reference</div>
   <div class="mcp-grid">
     <div class="mcp-card" style="--card-accent:var(--teal);">
-      <div class="mcp-icon" style="background:var(--teal-dim);">&#128194;</div>
-      <div class="mcp-info">
-        <h3>Swipe File</h3>
-        <div class="mcp-desc">Marketing copy frameworks, landing pages, templates.</div>
-        <div class="mcp-tags"><span class="tag">Filesystem</span><span class="tag">settings.json</span></div>
-      </div>
-    </div>
-    <div class="mcp-card" style="--card-accent:var(--teal);">
-      <div class="mcp-icon" style="background:var(--teal-dim);">&#129504;</div>
-      <div class="mcp-info">
-        <h3>Context</h3>
-        <div class="mcp-desc">Personal knowledge base: bio, skills, projects, notes.</div>
-        <div class="mcp-tags"><span class="tag">Filesystem</span><span class="tag">settings.json</span></div>
-      </div>
-    </div>
-    <div class="mcp-card" style="--card-accent:var(--teal);">
       <div class="mcp-icon" style="background:var(--teal-dim);">&#127909;</div>
       <div class="mcp-info">
         <h3>Transcript API</h3>
@@ -2154,11 +2241,56 @@
       </div>
     </div>
     <div class="mcp-card" style="--card-accent:var(--teal);">
+      <div class="mcp-icon" style="background:var(--teal-dim);">&#128220;</div>
+      <div class="mcp-info">
+        <h3>Paper</h3>
+        <div class="mcp-desc">Local document editing and note-taking service.</div>
+        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">localhost:29979</span></div>
+      </div>
+    </div>
+    <div class="mcp-card" style="--card-accent:var(--teal);">
       <div class="mcp-icon" style="background:var(--teal-dim);">&#128218;</div>
       <div class="mcp-info">
         <h3>OpenAI Developer Docs</h3>
         <div class="mcp-desc">OpenAI developer documentation.</div>
         <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">settings.json</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Claude.ai Remote -->
+  <div class="mcp-category"><span class="cat-dot" style="background:var(--pink);"></span> Claude.ai Remote</div>
+  <div class="mcp-grid">
+    <div class="mcp-card" style="--card-accent:var(--pink);">
+      <div class="mcp-icon" style="background:var(--pink-dim);">&#128270;</div>
+      <div class="mcp-info">
+        <h3>Ahrefs</h3>
+        <div class="mcp-desc">SEO analytics, keyword research, backlinks, site explorer.</div>
+        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span><span class="tag">claude.ai</span></div>
+      </div>
+    </div>
+    <div class="mcp-card" style="--card-accent:var(--pink);">
+      <div class="mcp-icon" style="background:var(--pink-dim);">&#128231;</div>
+      <div class="mcp-info">
+        <h3>Gmail</h3>
+        <div class="mcp-desc">Email management, search, drafts, labels.</div>
+        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span><span class="tag">claude.ai</span></div>
+      </div>
+    </div>
+    <div class="mcp-card" style="--card-accent:var(--pink);">
+      <div class="mcp-icon" style="background:var(--pink-dim);">&#128197;</div>
+      <div class="mcp-info">
+        <h3>Google Calendar</h3>
+        <div class="mcp-desc">Events, scheduling, free time lookups.</div>
+        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span><span class="tag">claude.ai</span></div>
+      </div>
+    </div>
+    <div class="mcp-card" style="--card-accent:var(--pink);">
+      <div class="mcp-icon" style="background:var(--pink-dim);">&#128202;</div>
+      <div class="mcp-info">
+        <h3>Clay</h3>
+        <div class="mcp-desc">Data enrichment and CRM workflows.</div>
+        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span><span class="tag">claude.ai</span></div>
       </div>
     </div>
   </div>
@@ -2294,64 +2426,75 @@
     </div>
 
     <!-- carousel-generator -->
-    <div class="card card-cyan card-clickable" onclick="openModal('carousel-generator')" title="Click to view full instructions">
+    <div class="card card-pink card-clickable" onclick="openModal('carousel-generator')" title="Click to view full instructions">
       <div class="agent-card">
-        <div class="agent-avatar" style="background: var(--cyan-dim);">&#127912;</div>
+        <div class="agent-avatar" style="background: var(--pink-dim);">&#127912;</div>
         <div>
           <h3>carousel-generator</h3>
-          <p>LinkedIn carousel posts as self-contained HTML. Exports to PNG slides + combined PDF. Dark and light themes. Mobile-optimized typography.</p>
+          <p>Generates LinkedIn carousel posts. Creates HTML slides, renders them to PNG/PDF via Puppeteer.</p>
           <div class="agent-meta">
             <span class="chip chip-model">Opus</span>
-            <span class="chip chip-tools">Read, Write, Edit, Bash</span>
+            <span class="chip" style="background:var(--pink-dim);color:var(--pink);">Content</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- greatest-people -->
-    <div class="card card-yellow card-clickable" onclick="openModal('greatest-people')" title="Click to view full instructions">
+    <!-- excalidraw-artist -->
+    <div class="card card-purple card-clickable" onclick="openModal('excalidraw-artist')" title="Click to view full instructions">
       <div class="agent-card">
-        <div class="agent-avatar" style="background: var(--amber-dim);">&#128081;</div>
+        <div class="agent-avatar" style="background: var(--purple-dim);">&#9998;</div>
         <div>
-          <h3>greatest-people</h3>
-          <p>Deep research on history's most successful people. Early career analysis, biggest levers, daily habits, mindset patterns. Cross-person synthesis.</p>
+          <h3>excalidraw-artist</h3>
+          <p>Creates diagrams and visual explanations on the Excalidraw canvas via MCP tools.</p>
           <div class="agent-meta">
             <span class="chip chip-model">Opus</span>
-            <span class="chip chip-tools">Read, Write, Bash, Web</span>
+            <span class="chip" style="background:var(--purple-dim);color:var(--purple);">Visual</span>
           </div>
         </div>
       </div>
     </div>
 
     <!-- sdr-blueprint -->
-    <div class="card card-pink card-clickable" onclick="openModal('sdr-blueprint')" title="Click to view full instructions">
+    <div class="card card-amber card-clickable" onclick="openModal('sdr-blueprint')" title="Click to view full instructions">
       <div class="agent-card">
-        <div class="agent-avatar" style="background: var(--pink-dim);">&#128232;</div>
+        <div class="agent-avatar" style="background: var(--amber-dim);">&#128640;</div>
         <div>
           <h3>sdr-blueprint</h3>
-          <p>Complete SDR system architect. Discovery, tool stack, email infrastructure, LinkedIn automation, compliance. Generates HTML blueprint document.</p>
+          <p>Builds SDR and outbound sales systems. Sequences, ICP targeting, cadence design, and outreach infrastructure.</p>
           <div class="agent-meta">
             <span class="chip chip-model">Opus</span>
-            <span class="chip chip-tools">Read, Write, Bash, Web</span>
+            <span class="chip" style="background:var(--amber-dim);color:var(--amber);">Sales</span>
           </div>
-          <div class="usage-bar-wrap">
-            <div class="usage-bar-label"><span>Embedded knowledge</span><span>7 stages</span></div>
-            <div class="usage-bar"><div class="usage-bar-fill" style="width:95%; background: var(--pink);"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- greatest-people -->
+    <div class="card card-teal card-clickable" onclick="openModal('greatest-people')" title="Click to view full instructions">
+      <div class="agent-card">
+        <div class="agent-avatar" style="background: var(--teal-dim);">&#127942;</div>
+        <div>
+          <h3>greatest-people</h3>
+          <p>Researches history's most successful people. Extracts principles, patterns, and mental models from their lives.</p>
+          <div class="agent-meta">
+            <span class="chip chip-model">Opus</span>
+            <span class="chip" style="background:var(--teal-dim);color:var(--teal);">Research</span>
           </div>
         </div>
       </div>
     </div>
 
     <!-- successful-companies -->
-    <div class="card card-cyan card-clickable" onclick="openModal('successful-companies')" title="Click to view full instructions">
+    <div class="card card-teal card-clickable" onclick="openModal('successful-companies')" title="Click to view full instructions">
       <div class="agent-card">
-        <div class="agent-avatar" style="background: var(--cyan-dim);">&#127970;</div>
+        <div class="agent-avatar" style="background: var(--teal-dim);">&#127970;</div>
         <div>
           <h3>successful-companies</h3>
-          <p>Deep research on successful companies. Origin stories, growth engines, biggest levers, moat analysis, founder decisions. Cross-company synthesis.</p>
+          <p>Researches successful companies and their strategies. Market positioning, growth levers, and competitive moats.</p>
           <div class="agent-meta">
             <span class="chip chip-model">Opus</span>
-            <span class="chip chip-tools">Read, Write, Bash, Web</span>
+            <span class="chip" style="background:var(--teal-dim);color:var(--teal);">Research</span>
           </div>
         </div>
       </div>
@@ -2388,7 +2531,7 @@
       <div class="flow-arrow">&rarr;</div>
       <div class="flow-node fn-agent">copywriting-storytelling</div>
       <div class="flow-arrow">&rarr;</div>
-      <div class="flow-node fn-mcp">Swipe File MCP</div>
+      <div class="flow-node fn-mcp">Context System</div>
       <div class="flow-arrow">&rarr;</div>
       <div class="flow-node fn-output">Framework-based copy</div>
     </div>
@@ -2410,9 +2553,52 @@
   <div class="section-header">
     <div class="section-tag tag-pink">Commands</div>
     <h2>Skills &amp; Slash Commands</h2>
-    <p class="section-desc">Quick shortcuts that trigger specific workflows. Custom skills live in <code style="color:var(--pink);font-size:0.85rem;">~/.claude/skills/</code>, each in its own subfolder with a SKILL.md. <span style="color:var(--pink);font-weight:600;">Click any card to view full details.</span></p>
+    <p class="section-desc">Custom slash commands grouped by purpose: content creation, development, research, productivity, and built-in system tools. Custom skills live in <code style="color:var(--pink);font-size:0.85rem;">~/.claude/skills/</code>, each in its own subfolder with a SKILL.md. System skills are built into the Claude Code harness.</p>
   </div>
 
+  <!-- Individual Skills (collapsible) -->
+  <!-- Content & Media Skills -->
+  <div class="sub-header">Content &amp; Media</div>
+  <div class="card-grid">
+
+    <div class="card card-pink">
+      <div class="card-icon">&#128300;</div>
+      <h3>/content-skill-graph</h3>
+      <p>Generic, customizable content production system. A 9-step interactive onboarding walks anyone through building their own brand-specific skill graph for creating content across platforms.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Custom Skill</span>
+        <span class="tag">Onboarding</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#128444;</div>
+      <h3>/remove-watermark</h3>
+      <p>Strip watermarks from images using GeminiWatermarkTool CLI.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Custom Skill</span>
+        <span class="tag">Media</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Development Tools -->
+  <div class="sub-header" style="margin-top: 48px;">Development Tools</div>
+  <div class="card-grid">
+    <div class="card card-pink">
+      <div class="card-icon">&#9998;</div>
+      <h3>/excalidraw-skill</h3>
+      <p>Programmatic Excalidraw canvas toolkit for creating and editing diagrams.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Custom Skill</span>
+        <span class="tag">Development</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Individual Skill Cards -->
+  <div class="sub-header" style="margin-top: 48px;">Featured Individual Skills</div>
   <div class="card-grid">
     <div class="card card-pink">
       <div class="card-icon">&#128221;</div>
@@ -2420,7 +2606,7 @@
       <p>Transform rough ideas into world-class AI prompts. Calibrates depth based on stakes (1-4 levels). Full assessment protocol.</p>
       <div class="card-tags">
         <span class="tag tag-highlight">Custom Skill</span>
-        <span class="tag">1 use</span>
+        <span class="tag">AI &amp; Research</span>
       </div>
     </div>
 
@@ -2430,7 +2616,7 @@
       <p>Project Decomposition Assistant. Breaks any project into phases, tasks (30-120 min), and MVAs (1-15 min). Applies Pareto 80/20 prioritization.</p>
       <div class="card-tags">
         <span class="tag tag-highlight">Custom Skill</span>
-        <span class="tag">Planning</span>
+        <span class="tag">Productivity</span>
       </div>
     </div>
 
@@ -2440,17 +2626,17 @@
       <p>Full Google NotebookLM API. Create notebooks, add sources (URLs, YouTube, PDFs), generate podcasts, download artifacts.</p>
       <div class="card-tags">
         <span class="tag tag-highlight">Custom Skill</span>
-        <span class="tag">1 use</span>
+        <span class="tag">AI &amp; Research</span>
       </div>
     </div>
 
     <div class="card card-pink">
       <div class="card-icon">&#128196;</div>
       <h3>/prd</h3>
-      <p>Generate Machine-Optimized PRD for AI coding agents. Most-used skill.</p>
+      <p>Generate Machine-Optimized PRD for AI coding agents. Most-used individual skill.</p>
       <div class="card-tags">
         <span class="tag">Built-in</span>
-        <span class="tag">23 uses</span>
+        <span class="tag">Development</span>
       </div>
       <div class="usage-bar-wrap">
         <div class="usage-bar"><div class="usage-bar-fill" style="width:100%; background: var(--pink);"></div></div>
@@ -2463,7 +2649,7 @@
       <p>Triggers stock-analyst agent for deep equity research. Reads knowledge base, fetches live data, writes analysis file.</p>
       <div class="card-tags">
         <span class="tag">Agent trigger</span>
-        <span class="tag">1 use</span>
+        <span class="tag">Finance</span>
       </div>
     </div>
 
@@ -2473,14 +2659,14 @@
       <p>Triggers crypto-analyst agent for token/protocol research. On-chain + tokenomics + macro framework.</p>
       <div class="card-tags">
         <span class="tag">Agent trigger</span>
-        <span class="tag">2 uses</span>
+        <span class="tag">Finance</span>
       </div>
     </div>
 
     <div class="card card-pink">
       <div class="card-icon">&#9728;&#65039;</div>
       <h3>/market-brief</h3>
-      <p>Generate a concise morning market brief using Perplexity and web search.</p>
+      <p>Generate a concise morning market brief using Firecrawl search and web research.</p>
       <div class="card-tags">
         <span class="tag">Finance</span>
         <span class="tag">Research</span>
@@ -2490,7 +2676,7 @@
     <div class="card card-pink">
       <div class="card-icon">&#128260;</div>
       <h3>/continue</h3>
-      <p>Generate a continue prompt file so work can be resumed in a new session. Just say "continue" to resume.</p>
+      <p>Generate a continue prompt file so work can be resumed in a new session. Also handles resuming from a previous continue prompt.</p>
       <div class="card-tags">
         <span class="tag tag-highlight">Custom Skill</span>
         <span class="tag">Workflow</span>
@@ -2518,22 +2704,106 @@
     </div>
 
     <div class="card card-pink">
-      <div class="card-icon">&#127912;</div>
-      <h3>/visualize</h3>
-      <p>Transform any text source (book, article, essay) into a premium visual HTML page. Converts non-MD formats first. Optional personalization.</p>
+      <div class="card-icon">&#128736;</div>
+      <h3>/devtakeover</h3>
+      <p>Comprehensive project onboarding: CLAUDE.md, rules, agents, skills, component catalog, and config repo setup.</p>
       <div class="card-tags">
         <span class="tag tag-highlight">Custom Skill</span>
-        <span class="tag">Knowledge</span>
+        <span class="tag">Development</span>
       </div>
     </div>
 
     <div class="card card-pink">
-      <div class="card-icon">&#128209;</div>
-      <h3>/content-skill-graph</h3>
-      <p>9-step onboarding that builds a personalized content creation system. Configures voice, audience, pillars, brand, and workflows.</p>
+      <div class="card-icon">&#128293;</div>
+      <h3>/firecrawl</h3>
+      <p>Advanced web scraping workflows: crawl, search, extract structured data, map site URLs.</p>
+      <div class="card-tags">
+        <span class="tag">AI &amp; Research</span>
+        <span class="tag">Web</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#128176;</div>
+      <h3>/portfolio</h3>
+      <p>Investment portfolio review and rebalancing analysis across stocks and crypto.</p>
+      <div class="card-tags">
+        <span class="tag">Finance</span>
+        <span class="tag">Personal</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#128197;</div>
+      <h3>/calendar</h3>
+      <p>Personal calendar management, week planning, event scheduling (integrates with Todoist).</p>
       <div class="card-tags">
         <span class="tag tag-highlight">Custom Skill</span>
-        <span class="tag">Content</span>
+        <span class="tag">Productivity</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- System & Built-in Skills -->
+  <div class="sub-header" style="margin-top: 48px;">System &amp; Built-in</div>
+  <div class="card-grid">
+    <div class="card card-blue">
+      <div class="card-icon">&#9881;&#65039;</div>
+      <h3>/update-config</h3>
+      <p>Configure the Claude Code harness via settings.json. Set up hooks, automated behaviors, and permissions.</p>
+      <div class="card-tags">
+        <span class="tag">Built-in</span>
+        <span class="tag">Configuration</span>
+      </div>
+    </div>
+
+    <div class="card card-blue">
+      <div class="card-icon">&#128296;</div>
+      <h3>/simplify</h3>
+      <p>Review changed code for reuse, quality, and efficiency, then fix any issues found.</p>
+      <div class="card-tags">
+        <span class="tag">Built-in</span>
+        <span class="tag">Development</span>
+      </div>
+    </div>
+
+    <div class="card card-blue">
+      <div class="card-icon">&#128260;</div>
+      <h3>/loop</h3>
+      <p>Run a prompt or slash command on a recurring interval. Self-pacing mode available for adaptive timing.</p>
+      <div class="card-tags">
+        <span class="tag">Built-in</span>
+        <span class="tag">Automation</span>
+      </div>
+    </div>
+
+    <div class="card card-blue">
+      <div class="card-icon">&#128339;</div>
+      <h3>/schedule</h3>
+      <p>Create, update, list, or run scheduled remote agents (triggers) that execute on a cron schedule.</p>
+      <div class="card-tags">
+        <span class="tag">Built-in</span>
+        <span class="tag">Automation</span>
+      </div>
+    </div>
+
+    <div class="card card-blue">
+      <div class="card-icon">&#129302;</div>
+      <h3>/claude-api</h3>
+      <p>Build, debug, and optimize Claude API and Anthropic SDK applications with prompt caching.</p>
+      <div class="card-tags">
+        <span class="tag">Built-in</span>
+        <span class="tag">AI &amp; Development</span>
+      </div>
+    </div>
+
+    <div class="card card-blue">
+      <div class="card-icon">&#9745;&#65039;</div>
+      <h3>/todo</h3>
+      <p>Quick task management within Claude Code sessions.</p>
+      <div class="card-tags">
+        <span class="tag">Built-in</span>
+        <span class="tag">Productivity</span>
       </div>
     </div>
   </div>
@@ -2572,6 +2842,24 @@
   </div>
 
   <div class="auto-card">
+    <h4>SessionStart Hook: GSD Update Checker</h4>
+    <p>Runs <code>~/.claude/hooks/gsd-check-update.js</code> every time Claude Code starts.</p>
+    <div class="auto-detail">
+      <strong>What it does:</strong> Checks if the GSD (Get Stuff Done) framework has updates available. Ensures the project management system stays current with the latest phases, templates, and workflow improvements.<br><br>
+      <strong>Trigger:</strong> Fires on every <code>SessionStart</code> event alongside the maintenance check hook.
+    </div>
+  </div>
+
+  <div class="auto-card">
+    <h4>PostToolUse Hook: GSD Context Monitor</h4>
+    <p>Runs <code>~/.claude/hooks/gsd-context-monitor.js</code> after tool use.</p>
+    <div class="auto-detail">
+      <strong>What it does:</strong> Monitors tool usage during GSD project execution to track context consumption and warn when context is running low during multi-phase work. Helps prevent mid-phase context exhaustion.<br><br>
+      <strong>Trigger:</strong> Fires on <code>PostToolUse</code> events when a GSD project is active.
+    </div>
+  </div>
+
+  <div class="auto-card">
     <h4>Custom Status Line</h4>
     <p>Runs <code>~/.claude/statusline-command.sh</code> to display contextual info in the terminal footer.</p>
     <div class="auto-detail">
@@ -2589,7 +2877,7 @@
   <div class="section-header">
     <div class="section-tag tag-teal">Knowledge</div>
     <h2>Data Sources</h2>
-    <p class="section-desc">Persistent data that Claude can read and write across sessions. Three main systems: Swipe File, Context, and Auto Memory.</p>
+    <p class="section-desc">Persistent data that Claude can read and write across sessions. Three main systems: the Swipe File (copy frameworks and references), the Context system (personal knowledge base), and Auto Memory (conversation learnings).</p>
   </div>
 
   <div class="data-grid">
@@ -2707,42 +2995,42 @@
       <div class="config-num">1</div>
       <h4>Main Config</h4>
       <div class="config-path">~/.claude.json</div>
-      <p>Global MCP servers (GitHub, Notion, Firecrawl, Perplexity, Hostinger, Dokploy, Yahoo Finance, CoinMarketCap, Transcript API, Docker, Chrome, Puppeteer, Google Workspace, BrowserMCP, n8n, Todoist, Figma). Also stores per-project MCPs under <code style="font-size:0.75rem;">projects.&lt;path&gt;.mcpServers</code>.</p>
+      <p>Global MCP servers (Notion, Firecrawl, Hostinger, Dokploy Personal, Dokploy Nevron, Yahoo Finance, CoinMarketCap, Transcript API, Docker, Puppeteer, Playwright, Chrome DevTools, BrowserMCP, Maestro, n8n, Todoist, Figma, Miro, Buffer, Stitch, Excalidraw, Ascend, Paper) plus Claude.ai remote MCPs (Ahrefs, Gmail, Google Calendar, Clay). Also stores per-project MCPs under <code style="font-size:0.75rem;">projects.&lt;path&gt;.mcpServers</code>.</p>
     </div>
 
     <div class="config-card">
       <div class="config-num">2</div>
       <h4>Settings</h4>
       <div class="config-path">~/.claude/settings.json</div>
-      <p>SessionStart hook (maintenance-check.sh), PreToolUse hook (confirm-git-commit.sh), custom status line, plus MCPs: Swipe File, Context, Firecrawl, Brave Search, Todoist, OpenAI Docs, Docker (uvx).</p>
+      <p>SessionStart hooks (maintenance-check.sh, gsd-check-update.js), PreToolUse hook (confirm-git-commit.sh), PostToolUse hook (gsd-context-monitor.js), custom status line, plus MCPs: Firecrawl, Brave Search, Todoist, OpenAI Docs, Docker (uvx).</p>
     </div>
 
     <div class="config-card">
       <div class="config-num">3</div>
       <h4>Global Instructions</h4>
       <div class="config-path">~/.claude/CLAUDE.md</div>
-      <p>186 lines of rules: Swipe File workflow, Context system usage, web research priority (Perplexity > Firecrawl > WebFetch), MCP gotchas, agent creation format, proactive advisor trigger rules.</p>
+      <p>Comprehensive rules: Context system usage, web research priority (Firecrawl > WebFetch), MCP gotchas, agent creation format, proactive advisor trigger rules, deployment infrastructure, Git safety protocols.</p>
     </div>
 
     <div class="config-card">
       <div class="config-num">4</div>
       <h4>Agents Directory</h4>
       <div class="config-path">~/.claude/agents/</div>
-      <p>8 agent files (.md). Each has YAML frontmatter (name, description, model, color, tools) followed by system prompt. Frontmatter must start on line 1.</p>
+      <p>12 agent files (.md). Each has YAML frontmatter (name, description, model, color, tools) followed by system prompt. Frontmatter must start on line 1.</p>
     </div>
 
     <div class="config-card">
       <div class="config-num">5</div>
       <h4>Skills Directory</h4>
       <div class="config-path">~/.claude/skills/</div>
-      <p>7 custom skills: prompt-writer, pda, notebooklm, continue, todoist, keybindings-help, visualize. Each in its own subfolder with a SKILL.md file inside.</p>
+      <p>Custom slash commands grouped into Content &amp; Media, Development Tools, Featured Skills, and System &amp; Built-in. Each custom skill has its own subfolder with a SKILL.md file inside. System skills are built into the Claude Code harness.</p>
     </div>
 
     <div class="config-card">
       <div class="config-num">6</div>
       <h4>Hooks &amp; Scripts</h4>
       <div class="config-path">~/.claude/hooks/ &amp; scripts</div>
-      <p>maintenance-check.sh (144 lines, 5 safeguards), confirm-git-commit.sh (PreToolUse), statusline-command.sh (37 lines), prompts/second-brain-maintenance.md.</p>
+      <p>maintenance-check.sh (144 lines, 5 safeguards), confirm-git-commit.sh (PreToolUse), gsd-check-update.js (SessionStart), gsd-context-monitor.js (PostToolUse), statusline-command.sh (37 lines), prompts/second-brain-maintenance.md.</p>
     </div>
   </div>
 
@@ -2758,7 +3046,7 @@
       <strong>MCP changes require restart.</strong> After editing config files, restart Claude Code for changes to take effect.
     </div>
     <div class="gotcha-box gotcha-amber">
-      <strong>GitHub MCP URL is NOT api.github.com.</strong> The correct URL is <code>https://api.githubcopilot.com/mcp</code> with a Bearer token header.
+      <strong>GitHub uses gh CLI, not MCP.</strong> All GitHub operations go through the <code>gh</code> command line tool. No MCP server needed.
     </div>
   </div>
 </div>
@@ -2783,7 +3071,7 @@
 <!-- ===== FOOTER ===== -->
 <div class="footer">
   <p>This is your Claude Code ecosystem. Every piece works together to make development faster, smarter, and more automated.</p>
-  <p class="date">Last updated: February 18, 2026 &middot; First session: November 12, 2025 &middot; 231 startups &middot; Powered by Opus 4.6</p>
+  <p class="date">Last updated: 12. 4. 2026 &middot; First session: 12. 11. 2025 &middot; Powered by Opus 4.6</p>
 </div>
 
 </div><!-- /page -->
@@ -2812,7 +3100,6 @@ The knowledge base is a Git repo. The agent will auto-sync it (git pull) before 
 
 For the best experience, also install these MCP servers (check the MCP Servers section above for install prompts):
 - Yahoo Finance MCP (for live stock data)
-- Perplexity MCP (for news research)
 - Firecrawl MCP (for scraping financial sites)`,
     content: `
       <div class="persona-quote">You are a senior equity research analyst with 30 years of experience across Goldman Sachs, Bridgewater, and Renaissance Technologies. You combine deep fundamental analysis with technical timing, macro awareness, and geopolitical context. You think like a contrarian but act like an institutionalist. You never give vague "it depends" answers &mdash; you take a data-backed stance.</div>
@@ -2838,7 +3125,7 @@ For the best experience, also install these MCP servers (check the MCP Servers s
       <ul>
         <li>Yahoo Finance MCP: current price, market cap, P/E, EV/EBITDA, 52-week range</li>
         <li>Financial statements: income, balance sheet, cash flow (3-5 years)</li>
-        <li>Perplexity: recent news, earnings recaps, analyst opinions, insider transactions</li>
+        <li>Firecrawl: recent news, earnings recaps, analyst opinions, insider transactions</li>
         <li>Firecrawl: investor relations pages, SEC filings if needed</li>
       </ul>
 
@@ -2939,7 +3226,6 @@ The knowledge base is a Git repo. The agent will auto-sync it (git pull) before 
 
 For the best experience, also install these MCP servers (check the MCP Servers section above for install prompts):
 - CoinMarketCap MCP (for live crypto data)
-- Perplexity MCP (for news research)
 - Firecrawl MCP (for scraping project docs)`,
     content: `
       <div class="persona-quote">You are a senior crypto analyst and former hedge fund portfolio manager with 10 years in crypto (since 2014) and 20 years in traditional finance. You survived the 2017 crash, the 2020 DeFi summer, the 2022 bear market, and multiple altcoin wipeouts. You're not a moonboy &mdash; you're a risk-adjusted return optimizer who understands that 90% of crypto projects go to zero.</div>
@@ -3398,13 +3684,13 @@ Then tell me to restart Claude Code for the agent to become available.`,
       <p>On first use, the agent walks you through connecting GitHub:</p>
       <ol>
         <li>Asks if you have a GitHub account</li>
-        <li>If yes, checks if GitHub MCP is already connected</li>
-        <li>If not, configures it automatically and tells you to restart, then <code>/mcp</code> &rarr; select github &rarr; authenticate in browser</li>
+        <li>If yes, checks if <code>gh</code> CLI is authenticated</li>
+        <li>If not, walks you through <code>gh auth login</code></li>
         <li>If no GitHub account, falls back to public raw URLs (works fine)</li>
       </ol>
 
       <h2>Knowledge Base</h2>
-      <p>Fetches sources directly from GitHub (via MCP or raw URLs). 10 curated source files:</p>
+      <p>Fetches sources directly from GitHub (via <code>gh</code> CLI or raw URLs). 10 curated source files:</p>
       <table>
         <tr><th>File</th><th>Topic</th></tr>
         <tr><td><code>01-setup-claude-code-15-minutes.md</code></td><td>Initial setup guide</td></tr>
@@ -3449,7 +3735,7 @@ Then tell me to restart Claude Code for the agent to become available.`,
 
       <h2>How It Works</h2>
       <ol>
-        <li>On first run, helps you connect GitHub MCP (or falls back to raw URLs)</li>
+        <li>On first run, helps you set up GitHub access via <code>gh</code> CLI (or falls back to raw URLs)</li>
         <li>Fetches relevant sources from GitHub before answering</li>
         <li>Gives exact commands, file paths, config snippets</li>
         <li>References sources so you can dig deeper</li>
@@ -3460,166 +3746,116 @@ Then tell me to restart Claude Code for the agent to become available.`,
   },
   'carousel-generator': {
     icon: '&#127912;',
-    iconBg: 'var(--cyan-dim)',
+    iconBg: 'var(--pink-dim)',
     name: 'carousel-generator',
     model: 'Opus',
     tools: 'Read, Write, Edit, Bash, Grep, Glob',
-    color: 'cyan',
-    installPrompt: `Install the carousel-generator agent in my Claude Code setup.
-
-Run these commands:
-mkdir -p ~/.claude/agents
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/carousel-generator.md -o ~/.claude/agents/carousel-generator.md
-
-Then tell me to restart Claude Code for the agent to become available.
-
-Note: This agent expects a carousel generator project with templates/, posts/, output/ directories and an export.js Puppeteer script. Set up your project structure before first use.`,
+    color: 'pink',
     content: `
-      <div class="persona-quote">You generate LinkedIn carousel posts as self-contained HTML files that export to PNG slides and a combined PDF.</div>
-
-      <h2>Workflow</h2>
-      <ol>
-        <li>Gather requirements: topic, brand/style, audience, slide count, tone</li>
-        <li>Plan slide sequence: cover + content slides + CTA</li>
-        <li>Read reference files to match visual quality</li>
-        <li>Generate HTML to posts/ directory</li>
-        <li>Preview in browser for approval</li>
-        <li>Export via Puppeteer to PNG slides + PDF</li>
-      </ol>
-
-      <h2>Visual Styles</h2>
+      <div class="persona-quote">You are a LinkedIn carousel content specialist. You create visually compelling carousel posts that drive engagement by combining persuasive copywriting with clean, professional slide design.</div>
+      <h2>What It Does</h2>
       <ul>
-        <li><strong>Dark theme:</strong> Uses brand.css. Dark background, cyan/purple accents. Best for technical content.</li>
-        <li><strong>Light theme:</strong> Inline CSS. Light background, indigo/green accents. Best for educational content.</li>
+        <li>Generates multi-slide LinkedIn carousel posts</li>
+        <li>Creates HTML slides with consistent branding</li>
+        <li>Renders slides to PNG/PDF via Puppeteer for publishing</li>
+        <li>Applies proven carousel frameworks for maximum engagement</li>
       </ul>
-
-      <h2>Slide Rules</h2>
-      <ul>
-        <li>Every slide: 1080x1350 with class <code>slide carousel</code></li>
-        <li>One idea per slide, never cram multiple points</li>
-        <li>Cover headline minimum 80px, body text minimum 30px</li>
-        <li>5 to 15 slides (engagement drops after 10)</li>
-        <li>All text must be readable at phone scale (~350px wide)</li>
-      </ul>
+      <h2>Output</h2>
+      <p>HTML slide deck rendered to individual PNGs or a combined PDF, ready to upload directly to LinkedIn.</p>
     `
   },
-  'greatest-people': {
-    icon: '&#128081;',
-    iconBg: 'var(--amber-dim)',
-    name: 'greatest-people',
+
+  'excalidraw-artist': {
+    icon: '&#9998;',
+    iconBg: 'var(--purple-dim)',
+    name: 'excalidraw-artist',
     model: 'Opus',
-    tools: 'Read, Write, Edit, Bash, Grep, Glob, WebSearch, WebFetch',
-    color: 'yellow',
-    installPrompt: `Install the greatest-people agent in my Claude Code setup.
+    tools: 'Read, Write, Bash, Excalidraw MCP',
+    color: 'purple',
+    installPrompt: `Install the excalidraw-artist agent in my Claude Code setup.
 
 Run these commands:
-mkdir -p ~/.claude/agents
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/greatest-people.md -o ~/.claude/agents/greatest-people.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/excalidraw-artist.md -o ~/.claude/agents/excalidraw-artist.md
 
 Then tell me to restart Claude Code for the agent to become available.`,
     content: `
-      <div class="persona-quote">You are a historian and strategic biographer with deep expertise in studying the world's most successful people across business, science, art, politics, and athletics.</div>
-
-      <h2>Research Framework</h2>
-      <p>For every person analyzed, follows this structure:</p>
-      <ol>
-        <li><strong>Early Career Deep Dive</strong> (age 18-25): skills, obsessions, finances, failures, first ventures</li>
-        <li><strong>The Biggest Levers</strong>: 3-5 decisions with disproportionate impact</li>
-        <li><strong>Daily Habits &amp; Routines</strong>: typical day, energy management, reading habits</li>
-        <li><strong>Mindset &amp; Psychology</strong>: handling failure, risk relationship, conviction</li>
-        <li><strong>Pattern Matching</strong>: connections to broader patterns, actionable takeaways</li>
-      </ol>
-
-      <h2>Cross-Person Synthesis</h2>
+      <div class="persona-quote">You are a visual communication specialist who creates clear, expressive diagrams using the Excalidraw canvas.</div>
+      <h2>What It Does</h2>
       <ul>
-        <li>Universal patterns (shared by 80%+ of successful people)</li>
-        <li>Surprising findings (against conventional wisdom)</li>
-        <li>Biggest levers ranked by expected impact</li>
-        <li>Era-adjusted insights (what translates to today)</li>
+        <li>Creates architecture diagrams, flowcharts, and system maps</li>
+        <li>Uses the Excalidraw MCP to manipulate the canvas directly</li>
+        <li>Produces hand-drawn style diagrams that are clear and professional</li>
+        <li>Can annotate existing diagrams or create from scratch</li>
       </ul>
-
-      <h2>Categories Covered</h2>
-      <p>Business founders, scientists, conquerors, athletes, investors, creators, modern builders.</p>
+      <h2>Integration</h2>
+      <p>Works with the Excalidraw MCP server to create and manipulate diagrams programmatically on the canvas.</p>
     `
   },
+
   'sdr-blueprint': {
-    icon: '&#128232;',
-    iconBg: 'var(--pink-dim)',
+    icon: '&#128640;',
+    iconBg: 'var(--amber-dim)',
     name: 'sdr-blueprint',
     model: 'Opus',
-    tools: 'Read, Write, Edit, Bash, Grep, Glob, WebSearch, WebFetch',
-    color: 'pink',
-    installPrompt: `Install the sdr-blueprint agent in my Claude Code setup.
-
-Run these commands:
-mkdir -p ~/.claude/agents
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/sdr-blueprint.md -o ~/.claude/agents/sdr-blueprint.md
-
-Then tell me to restart Claude Code for the agent to become available.
-
-This agent has a massive embedded knowledge base (30K+ characters) covering the full SDR pipeline, tool pricing, email frameworks, LinkedIn strategies, compliance, and budget stacks. No external knowledge files needed.`,
+    tools: 'All tools',
+    color: 'amber',
     content: `
-      <div class="persona-quote">You are an elite SDR systems architect with 15+ years building outbound sales machines. Deep expertise in cold email infrastructure, LinkedIn automation, multi-channel sequencing, CRM architecture, AI SDR tools, and sales compliance.</div>
-
-      <h2>Process</h2>
-      <ol>
-        <li><strong>Discovery:</strong> 11-question structured interview about company, ICP, channels, budget, compliance needs</li>
-        <li><strong>Research:</strong> Verifies current tool pricing, finds new tools, checks deliverability rules</li>
-        <li><strong>Blueprint:</strong> Generates comprehensive HTML document with 17 sections</li>
-      </ol>
-
-      <h2>Embedded Knowledge (30K+ chars)</h2>
+      <div class="persona-quote">You are an outbound sales systems architect. You design and build complete SDR (Sales Development Representative) infrastructure from targeting to conversion.</div>
+      <h2>What It Does</h2>
       <ul>
-        <li>Full 10-stage SDR pipeline from ICP to analytics</li>
-        <li>50+ tool comparisons with pricing across all categories</li>
-        <li>6 cold email frameworks (PAS, BAB, AIDA, Straight-Line, Permission, Breakup)</li>
-        <li>LinkedIn automation safety tiers and best practices</li>
-        <li>GDPR, CAN-SPAM, CASL compliance checklists</li>
-        <li>4 budget-tier tool stacks ($0-$100 to $1,500+/mo)</li>
-        <li>Phased implementation plan (Week 1 through Month 3+)</li>
-        <li>KPI benchmarks for email, LinkedIn, and pipeline</li>
+        <li>Builds complete SDR/outbound sales systems</li>
+        <li>Designs multi-channel outreach sequences (email, LinkedIn, phone)</li>
+        <li>Creates ICP (Ideal Customer Profile) definitions and targeting criteria</li>
+        <li>Develops cadence timing and follow-up automation</li>
+        <li>Writes personalized outreach templates and A/B test variants</li>
       </ul>
+      <h2>Output</h2>
+      <p>Complete SDR playbook with sequences, templates, objection handling scripts, and performance tracking metrics.</p>
     `
   },
+
+  'greatest-people': {
+    icon: '&#127942;',
+    iconBg: 'var(--teal-dim)',
+    name: 'greatest-people',
+    model: 'Opus',
+    tools: 'Read, Write, Bash, Web',
+    color: 'teal',
+    content: `
+      <div class="persona-quote">You are a biographical researcher and pattern analyst who studies history's most successful people to extract actionable principles and mental models.</div>
+      <h2>What It Does</h2>
+      <ul>
+        <li>Researches specific historical figures in depth</li>
+        <li>Extracts principles, habits, and decision frameworks</li>
+        <li>Identifies common patterns across multiple successful people</li>
+        <li>Connects historical lessons to modern situations</li>
+      </ul>
+      <h2>Output</h2>
+      <p>Structured research profiles with key principles, notable decisions, mental models, and applicable lessons.</p>
+    `
+  },
+
   'successful-companies': {
     icon: '&#127970;',
-    iconBg: 'var(--cyan-dim)',
+    iconBg: 'var(--teal-dim)',
     name: 'successful-companies',
     model: 'Opus',
-    tools: 'Read, Write, Edit, Bash, Grep, Glob, WebSearch, WebFetch',
-    color: 'cyan',
-    installPrompt: `Install the successful-companies agent in my Claude Code setup.
-
-Run these commands:
-mkdir -p ~/.claude/agents
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/successful-companies.md -o ~/.claude/agents/successful-companies.md
-
-Then tell me to restart Claude Code for the agent to become available.`,
+    tools: 'Read, Write, Bash, Web',
+    color: 'teal',
     content: `
-      <div class="persona-quote">You are a business historian and strategy consultant with deep expertise in studying the world's most successful companies. You combine rigorous research with frameworks from competitive strategy, venture capital, and entrepreneurship.</div>
-
-      <h2>Research Framework</h2>
-      <p>For every company analyzed, follows this structure:</p>
-      <ol>
-        <li><strong>Origin Story</strong> (Year 0-1): problem, founding team, MVP, first 10 customers</li>
-        <li><strong>Early Growth Engine</strong> (Year 1-3): acquisition, pricing, iteration, near-death moments</li>
-        <li><strong>Biggest Levers</strong>: top 3-5 decisions with disproportionate impact</li>
-        <li><strong>Moat Analysis</strong>: type, formation timeline, durability</li>
-        <li><strong>Culture &amp; Operating System</strong>: principles, decision-making, speed vs quality</li>
-        <li><strong>Founder Decisions</strong>: strategic bets, hiring, pivots</li>
-        <li><strong>What Went Wrong</strong>: ethical compromises, luck, valid criticisms</li>
-      </ol>
-
-      <h2>Cross-Company Synthesis</h2>
+      <div class="persona-quote">You are a business strategy researcher who studies successful companies to understand what makes them win in their markets.</div>
+      <h2>What It Does</h2>
       <ul>
-        <li>Universal patterns, distribution strategies ranked, business model patterns</li>
-        <li>Timing &amp; market patterns, solo founder playbook</li>
+        <li>Researches company strategies, business models, and growth levers</li>
+        <li>Analyzes market positioning and competitive advantages</li>
+        <li>Studies go-to-market strategies and scaling patterns</li>
+        <li>Identifies transferable tactics and frameworks</li>
       </ul>
-
-      <h2>Companies Covered</h2>
-      <p>Tech giants, modern SaaS, marketplaces, consumer brands, solo successes, and non-tech companies.</p>
+      <h2>Output</h2>
+      <p>Company strategy breakdowns with competitive moats, growth mechanics, key decisions, and lessons applicable to other businesses.</p>
     `
   },
+
 };
 
 function openModal(agentName) {
@@ -3652,49 +3888,6 @@ function openModal(agentName) {
 
 // ===== MCP SERVER DATA =====
 const mcpServers = {
-  'GitHub': {
-    icon: '&#128025;', iconBg: 'var(--amber-dim)', color: 'amber',
-    installPrompt: `Install the GitHub MCP server in my Claude Code setup.
-
-Before you do anything, ask me: "Do you have a GitHub account?"
-
-If I say YES:
-- Add the GitHub MCP config to ~/.claude.json using the jq command below
-- Then tell me to restart Claude Code and authenticate by running /mcp, selecting "github", and choosing "Authenticate"
-
-If I say NO:
-- Tell me to create a free account at https://github.com (just sign up with email)
-- Then once I confirm, add the config using the jq command below and walk me through authentication
-
-IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail with "File has been modified since read." Use this jq command via Bash instead (it reads, modifies, and writes atomically):
-
-jq '.mcpServers.github = {"type": "http", "url": "https://api.githubcopilot.com/mcp"}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
-
-IMPORTANT: The URL must be https://api.githubcopilot.com/mcp (NOT api.github.com, that will silently fail).`,
-    content: `
-      <h2>Connection</h2>
-      <table>
-        <tr><th>Property</th><th>Value</th></tr>
-        <tr><td>Type</td><td><strong>HTTP</strong></td></tr>
-        <tr><td>URL</td><td><code>https://api.githubcopilot.com/mcp</code></td></tr>
-        <tr><td>Auth</td><td>Bearer token (from <code>gh auth token</code>)</td></tr>
-        <tr><td>Config file</td><td><code>~/.claude.json</code> (global mcpServers)</td></tr>
-      </table>
-      <div class="persona-quote" style="border-left-color:var(--red);">Gotcha: The URL is NOT api.github.com! Must use api.githubcopilot.com. Getting this wrong causes silent failure.</div>
-      <h2>Available Tools</h2>
-      <ul>
-        <li><strong>Repositories:</strong> create, fork, search, get file contents, create/update files, push files</li>
-        <li><strong>Pull Requests:</strong> create, list, review, merge, update, add comments</li>
-        <li><strong>Issues:</strong> create, list, search, comment, assign, close</li>
-        <li><strong>Code Search:</strong> search across repos with GitHub's code search</li>
-        <li><strong>Branches:</strong> create, list, get commits</li>
-        <li><strong>Releases:</strong> list, get latest, get by tag</li>
-        <li><strong>Teams:</strong> list teams, get members</li>
-      </ul>
-      <h2>Usage Pattern</h2>
-      <p>Use <code>list_*</code> tools for broad retrieval with pagination. Use <code>search_*</code> tools for targeted queries with filters. Always call <code>get_me</code> first to understand permissions.</p>
-    `
-  },
   'Notion': {
     icon: '&#128211;', iconBg: 'var(--amber-dim)', color: 'amber',
     installPrompt: `Install the Notion MCP server in my Claude Code setup.
@@ -3770,47 +3963,7 @@ jq --arg key "YOUR_KEY" '.mcpServers.firecrawl = {"type": "stdio", "command": "n
         <li><strong>firecrawl_map:</strong> Map all URLs on a site without scraping content.</li>
       </ul>
       <h2>Why Use This</h2>
-      <p>Handles JavaScript-rendered pages (SPAs, dynamic content). Much better than basic HTTP fetch. Priority #2 for web tasks (after Perplexity for research, before WebFetch fallback).</p>
-    `
-  },
-  'Perplexity': {
-    icon: '&#128269;', iconBg: 'var(--amber-dim)', color: 'amber',
-    installPrompt: `Install the Perplexity MCP server in my Claude Code setup.
-
-Before you do anything, ask me: "Do you already have a Perplexity API key, or do you need to create an account first?"
-
-If I HAVE an API key:
-- Ask me to paste it
-- Add the config using the jq command below (replace YOUR_KEY with my actual key)
-- Tell me to restart Claude Code
-
-If I DON'T have an account yet:
-- Tell me to go to https://perplexity.ai and sign up
-- Once signed up, tell me to go to Settings > API and generate a new API key
-- Ask me to paste it
-- Then add the config using the jq command below (replace YOUR_KEY) and tell me to restart Claude Code
-
-IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
-
-jq --arg key "YOUR_KEY" '.mcpServers.perplexity = {"type": "stdio", "command": "npx", "args": ["-y", "@nicepkg/perplexity-mcp"], "env": {"PERPLEXITY_API_KEY": $key}}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json`,
-    content: `
-      <h2>Connection</h2>
-      <table>
-        <tr><th>Property</th><th>Value</th></tr>
-        <tr><td>Type</td><td><strong>STDIO</strong></td></tr>
-        <tr><td>Command</td><td><code>npx -y @perplexity-ai/mcp-server</code></td></tr>
-        <tr><td>Auth</td><td>PERPLEXITY_API_KEY environment variable</td></tr>
-        <tr><td>Config file</td><td><code>~/.claude.json</code> (global mcpServers)</td></tr>
-      </table>
-      <h2>Available Tools</h2>
-      <ul>
-        <li><strong>perplexity_ask:</strong> Ask questions, get sourced answers</li>
-        <li><strong>perplexity_search:</strong> Search the web with AI-powered results</li>
-        <li><strong>perplexity_research:</strong> Deep research on complex topics</li>
-        <li><strong>perplexity_reason:</strong> Multi-step reasoning with web data</li>
-      </ul>
-      <h2>Priority</h2>
-      <p><strong>Priority #1 for all research tasks.</strong> Returns sourced, synthesized answers rather than raw links. Use before Firecrawl (for scraping specific URLs) or WebFetch (fallback).</p>
+      <p>Handles JavaScript-rendered pages (SPAs, dynamic content). Much better than basic HTTP fetch. Primary tool for web research, scraping, and search.</p>
     `
   },
   'Hostinger': {
@@ -3859,11 +4012,11 @@ jq --arg token "YOUR_TOKEN" '.mcpServers.hostinger = {"type": "stdio", "command"
       </ul>
     `
   },
-  'Dokploy': {
+  'Dokploy Personal': {
     icon: '&#128640;', iconBg: 'var(--amber-dim)', color: 'amber',
-    installPrompt: `Install the Dokploy MCP server in my Claude Code setup.
+    installPrompt: `Install the Dokploy Personal MCP server in my Claude Code setup.
 
-Before you do anything, ask me: "Do you have a Dokploy instance running on a VPS, and do you have your Dokploy API key and URL?"
+Before you do anything, ask me: "Do you have a Dokploy instance running on your Hostinger VPS, and do you have your Dokploy API key and URL?"
 
 If I HAVE the URL and API key:
 - Ask me to paste both my Dokploy URL (e.g. http://my-vps-ip:3000/api) and API key
@@ -3884,7 +4037,7 @@ If I DON'T have Dokploy set up:
 
 IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
 
-jq --arg url "YOUR_URL" --arg key "YOUR_KEY" '.mcpServers.dokploy = {"type": "stdio", "command": "npx", "args": ["-y", "@ahdev/dokploy-mcp"], "env": {"DOKPLOY_URL": $url, "DOKPLOY_API_KEY": $key}}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json`,
+jq --arg url "YOUR_URL" --arg key "YOUR_KEY" '.mcpServers["dokploy-personal"] = {"type": "stdio", "command": "npx", "args": ["-y", "@ahdev/dokploy-mcp"], "env": {"DOKPLOY_URL": $url, "DOKPLOY_API_KEY": $key}}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -3892,18 +4045,65 @@ jq --arg url "YOUR_URL" --arg key "YOUR_KEY" '.mcpServers.dokploy = {"type": "st
         <tr><td>Type</td><td><strong>STDIO</strong></td></tr>
         <tr><td>Command</td><td><code>npx -y @ahdev/dokploy-mcp</code></td></tr>
         <tr><td>Auth</td><td>DOKPLOY_URL + DOKPLOY_API_KEY environment variables</td></tr>
-        <tr><td>Server</td><td><code>http://72.62.157.123:3000/api</code></td></tr>
+        <tr><td>Instance</td><td>Hostinger VPS (NativeAI, personal projects)</td></tr>
         <tr><td>Config file</td><td><code>~/.claude.json</code> (global mcpServers)</td></tr>
       </table>
       <h2>Available Tools</h2>
       <ul>
         <li><strong>Applications:</strong> Create, deploy, redeploy, start, stop, update, monitor. Configure Git/Docker/Bitbucket providers. Manage environment variables and Traefik config.</li>
-        <li><strong>Databases:</strong> PostgreSQL and MySQL &mdash; create, deploy, start, stop, rebuild, manage external ports</li>
+        <li><strong>Databases:</strong> PostgreSQL and MySQL: create, deploy, start, stop, rebuild, manage external ports</li>
         <li><strong>Domains:</strong> Create, update, delete, validate, generate Traefik domains</li>
         <li><strong>Projects:</strong> Create, list, update, duplicate, remove</li>
       </ul>
       <h2>What It Does</h2>
-      <p>Dokploy is a self-hosted deployment platform running on your VPS. This MCP gives Claude full control over deploying and managing applications, databases, and domains on your server.</p>
+      <p>Dokploy is a self-hosted deployment platform running on your Hostinger VPS. This instance manages NativeAI and personal project deployments.</p>
+    `
+  },
+  'Dokploy Nevron': {
+    icon: '&#128640;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the Dokploy Nevron MCP server in my Claude Code setup.
+
+Before you do anything, ask me: "Do you have a Dokploy instance running on your Hetzner server, and do you have your Dokploy API key and URL?"
+
+If I HAVE the URL and API key:
+- Ask me to paste both my Dokploy URL (e.g. http://my-server-ip:3000/api) and API key
+- Add the config using the jq command below (replace YOUR_URL and YOUR_KEY with my actual values)
+- Tell me to restart Claude Code
+
+If I HAVE Dokploy running but NO API key:
+- Tell me to open my Dokploy dashboard in the browser
+- Go to Settings and generate a new API key
+- Ask me to paste the API key and my Dokploy URL
+- Then add the config using the jq command below and tell me to restart Claude Code
+
+If I DON'T have Dokploy set up:
+- Tell me Dokploy is a self-hosted deployment platform that runs on a VPS
+- Direct me to https://dokploy.com for setup instructions; I need a server first
+- Once Dokploy is running, walk me through getting the API key from Settings
+- Then add the config using the jq command below and tell me to restart
+
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
+
+jq --arg url "YOUR_URL" --arg key "YOUR_KEY" '.mcpServers["dokploy-nevron"] = {"type": "stdio", "command": "npx", "args": ["-y", "@ahdev/dokploy-mcp"], "env": {"DOKPLOY_URL": $url, "DOKPLOY_API_KEY": $key}}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json`,
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>STDIO</strong></td></tr>
+        <tr><td>Command</td><td><code>npx -y @ahdev/dokploy-mcp</code></td></tr>
+        <tr><td>Auth</td><td>DOKPLOY_URL + DOKPLOY_API_KEY environment variables</td></tr>
+        <tr><td>Instance</td><td>Hetzner server (Nevron company projects)</td></tr>
+        <tr><td>Config file</td><td><code>~/.claude.json</code> (global mcpServers)</td></tr>
+      </table>
+      <h2>Available Tools</h2>
+      <ul>
+        <li><strong>Applications:</strong> Create, deploy, redeploy, start, stop, update, monitor. Configure Git/Docker/Bitbucket providers. Manage environment variables and Traefik config.</li>
+        <li><strong>Databases:</strong> PostgreSQL and MySQL: create, deploy, start, stop, rebuild, manage external ports</li>
+        <li><strong>Domains:</strong> Create, update, delete, validate, generate Traefik domains</li>
+        <li><strong>Projects:</strong> Create, list, update, duplicate, remove</li>
+      </ul>
+      <h2>What It Does</h2>
+      <p>Dokploy is a self-hosted deployment platform running on the Hetzner server. This instance manages Nevron company project deployments.</p>
     `
   },
   'Yahoo Finance': {
@@ -4082,73 +4282,6 @@ After installing, restart Claude Code. The browser automation tools (navigate, c
       </ul>
     `
   },
-  'Swipe File': {
-    icon: '&#128194;', iconBg: 'var(--amber-dim)', color: 'amber',
-    installPrompt: `Install a Filesystem MCP server to give Claude Code access to a local folder. Add this to ~/.claude/settings.json under the "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
-
-"swipe-file": {
-  "type": "stdio",
-  "command": "npx",
-  "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/your/folder"]
-}
-
-Replace /path/to/your/folder with the absolute path to the folder you want Claude to access. No API key needed. After adding, tell me to restart Claude Code.`,
-    content: `
-      <h2>Connection</h2>
-      <table>
-        <tr><th>Property</th><th>Value</th></tr>
-        <tr><td>Type</td><td><strong>STDIO (Filesystem)</strong></td></tr>
-        <tr><td>Command</td><td><code>npx -y @modelcontextprotocol/server-filesystem</code></td></tr>
-        <tr><td>Path</td><td><code>/Users/amadejdemsar/Domain/Swipe file</code></td></tr>
-        <tr><td>Config file</td><td><code>~/.claude/settings.json</code></td></tr>
-      </table>
-      <h2>What It Contains</h2>
-      <ul>
-        <li>Company landing pages (Linear, HeyReach, etc.)</li>
-        <li>Copy frameworks &amp; formulas</li>
-        <li>Design patterns &amp; UI examples</li>
-        <li>Email sequences &amp; templates</li>
-        <li>Pricing strategies</li>
-        <li>Positioning examples</li>
-      </ul>
-      <h2>How It Works</h2>
-      <p>Each entry gets its own folder with a <code>notes.md</code> file plus source files (PDFs, screenshots). The <code>index.md</code> file tracks all entries by category. Without an index entry, items are invisible.</p>
-    `
-  },
-  'Context': {
-    icon: '&#129504;', iconBg: 'var(--amber-dim)', color: 'amber',
-    installPrompt: `Install a Filesystem MCP server to give Claude Code access to a personal knowledge folder. Add this to ~/.claude/settings.json under the "mcpServers" key (create the key if it doesn't exist, and preserve any existing MCP servers):
-
-"context": {
-  "type": "stdio",
-  "command": "npx",
-  "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/your/context"]
-}
-
-Replace /path/to/your/context with the absolute path to your personal context/notes folder. No API key needed. After adding, tell me to restart Claude Code.`,
-    content: `
-      <h2>Connection</h2>
-      <table>
-        <tr><th>Property</th><th>Value</th></tr>
-        <tr><td>Type</td><td><strong>STDIO (Filesystem)</strong></td></tr>
-        <tr><td>Command</td><td><code>npx -y @modelcontextprotocol/server-filesystem</code></td></tr>
-        <tr><td>Path</td><td><code>/Users/amadejdemsar/Domain/context</code></td></tr>
-        <tr><td>Config file</td><td><code>~/.claude/settings.json</code></td></tr>
-      </table>
-      <h2>What It Contains</h2>
-      <ul>
-        <li><strong>about.md</strong> &mdash; Bio, current focus, contact info</li>
-        <li><strong>skills.md</strong> &mdash; Technical and non-technical skills</li>
-        <li><strong>experience.md</strong> &mdash; Work history, achievements</li>
-        <li><strong>preferences.md</strong> &mdash; Working style, coding prefs</li>
-        <li><strong>projects/</strong> &mdash; Detailed project breakdowns</li>
-        <li><strong>knowledge/</strong> &mdash; Notes and learnings by topic</li>
-        <li><strong>index.md</strong> &mdash; Quick reference to everything</li>
-      </ul>
-      <h2>Use Cases</h2>
-      <p>CV/resume generation, coding with preferences, project references, learning notes. Claude reads this to understand your background and write in your style.</p>
-    `
-  },
   'Brave Search': {
     icon: '&#128526;', iconBg: 'var(--amber-dim)', color: 'amber',
     installPrompt: `Install the Brave Search MCP server in my Claude Code setup.
@@ -4193,7 +4326,7 @@ Add this to ~/.claude/settings.json under the "mcpServers" key (create the key i
         <li>Returns structured results with snippets</li>
       </ul>
       <h2>Priority</h2>
-      <p>Lower priority than Perplexity for research. Used as an alternative search engine when Perplexity is unavailable or for quick lookups.</p>
+      <p>Alternative search engine for quick lookups when Firecrawl is not ideal.</p>
     `
   },
   'Todoist': {
@@ -4307,55 +4440,6 @@ No API key needed — this uses your local Docker daemon. Make sure Docker Deskt
       <p>Second Docker MCP alongside the gateway version. This one uses the uvx Python tool runner and provides a slightly different set of Docker operations.</p>
     `
   },
-  'Supabase': {
-    icon: '&#9889;', iconBg: 'var(--amber-dim)', color: 'amber',
-    installPrompt: `Install the Supabase MCP server in my Claude Code setup.
-
-Before you do anything, ask me: "Do you already have a Supabase project, and do you know your project reference ID?"
-
-If I HAVE a project and know my project ref:
-- Ask me to paste my project reference ID
-- Add the config using the jq command below (replace YOUR_PROJECT_REF with my actual ref)
-- Tell me to restart Claude Code; on first use a browser popup will ask me to authorize (OAuth)
-
-If I HAVE a Supabase account but DON'T know my project ref:
-- Tell me to go to my Supabase dashboard at https://supabase.com/dashboard
-- Open my project, go to Settings > General, and find the Reference ID
-- Ask me to paste it
-- Then add the config using the jq command below and tell me to restart Claude Code
-
-If I DON'T have a Supabase project yet:
-- Tell me to sign up at https://supabase.com (free tier available)
-- Create a new project
-- Then go to Settings > General to find the Reference ID
-- Ask me to paste it
-- Then add the config using the jq command below and tell me to restart Claude Code
-
-IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
-
-jq --arg ref "YOUR_PROJECT_REF" '.mcpServers.supabase = {"type": "http", "url": ("https://mcp.supabase.com/mcp?project_ref=" + $ref)}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json`,
-    content: `
-      <h2>Connection</h2>
-      <table>
-        <tr><th>Property</th><th>Value</th></tr>
-        <tr><td>Type</td><td><strong>HTTP</strong></td></tr>
-        <tr><td>URL</td><td><code>https://mcp.supabase.com/mcp?project_ref=...</code></td></tr>
-        <tr><td>Auth</td><td>OAuth (project-scoped)</td></tr>
-        <tr><td>Config file</td><td><code>~/.claude.json</code> (project: Fitness App)</td></tr>
-        <tr><td>Scope</td><td><strong>Fitness App only</strong></td></tr>
-      </table>
-      <h2>Capabilities</h2>
-      <ul>
-        <li>Database queries and mutations</li>
-        <li>Auth management</li>
-        <li>Storage operations</li>
-        <li>Edge function management</li>
-        <li>Real-time subscriptions</li>
-      </ul>
-      <h2>Project-Specific</h2>
-      <p>Only available when working in the Fitness App directory. Connected to the app's Supabase backend for database operations.</p>
-    `
-  },
   'Puppeteer': {
     icon: '&#127917;', iconBg: 'var(--amber-dim)', color: 'amber',
     installPrompt: `Install the Puppeteer MCP server in my Claude Code setup.
@@ -4387,35 +4471,6 @@ After running the command, tell me to restart Claude Code.`,
       </ul>
       <h2>Use Case</h2>
       <p>Automated testing, visual regression testing, and browser automation. Can screenshot pages, interact with the UI, and verify visual output.</p>
-    `
-  },
-  'Google Workspace': {
-    icon: '&#128197;', iconBg: 'var(--amber-dim)', color: 'amber',
-    installPrompt: `Install the Google Workspace MCP server in my Claude Code setup.
-
-No API key needed; it uses OAuth. After adding, restart Claude Code and authenticate when prompted.
-
-IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
-
-jq '.mcpServers["google-workspace"] = {"type": "stdio", "command": "npx", "args": ["-y", "@dguido/google-workspace-mcp"]}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
-
-After running the command, restart Claude Code and authenticate when prompted.`,
-    content: `
-      <h2>Connection</h2>
-      <table>
-        <tr><th>Property</th><th>Value</th></tr>
-        <tr><td>Type</td><td><strong>STDIO</strong></td></tr>
-        <tr><td>Command</td><td><code>npx -y @dguido/google-workspace-mcp</code></td></tr>
-        <tr><td>Auth</td><td>OAuth (browser login)</td></tr>
-        <tr><td>Config file</td><td><code>~/.claude.json</code> (global mcpServers)</td></tr>
-      </table>
-      <h2>Capabilities</h2>
-      <ul>
-        <li>List calendars and events</li>
-        <li>Create, update, and delete calendar events</li>
-        <li>Find free time slots across calendars</li>
-        <li>Get current calendar status</li>
-      </ul>
     `
   },
   'BrowserMCP': {
@@ -4725,7 +4780,7 @@ IMPORTANT: This command requires the stock-analyst agent AND the finance knowled
       <ol>
         <li>Reads 9 knowledge base files (fundamentals, technicals, macro, etc.)</li>
         <li>Fetches live data from Yahoo Finance MCP</li>
-        <li>Searches recent news via Perplexity</li>
+        <li>Searches recent news via Firecrawl</li>
         <li>Runs 8-step analysis framework</li>
         <li>Writes structured analysis to <code>~/analyses/stocks/[ticker].md</code></li>
       </ol>
@@ -4734,7 +4789,7 @@ IMPORTANT: This command requires the stock-analyst agent AND the finance knowled
       <h2>Output</h2>
       <p>YAML frontmatter with score + full analysis: fundamentals, valuation, technicals, macro context, sentiment, scenario analysis (bear/base/bull with price targets), and final verdict (1-10 score, action, time horizon, risk level).</p>
       <hr>
-      <p><strong>Type:</strong> Agent Trigger &middot; <strong>Agent:</strong> stock-analyst (Opus) &middot; <strong>MCPs Used:</strong> Yahoo Finance, Perplexity</p>
+      <p><strong>Type:</strong> Agent Trigger &middot; <strong>Agent:</strong> stock-analyst (Opus) &middot; <strong>MCPs Used:</strong> Yahoo Finance, Firecrawl</p>
     `
   },
   '/analyze-crypto': {
@@ -4755,7 +4810,7 @@ IMPORTANT: This command requires the crypto-analyst agent AND the finance knowle
       <ol>
         <li>Reads 8 knowledge base files (crypto-frameworks, fundamentals, macro, etc.)</li>
         <li>Fetches live data from CoinMarketCap MCP</li>
-        <li>Searches recent developments via Perplexity</li>
+        <li>Searches recent developments via Firecrawl</li>
         <li>Runs 5-part institutional analysis framework</li>
         <li>Writes analysis to <code>~/analyses/crypto/[ticker].md</code></li>
       </ol>
@@ -4764,7 +4819,7 @@ IMPORTANT: This command requires the crypto-analyst agent AND the finance knowle
       <h2>Output</h2>
       <p>Executive summary, fundamental deep dive (tokenomics, team, adoption), competitive landscape, scenario analysis with market cap targets, final verdict with entry strategy and allocation suggestion.</p>
       <hr>
-      <p><strong>Type:</strong> Agent Trigger &middot; <strong>Agent:</strong> crypto-analyst (Opus) &middot; <strong>MCPs Used:</strong> CoinMarketCap, Perplexity</p>
+      <p><strong>Type:</strong> Agent Trigger &middot; <strong>Agent:</strong> crypto-analyst (Opus) &middot; <strong>MCPs Used:</strong> CoinMarketCap, Firecrawl</p>
     `
   },
   '/market-brief': {
@@ -4778,7 +4833,7 @@ curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/m
 Then tell me to restart Claude Code. After that I can use it by typing /market-brief in Claude Code.`,
     content: `
       <h2>What It Does</h2>
-      <p>Generates a concise morning market brief using Perplexity and web search. Quick overview of what's happening in markets today.</p>
+      <p>Generates a concise morning market brief using Firecrawl search. Quick overview of what's happening in markets today.</p>
       <h2>Coverage</h2>
       <ul>
         <li>Major indices (S&amp;P 500, Nasdaq, Dow)</li>
@@ -4790,39 +4845,30 @@ Then tell me to restart Claude Code. After that I can use it by typing /market-b
       <h2>Usage</h2>
       <pre>/market-brief</pre>
       <hr>
-      <p><strong>Type:</strong> Research Command &middot; <strong>MCPs Used:</strong> Perplexity, WebSearch</p>
+      <p><strong>Type:</strong> Research Command &middot; <strong>MCPs Used:</strong> Firecrawl</p>
     `
   },
   '/continue': {
     icon: '&#128260;', iconBg: 'var(--pink-dim)', color: 'pink',
     installPrompt: `Install the /continue skill in my Claude Code setup.
 
-1. Download the skill file:
-mkdir -p ~/.claude/skills/continue/rules
+Run these commands:
+mkdir -p ~/.claude/skills/continue
 curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/continue/SKILL.md -o ~/.claude/skills/continue/SKILL.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/continue/rules/setup.md -o ~/.claude/skills/continue/rules/setup.md
 
-2. Add a "Continue / Resume" section to my global ~/.claude/CLAUDE.md (create the file if it does not exist). The section should contain a rule that when the user says "continue", "continue from where we left off", "pick up where we left off", "resume", or "read the continue prompt" at the START of a session or after a /clear, Claude should: (a) list all .md files in ~/.claude/continue-prompts/, (b) if none exist, tell the user no continue prompts were found and ask what they would like to work on, (c) if exactly one exists, read it, read the key files listed in "Files Being Worked On", delete that file, confirm to the user what the task is, and resume working, (d) if multiple exist, list them with numbers (show the filename without .md as a human readable label), ask the user which session they want to resume, then read the chosen file, read the key files, delete only that file, confirm, and resume working. Also note that to GENERATE a continue prompt, the user should use /continue.
-
-3. Tell me to restart Claude Code.`,
+Then tell me to restart Claude Code. After that I can use it by typing /continue in Claude Code.`,
     content: `
       <h2>What It Does</h2>
       <p>Generates a structured continue prompt file when the context window is running low, so work can be seamlessly resumed in a fresh session.</p>
-      <h2>Two Parts</h2>
+      <h2>Two Modes</h2>
       <ul>
-        <li><strong>Save (<code>/continue</code>):</strong> Captures current task state into a named file in <code>~/.claude/continue-prompts/</code></li>
-        <li><strong>Resume ("continue"):</strong> A CLAUDE.md rule lists all saved sessions and lets you pick which one to load</li>
+        <li><strong>Save:</strong> Captures current task state, progress, next steps, and relevant file paths into a continue prompt file</li>
+        <li><strong>Resume:</strong> Reads a previous continue prompt file and picks up where the last session left off</li>
       </ul>
-      <h2>Multi-Session Support</h2>
-      <p>You can <code>/continue</code> from multiple sessions. Each gets a descriptive filename based on context. When you say "continue" later, Claude lists all saved prompts and lets you choose which to resume.</p>
-      <h2>Why Two Parts?</h2>
-      <p>Skills are only triggered deterministically by <code>/skill-name</code>. Natural language like "continue" uses probabilistic matching, which is unreliable after <code>/clear</code> or in fresh sessions. The CLAUDE.md rule makes the resume path deterministic and reliable.</p>
       <h2>When to Use</h2>
       <p>When the status line shows context remaining below 20%, or when you need to switch to a different task and want to come back later.</p>
-      <h2>Setup</h2>
-      <p>Requires both the SKILL.md file <strong>and</strong> a section in your global <code>~/.claude/CLAUDE.md</code>. See the install prompt for full instructions.</p>
       <hr>
-      <p><strong>Type:</strong> Custom Skill + CLAUDE.md Rule &middot; <strong>Location:</strong> <code>~/.claude/skills/continue/</code></p>
+      <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/continue/SKILL.md</code></p>
     `
   },
   '/todoist': {
@@ -4874,78 +4920,386 @@ Then tell me to restart Claude Code. After that I can use it by typing /keybindi
       <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/keybindings-help/SKILL.md</code></p>
     `
   },
-  '/visualize': {
-    icon: '&#127912;', iconBg: 'var(--pink-dim)', color: 'pink',
-    installPrompt: `Install the /visualize skill in my Claude Code setup.
+  '/content-skill-graph': {
+    icon: '&#128300;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /content-skill-graph skill in my Claude Code setup.
 
 Run these commands:
-mkdir -p ~/.claude/skills/visualize
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/visualize/SKILL.md -o ~/.claude/skills/visualize/SKILL.md
+cd /tmp && rm -rf my-claude-setup-csg && git clone --depth 1 https://github.com/amadejdemsar-create/my-claude-setup.git my-claude-setup-csg
+mkdir -p ~/.claude/skills/content-skill-graph
+cp -r /tmp/my-claude-setup-csg/skills/content-skill-graph/* ~/.claude/skills/content-skill-graph/
+rm -rf /tmp/my-claude-setup-csg
 
-Then tell me to restart Claude Code. After that I can use it by typing /visualize <source> in Claude Code.`,
+Then tell me to restart Claude Code. After that I can run /content-skill-graph and the 9-step onboarding will walk me through building my own brand-specific content production system.`,
     content: `
-      <h2>What It Does</h2>
-      <p>Transforms any text source (book, article, essay, notes) into a premium visual HTML page that explains key principles, frameworks, and ideas. Optionally personalized to the reader based on available context.</p>
-
-      <h2>Workflow</h2>
+      <div class="persona-quote">A generalized content creation system for Claude Code. Runs across platforms with configurable voice, audience, and workflows. Brand-agnostic by default; a 9-step onboarding generates your brand-specific configuration on top of the shared framework.</div>
+      <h2>How It Works</h2>
       <ol>
-        <li><strong>Ingest source:</strong> Accepts .md, .txt, .pdf, URLs, or other formats. Converts non-MD formats to .md first and saves alongside the original.</li>
-        <li><strong>Ask mode and depth:</strong> Principles only vs. personalized. Executive summary vs. comprehensive vs. deep dive.</li>
-        <li><strong>Extract content:</strong> Central thesis, key frameworks, core principles, memorable quotes, actionable techniques, contrasts.</li>
-        <li><strong>Generate HTML:</strong> Single self-contained file with dark theme, Inter + Playfair Display typography, responsive design, CSS-only diagrams.</li>
+        <li><strong>Run /content-skill-graph</strong> to start the 9-step onboarding.</li>
+        <li>Onboarding generates your voice, audience, pillars, brand guidelines, and proof points.</li>
+        <li>Use entry-point skills (<code>/article</code>, <code>/repurpose</code>, <code>/tool-review</code>, <code>/new-tool</code>) to create content.</li>
+        <li>Each skill reads both the shared framework files and your generated brand config.</li>
       </ol>
-
-      <h2>Design System</h2>
+      <h2>Framework Directories</h2>
+      <table>
+        <tr><th>Directory</th><th>Purpose</th><th>Files</th></tr>
+        <tr><td><code>engine/</code></td><td>Content mechanics: hooks, scheduling, power law, hit detection, repurposing</td><td>7</td></tr>
+        <tr><td><code>platforms/</code></td><td>Format specs per platform: X, LinkedIn, blog, resource pages</td><td>8</td></tr>
+        <tr><td><code>workflows/</code></td><td>Step-by-step pipelines: article creation, repurposing, tool reviews, image generation</td><td>7</td></tr>
+        <tr><td><code>quality/</code></td><td>Quality gates: calibration questions, content standards</td><td>2</td></tr>
+        <tr><td><code>templates/</code></td><td>Fill-in templates: post scaffolds, announcement formats, review formats</td><td>8</td></tr>
+        <tr><td><code>skills/</code></td><td>Entry-point slash commands</td><td>4</td></tr>
+      </table>
+      <h2>9-Step Onboarding</h2>
+      <ol>
+        <li>Brand basics and positioning</li>
+        <li>Platform selection and languages</li>
+        <li>Voice and tone definition</li>
+        <li>Anti-patterns (what your content must never do)</li>
+        <li>Per-platform tone variations</li>
+        <li>Target audience profiles</li>
+        <li>Content pillars and recurring themes</li>
+        <li>Visual brand guidelines for asset generation</li>
+        <li>Proof points: credentials, case patterns, stats</li>
+      </ol>
+      <h2>Entry-Point Skills</h2>
       <ul>
-        <li>Dark background with themed accent color (gold for self-improvement, purple for philosophy, teal for science, etc.)</li>
-        <li>Card-based layouts with hover effects</li>
-        <li>Hero section, principle sections, quote blocks, prescription cards</li>
-        <li>Fully responsive (768px and 380px breakpoints)</li>
-        <li>No external dependencies beyond Google Fonts</li>
+        <li><code>/article</code> &mdash; 10-phase article creation pipeline.</li>
+        <li><code>/repurpose</code> &mdash; turn existing articles into platform-native posts on a drip schedule.</li>
+        <li><code>/tool-review</code> &mdash; structured review of tools tested over 2+ weeks.</li>
+        <li><code>/new-tool</code> &mdash; quick announcement pipeline for a new tool or resource.</li>
       </ul>
       <hr>
-      <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/visualize/SKILL.md</code></p>
+      <p><strong>Type:</strong> Custom Skill (multi-file) &middot; <strong>Location:</strong> <code>~/.claude/skills/content-skill-graph/</code> &middot; <strong>Source:</strong> <code>github.com/amadejdemsar-create/my-claude-setup</code></p>
     `
   },
-  '/content-skill-graph': {
-    icon: '&#128209;', iconBg: 'var(--pink-dim)', color: 'pink',
-    installPrompt: `Install the /content-skill-graph skill and its framework in my Claude Code setup.
+  '/excalidraw-skill': {
+    icon: '&#9998;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /excalidraw-skill in my Claude Code setup.
 
 Run these commands:
-git clone --depth 1 https://github.com/amadejdemsar-create/my-claude-setup.git /tmp/csg-install
-cp -r /tmp/csg-install/skills/content-skill-graph ~/.claude/skills/content-skill-graph
-rm -rf /tmp/csg-install
+cd /tmp && rm -rf mcs-exc && git clone --depth 1 https://github.com/amadejdemsar-create/my-claude-setup.git mcs-exc
+mkdir -p ~/.claude/skills/excalidraw-skill
+cp -r /tmp/mcs-exc/skills/excalidraw-skill/* ~/.claude/skills/excalidraw-skill/
+rm -rf /tmp/mcs-exc
 
-Then tell me to restart Claude Code. After that I can use it by typing /content-skill-graph in Claude Code to start the onboarding.`,
+Then tell me to restart Claude Code. Use it by typing /excalidraw-skill to work with the Excalidraw MCP canvas.`,
     content: `
+      <div class="persona-quote">Programmatic Excalidraw canvas toolkit. Create, read, update, and delete elements on a live Excalidraw canvas via a custom MCP server.</div>
       <h2>What It Does</h2>
-      <p>A complete content creation system for Claude Code. Runs a 9-step interactive onboarding that configures your brand voice, target audience, content pillars, visual brand, and workflows. After onboarding, you get four content creation commands: <code>/article</code>, <code>/repurpose</code>, <code>/tool-review</code>, and <code>/new-tool</code>.</p>
-      <h2>The 9 Onboarding Steps</h2>
-      <ol>
-        <li><strong>Who Are You</strong>: Brand basics (name, description, industry, differentiator)</li>
-        <li><strong>Platforms</strong>: Which platforms you publish to and in what language</li>
-        <li><strong>Tone of Voice</strong>: Core voice definition with 5 presets or custom extraction</li>
-        <li><strong>Anti-Patterns</strong>: 12 &ldquo;Don&rsquo;t Sound Like AI&rdquo; patterns plus custom quality gates</li>
-        <li><strong>Audience</strong>: Target reader profiles with pain points and language</li>
-        <li><strong>Content Pillars</strong>: 3 to 7 recurring themes that build authority</li>
-        <li><strong>Brand Design</strong>: Colors, fonts, visual style for asset generation</li>
-        <li><strong>Workflow Selection</strong>: Which content workflows to activate</li>
-        <li><strong>Proof Points</strong>: Credentials, stats, and case patterns</li>
-      </ol>
-      <h2>Framework (36 Files)</h2>
-      <table>
-        <tr><th>Directory</th><th>Files</th><th>Purpose</th></tr>
-        <tr><td>engine/</td><td>7</td><td>Hooks, scheduling, power law, hit detection, repurposing</td></tr>
-        <tr><td>platforms/</td><td>8</td><td>X, LinkedIn, blog format specs</td></tr>
-        <tr><td>workflows/</td><td>7</td><td>Article creation, repurposing, tool reviews, images</td></tr>
-        <tr><td>quality/</td><td>2</td><td>Calibration questions, content standards</td></tr>
-        <tr><td>templates/</td><td>8</td><td>Post scaffolds, announcements, reviews</td></tr>
-        <tr><td>skills/</td><td>4</td><td>/article, /repurpose, /new-tool, /tool-review</td></tr>
-      </table>
-      <h2>After Onboarding</h2>
-      <p>The system generates config files (voice, audience, pillars, brand guidelines, proof points) that the four content commands read alongside the framework templates. Every piece of content follows your voice, targets your audience, and maintains quality standards.</p>
+      <ul>
+        <li>Create shapes, arrows, text, and frames with batched element creation</li>
+        <li>Query the canvas state and existing elements</li>
+        <li>Edit, move, group, align, and distribute elements programmatically</li>
+        <li>Export scenes to .excalidraw, PNG, or SVG</li>
+        <li>Snapshot/restore scenes for safe experimentation</li>
+      </ul>
+      <h2>Bundled Files</h2>
+      <ul>
+        <li><code>SKILL.md</code> &mdash; full cheatsheet and workflow guide</li>
+        <li><code>references/cheatsheet.md</code> &mdash; fast lookup for every MCP tool call</li>
+        <li><code>scripts/</code> &mdash; helper Node scripts for create/update/delete/export</li>
+        <li><code>evals/evals.json</code> &mdash; evaluation tasks for verifying the skill works</li>
+      </ul>
+      <h2>Requires</h2>
+      <p>The <strong>Excalidraw MCP server</strong> (separate install). Configure it in <code>~/.claude.json</code> before this skill works.</p>
       <hr>
-      <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/content-skill-graph/</code> &middot; <strong>Framework:</strong> 36 template files + 4 sub-skills</p>
+      <p><strong>Type:</strong> Custom Skill (multi-file) &middot; <strong>Location:</strong> <code>~/.claude/skills/excalidraw-skill/</code></p>
+    `
+  },
+  '/firecrawl': {
+    icon: '&#128293;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /firecrawl skill in my Claude Code setup.
+
+Run these commands:
+cd /tmp && rm -rf mcs-fc && git clone --depth 1 https://github.com/amadejdemsar-create/my-claude-setup.git mcs-fc
+mkdir -p ~/.claude/skills/firecrawl
+cp -r /tmp/mcs-fc/skills/firecrawl/* ~/.claude/skills/firecrawl/
+rm -rf /tmp/mcs-fc
+
+Then tell me to restart Claude Code. You'll also need the Firecrawl MCP configured (see the bundled install.md).`,
+    content: `
+      <div class="persona-quote">Firecrawl workflows for web scraping, searching, and extraction. Covers the most common patterns: search, scrape, crawl, map, and structured extraction.</div>
+      <h2>What It Does</h2>
+      <ul>
+        <li>Search the live web with operators (web, images, news)</li>
+        <li>Scrape a single URL and get clean markdown or HTML</li>
+        <li>Crawl an entire site with filters and depth limits</li>
+        <li>Map a site (URL list only, no content)</li>
+        <li>Structured extraction: pull JSON out of pages using a schema</li>
+      </ul>
+      <h2>Included</h2>
+      <ul>
+        <li><code>SKILL.md</code> &mdash; when to use each Firecrawl tool, with copy-paste examples</li>
+        <li><code>rules/install.md</code> &mdash; how to install and configure the Firecrawl MCP</li>
+      </ul>
+      <h2>Requires</h2>
+      <p>The <strong>Firecrawl MCP</strong> server with an API key. Follow <code>rules/install.md</code> after installing the skill.</p>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill (multi-file) &middot; <strong>Location:</strong> <code>~/.claude/skills/firecrawl/</code></p>
+    `
+  },
+  '/portfolio': {
+    icon: '&#128188;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /portfolio command in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/commands
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/commands/portfolio.md -o ~/.claude/commands/portfolio.md
+
+Then tell me to restart Claude Code. After that I can use /portfolio to view my investment portfolio dashboard.`,
+    content: `
+      <div class="persona-quote">Open the personal portfolio dashboard. Unified view of crypto and stock holdings, allocations, and tranche entries.</div>
+      <h2>What It Does</h2>
+      <p>Launches your portfolio dashboard HTML in your browser. The dashboard reads from your personal holdings files (customize the data path in the command file).</p>
+      <h2>Setup</h2>
+      <p>Edit the paths in <code>~/.claude/commands/portfolio.md</code> to point at your own holdings JSON/dashboard location.</p>
+      <hr>
+      <p><strong>Type:</strong> Slash Command &middot; <strong>Location:</strong> <code>~/.claude/commands/portfolio.md</code></p>
+    `
+  },
+  '/todo': {
+    icon: '&#9745;&#65039;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /todo command in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/commands
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/commands/todo.md -o ~/.claude/commands/todo.md
+
+Then tell me to restart Claude Code. After that I can use /todo to manage my task list from inside Claude Code.`,
+    content: `
+      <div class="persona-quote">Unified todo manager with nested projects. Read, add, complete, and remove tasks directly from Claude Code; the dashboard HTML auto-syncs.</div>
+      <h2>Supported Actions</h2>
+      <ul>
+        <li><code>/todo</code> or <code>/todo show</code> &mdash; show open tasks grouped by project</li>
+        <li><code>/todo add [task]</code> &mdash; add a task; category is inferred from context</li>
+        <li><code>/todo add project [name]</code> &mdash; create a project under a category</li>
+        <li><code>/todo done [task]</code> &mdash; mark a task complete across all projects</li>
+        <li><code>/todo remove [task]</code> &mdash; delete a task</li>
+        <li><code>/todo clear done</code> &mdash; remove all completed tasks</li>
+        <li><code>/todo open</code> &mdash; open the dashboard HTML</li>
+      </ul>
+      <h2>Data Model</h2>
+      <p>JSON file with nested projects. Each project has <code>category</code>, optional sub-<code>projects</code>, and a <code>todos</code> array. Tasks have id, title, priority, due date, note, createdAt, and done.</p>
+      <h2>Setup</h2>
+      <p>Edit the data paths in <code>~/.claude/commands/todo.md</code> to point to your own <code>todos.json</code> and dashboard HTML. The command includes a customizable category inference table.</p>
+      <hr>
+      <p><strong>Type:</strong> Slash Command &middot; <strong>Location:</strong> <code>~/.claude/commands/todo.md</code></p>
+    `
+  },
+  '/calendar': {
+    icon: '&#128197;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /calendar skill in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/skills/calendar
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/calendar/SKILL.md -o ~/.claude/skills/calendar/SKILL.md
+
+Then tell me to restart Claude Code. You'll also need the Google Calendar MCP connected. Edit the SKILL.md to replace placeholder timezone, calendar ID, and schedule templates with your own.`,
+    content: `
+      <div class="persona-quote">Personal Google Calendar planner. Plans whole weeks, edits days, adds one-off events, and integrates with a task manager for weekly priorities.</div>
+      <h2>Subcommands</h2>
+      <ul>
+        <li><code>/calendar week</code> &mdash; plan the current week (Mon to Sun)</li>
+        <li><code>/calendar week next</code> &mdash; plan next week</li>
+        <li><code>/calendar today|tomorrow|monday|YYYY-MM-DD</code> &mdash; view/edit a specific day</li>
+        <li><code>/calendar view</code> &mdash; read-only week view</li>
+        <li><code>/calendar clear &lt;day&gt;</code> &mdash; remove template blocks from a day</li>
+        <li><code>/calendar add &lt;day&gt; &lt;event&gt; &lt;time&gt;</code> &mdash; one-off event</li>
+        <li><code>/calendar move &lt;event&gt; &lt;from&gt; &lt;to&gt;</code> &mdash; reschedule</li>
+      </ul>
+      <h2>What You Configure</h2>
+      <ul>
+        <li>Calendar ID (your Gmail), timezone</li>
+        <li>Wake/leave/work/gym/sleep times</li>
+        <li>Weekly gym rotation (or any recurring split)</li>
+        <li>Habits table (duration, days, placement)</li>
+        <li>Day templates (weekday gym, weekday rest, weekend)</li>
+      </ul>
+      <h2>Requires</h2>
+      <p>The <strong>Google Calendar MCP</strong> connected via OAuth. The skill loads MCP tools via ToolSearch on first use.</p>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/calendar/SKILL.md</code></p>
+    `
+  },
+  '/devtakeover': {
+    icon: '&#128736;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /devtakeover skill in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/skills/devtakeover
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/devtakeover/SKILL.md -o ~/.claude/skills/devtakeover/SKILL.md
+
+Then tell me to restart Claude Code. Run /devtakeover on any project (new or existing) to produce a full Claude Code ecosystem: audit, design, rules, agents, skills, HTML guides, config repo.`,
+    content: `
+      <div class="persona-quote">A 5-phase skill that takes over a codebase and produces a complete, project-specific Claude Code ecosystem: agents, skills, rules, hooks, component catalog, and a distributable config repo.</div>
+      <h2>The 5 Phases</h2>
+      <table>
+        <tr><th>Phase</th><th>Duration</th><th>Output</th></tr>
+        <tr><td>0. Discovery</td><td>5-10 min</td><td>Requirements, tech decisions, team type</td></tr>
+        <tr><td>1. Audit</td><td>30-60 min</td><td>Machine context, human-readable project guide</td></tr>
+        <tr><td>2. Design</td><td>10-15 min</td><td>Ecosystem design document</td></tr>
+        <tr><td>3. Generate</td><td>45-90 min</td><td>CLAUDE.md, agents/, skills/, rules/, hooks/, component catalog</td></tr>
+        <tr><td>4. Visual guides</td><td>15-30 min</td><td>3 dense HTML guides (100KB+ each) for team onboarding</td></tr>
+        <tr><td>5. Config repo</td><td>5-10 min</td><td>setup.sh + README.md for team distribution</td></tr>
+      </table>
+      <h2>Key Principles</h2>
+      <ul>
+        <li>Present an explicit deliverables checklist before starting work</li>
+        <li>Read quality reference files BEFORE generating (#2 cause of phase failure is skipping this)</li>
+        <li>Use the right subagent for each phase (design-visionary for HTML, senior-architect for code, etc.)</li>
+        <li>Iteration loops with size and coverage gates are mandatory</li>
+        <li>Orchestrator pattern: main Claude orchestrates, specialized agents implement</li>
+      </ul>
+      <h2>Completion Guard</h2>
+      <p>The skill forbids using "complete", "done", "finished", or "ready" unless every deliverable passes the checklist. If anything is skipped or stubbed, status must be "partially complete" with a list of what remains.</p>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill &middot; <strong>Size:</strong> ~930 lines &middot; <strong>Location:</strong> <code>~/.claude/skills/devtakeover/SKILL.md</code></p>
+    `
+  },
+  '/remove-watermark': {
+    icon: '&#128444;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /remove-watermark skill in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/skills/remove-watermark
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/remove-watermark/SKILL.md -o ~/.claude/skills/remove-watermark/SKILL.md
+
+Then tell me to restart Claude Code. You'll also need GeminiWatermarkTool installed at /usr/local/bin/GeminiWatermarkTool.`,
+    content: `
+      <div class="persona-quote">Strip Gemini visible watermarks from images using GeminiWatermarkTool with optional AI or classical denoising. Single image and batch workflows supported.</div>
+      <h2>Usage Patterns</h2>
+      <ul>
+        <li>Single image: <code>GeminiWatermarkTool --no-banner -i input.jpg -o clean.jpg --denoise ai</code></li>
+        <li>Batch folder: <code>GeminiWatermarkTool --no-banner -i ./folder/ -o ./output/ --denoise ai</code></li>
+        <li>Quick overwrite: <code>GeminiWatermarkTool --no-banner input.jpg</code></li>
+      </ul>
+      <h2>Key Flags</h2>
+      <table>
+        <tr><th>Flag</th><th>Purpose</th><th>Default</th></tr>
+        <tr><td><code>--denoise</code></td><td>Cleanup method: ai, ns, telea, soft, off</td><td>off</td></tr>
+        <tr><td><code>--sigma</code></td><td>AI denoise sigma (1-150)</td><td>50</td></tr>
+        <tr><td><code>--strength</code></td><td>Denoise strength percent (0-300)</td><td>120 for ai, 85 others</td></tr>
+        <tr><td><code>--threshold</code></td><td>Detection confidence (0-1)</td><td>0.25</td></tr>
+        <tr><td><code>--no-banner</code></td><td>Suppress ASCII art (use from Claude)</td><td>off</td></tr>
+      </table>
+      <h2>Requires</h2>
+      <p>GeminiWatermarkTool CLI at <code>/usr/local/bin/GeminiWatermarkTool</code> (v0.2.5+). AI denoise requires Vulkan GPU; Navier-Stokes (<code>ns</code>) is the safe fallback on Mac.</p>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/remove-watermark/SKILL.md</code></p>
+    `
+  },
+  '/loop': {
+    icon: '&#128260;', iconBg: 'var(--blue-dim)', color: 'blue',
+    content: `
+      <div class="persona-quote">Built-in Claude Code skill for running a prompt or slash command on a recurring interval.</div>
+      <h2>What It Does</h2>
+      <p>Runs a task repeatedly. Two modes:</p>
+      <ul>
+        <li><strong>Fixed interval:</strong> <code>/loop 10m [prompt]</code> &mdash; reruns the task every 10 minutes.</li>
+        <li><strong>Dynamic (self-paced):</strong> <code>/loop [prompt]</code> &mdash; Claude decides when to re-fire based on what it is waiting for. Uses ScheduleWakeup.</li>
+      </ul>
+      <h2>When to Use</h2>
+      <ul>
+        <li>Monitoring a long build, deployment, or queue</li>
+        <li>Polling external state that changes slowly</li>
+        <li>Autonomous maintenance loops (sweep a folder, check a dashboard)</li>
+      </ul>
+      <h2>Cache Considerations</h2>
+      <p>Anthropic's prompt cache has a 5-minute TTL. Short intervals (60-270s) stay cached and are cheap. Going past 300s pays a cache miss, so if you're waiting longer commit to 20+ minutes to amortize it. Avoid picking exactly 5 minutes; it's the worst of both.</p>
+      <hr>
+      <p><strong>Type:</strong> Built-in Claude Code skill</p>
+    `
+  },
+  '/schedule': {
+    icon: '&#128339;', iconBg: 'var(--blue-dim)', color: 'blue',
+    content: `
+      <div class="persona-quote">Built-in skill for managing scheduled remote agents (cron triggers) that run Claude Code on a schedule.</div>
+      <h2>What It Does</h2>
+      <ul>
+        <li><code>/schedule list</code> &mdash; list all scheduled triggers</li>
+        <li><code>/schedule create</code> &mdash; create a new cron-scheduled agent</li>
+        <li><code>/schedule update</code> &mdash; modify an existing trigger</li>
+        <li><code>/schedule delete</code> &mdash; remove a trigger</li>
+        <li><code>/schedule run</code> &mdash; manually fire a scheduled agent once</li>
+      </ul>
+      <h2>Uses CronCreate / CronDelete / CronList Tools</h2>
+      <p>The skill wraps the built-in Cron* tools. Each trigger is a prompt + cron expression; Claude runs the prompt autonomously on schedule.</p>
+      <h2>When to Use</h2>
+      <ul>
+        <li>Daily morning briefings (market brief, inbox sweep, calendar prep)</li>
+        <li>Weekly reports (log compilation, portfolio snapshot)</li>
+        <li>Continuous monitoring (every hour, check a source, alert on change)</li>
+      </ul>
+      <hr>
+      <p><strong>Type:</strong> Built-in Claude Code skill</p>
+    `
+  },
+  '/update-config': {
+    icon: '&#9881;&#65039;', iconBg: 'var(--blue-dim)', color: 'blue',
+    content: `
+      <div class="persona-quote">Built-in skill for editing the Claude Code harness configuration: settings.json, hooks, permissions, and automated behaviors.</div>
+      <h2>What It Does</h2>
+      <ul>
+        <li>Edit <code>~/.claude/settings.json</code> (global) or project-level settings</li>
+        <li>Add/remove hooks (PreToolUse, PostToolUse, UserPromptSubmit, etc.)</li>
+        <li>Configure permission mode (allow/ask/deny)</li>
+        <li>Set up status line, output style, theme</li>
+      </ul>
+      <h2>Common Patterns</h2>
+      <ul>
+        <li><strong>PostToolUse hook</strong> for auto-formatting after every Edit/Write</li>
+        <li><strong>UserPromptSubmit hook</strong> for injecting context (memory, date, branch)</li>
+        <li><strong>PreToolUse hook</strong> for blocking destructive commands</li>
+      </ul>
+      <h2>Safety</h2>
+      <p>Never commit <code>settings.json</code> if it contains API keys. The skill will flag secrets during edits.</p>
+      <hr>
+      <p><strong>Type:</strong> Built-in Claude Code skill</p>
+    `
+  },
+  '/simplify': {
+    icon: '&#128296;', iconBg: 'var(--blue-dim)', color: 'blue',
+    content: `
+      <div class="persona-quote">Built-in skill for reviewing and refactoring changed code. Checks for reuse opportunities, dead code, over-engineering, and quality issues, then fixes what it finds.</div>
+      <h2>What It Does</h2>
+      <ol>
+        <li>Identifies the changed code (git diff or specified files)</li>
+        <li>Reads the surrounding codebase for existing utilities it could reuse</li>
+        <li>Flags: duplicated logic, premature abstractions, unnecessary error handling, unused code, overly defensive checks</li>
+        <li>Rewrites to remove the flagged issues while preserving behavior</li>
+        <li>Runs tests (if present) to verify no regression</li>
+      </ol>
+      <h2>When to Use</h2>
+      <ul>
+        <li>After completing a feature, before commit</li>
+        <li>After a long agentic session that may have accumulated cruft</li>
+        <li>On PRs that feel bloated relative to the change</li>
+      </ul>
+      <hr>
+      <p><strong>Type:</strong> Built-in Claude Code skill</p>
+    `
+  },
+  '/claude-api': {
+    icon: '&#129302;', iconBg: 'var(--blue-dim)', color: 'blue',
+    content: `
+      <div class="persona-quote">Built-in skill for building, debugging, and optimizing Claude API and Anthropic SDK applications. Covers prompt caching, tool use, streaming, and batching.</div>
+      <h2>What It Does</h2>
+      <ul>
+        <li>Scaffolds Anthropic SDK code in Python, TypeScript, or any supported language</li>
+        <li>Debugs API errors (rate limits, 400s, streaming edge cases)</li>
+        <li>Applies prompt caching best practices (5-min TTL, breakpoint strategy)</li>
+        <li>Optimizes cost: token accounting, cache ratios, batch API for async work</li>
+        <li>Sets up tool use, structured outputs, and vision inputs correctly</li>
+      </ul>
+      <h2>Key Knowledge</h2>
+      <ul>
+        <li>Exact model IDs (looks up current IDs instead of guessing)</li>
+        <li>Caching breakpoints: place <code>cache_control</code> boundaries at system prompt, tools, and stable prefixes</li>
+        <li>Extended thinking, computer use, and Messages API specifics</li>
+      </ul>
+      <hr>
+      <p><strong>Type:</strong> Built-in Claude Code skill</p>
     `
   }
 };
@@ -5087,6 +5441,20 @@ document.addEventListener('keydown', function(e) {
   }, { rootMargin: '-20% 0px -70% 0px' });
   sections.forEach(function(s) { if (s.id) observer.observe(s); });
 })();
+
+// ===== COLLAPSIBLE TOGGLE =====
+function toggleSection(btn) {
+  if (!btn.dataset.label) {
+    btn.dataset.label = btn.textContent.replace(/[▼▲]/g, '').trim();
+  }
+  var section = btn.closest('[data-collapsible]');
+  section.classList.toggle('category-expanded');
+  section.classList.toggle('section-expanded');
+  var isExpanded = section.classList.contains('category-expanded') || section.classList.contains('section-expanded');
+  btn.innerHTML = isExpanded
+    ? 'Show less <span class="toggle-arrow">&#9650;</span>'
+    : btn.dataset.label + ' <span class="toggle-arrow">&#9660;</span>';
+}
 </script>
 </body>
 </html>
