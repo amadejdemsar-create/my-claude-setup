@@ -462,93 +462,6 @@
     border-color: rgba(255,255,255,0.08);
   }
 
-  /* MCP setup (collapsible copy-paste install block) */
-  .mcp-setup {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px dashed rgba(255,255,255,0.08);
-  }
-  .mcp-setup > summary {
-    cursor: pointer;
-    font-size: 0.65rem;
-    font-weight: 700;
-    color: var(--card-accent, var(--purple));
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    list-style: none;
-    padding: 2px 0;
-    user-select: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .mcp-setup > summary::-webkit-details-marker { display: none; }
-  .mcp-setup > summary::before {
-    content: "▸";
-    display: inline-block;
-    font-size: 0.7rem;
-    transition: transform 0.15s ease;
-  }
-  .mcp-setup[open] > summary::before { content: "▾"; }
-  .mcp-setup > summary:hover { filter: brightness(1.2); }
-  .mcp-setup .setup-body {
-    margin-top: 10px;
-    font-size: 0.72rem;
-    color: var(--text);
-    line-height: 1.55;
-  }
-  .mcp-setup .setup-meta {
-    color: var(--text-dim);
-    margin-bottom: 8px;
-  }
-  .mcp-setup .setup-label {
-    font-size: 0.6rem;
-    font-weight: 700;
-    color: rgba(255,255,255,0.55);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-top: 10px;
-    margin-bottom: 4px;
-  }
-  .mcp-setup pre {
-    margin: 4px 0 6px;
-    padding: 10px 12px;
-    background: rgba(0,0,0,0.4);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 6px;
-    overflow-x: auto;
-    font-size: 0.68rem;
-    line-height: 1.55;
-  }
-  .mcp-setup pre code {
-    color: #d1d5db;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    white-space: pre;
-    background: transparent;
-    padding: 0;
-  }
-  .mcp-setup code:not(pre code) {
-    background: rgba(255,255,255,0.08);
-    padding: 1px 5px;
-    border-radius: 3px;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 0.7rem;
-    color: var(--text);
-  }
-  .mcp-setup .setup-note {
-    font-size: 0.68rem;
-    color: var(--text-dim);
-    font-style: italic;
-    margin-top: 6px;
-  }
-  .mcp-setup a {
-    color: var(--blue);
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 2px;
-  }
-  .mcp-setup a:hover { filter: brightness(1.2); }
-
   .mcp-category {
     font-size: 0.68rem;
     font-weight: 700;
@@ -2018,7 +1931,7 @@
     <a href="#mcp" class="smap-node smap-node-amber">
       <div class="smap-card">
         <div class="smap-icon">&#128268;</div>
-        <div class="smap-count">31</div>
+        <div class="smap-count">33</div>
         <div class="smap-label">MCP Servers</div>
         <div class="smap-items">
           <span>Notion</span>
@@ -2101,128 +2014,66 @@
   <div class="section-header">
     <div class="section-tag tag-amber">Superpowers</div>
     <h2>MCP Servers</h2>
-    <p class="section-desc">Model Context Protocol servers give Claude access to external services. Each one is a bridge between AI and a specific API. <span style="color:var(--amber);font-weight:600;">Click Setup on any card for the copy-paste install command.</span></p>
+    <p class="section-desc">Model Context Protocol servers give Claude access to external services. Each one is a bridge between AI and a specific API. <span style="color:var(--amber);font-weight:600;">Click any card for the full explanation and copy-paste install prompt.</span></p>
   </div>
 
   <!-- Web & Search -->
   <div class="mcp-category"><span class="cat-dot" style="background:var(--blue);"></span> Web &amp; Search</div>
   <div class="mcp-grid">
-    <div class="mcp-card" style="--card-accent:var(--amber);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--amber);" onclick="openMcpModal('Firecrawl')" title="Click to view setup">
       <div class="mcp-icon">&#128293;</div>
       <div class="mcp-info">
         <h3>Firecrawl</h3>
         <div class="mcp-desc">Web scraping with JS rendering. Primary search tool.</div>
         <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">npx firecrawl-mcp</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> API key (<code>FIRECRAWL_API_KEY</code>). Get a key at <a href="https://firecrawl.dev" target="_blank" rel="noopener">firecrawl.dev</a>.</div>
-            <div class="setup-label">Install (global, via jq)</div>
-<pre><code>jq '.mcpServers.firecrawl = {"type":"stdio","command":"npx","args":["-y","firecrawl-mcp"],"env":{"FIRECRAWL_API_KEY":"YOUR_KEY"}}' ~/.claude.json &gt; /tmp/t &amp;&amp; mv /tmp/t ~/.claude.json</code></pre>
-            <div class="setup-note">Restart Claude Code after adding.</div>
-          </div>
-        </details>
       </div>
     </div>
-    <div class="mcp-card" style="--card-accent:var(--amber);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--amber);" onclick="openMcpModal('Brave Search')" title="Click to view setup">
       <div class="mcp-icon">&#128526;</div>
       <div class="mcp-info">
         <h3>Brave Search</h3>
         <div class="mcp-desc">Web search engine for quick lookups.</div>
         <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">@brave/brave-search-mcp-server</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> API key (<code>BRAVE_API_KEY</code>). Get a key at <a href="https://api.search.brave.com/" target="_blank" rel="noopener">api.search.brave.com</a>.</div>
-            <div class="setup-label">Install (global, via jq)</div>
-<pre><code>jq '.mcpServers["brave-search"] = {"type":"stdio","command":"npx","args":["-y","@brave/brave-search-mcp-server"],"env":{"BRAVE_API_KEY":"YOUR_KEY"}}' ~/.claude.json &gt; /tmp/t &amp;&amp; mv /tmp/t ~/.claude.json</code></pre>
-            <div class="setup-note">Restart Claude Code after adding.</div>
-          </div>
-        </details>
       </div>
     </div>
-    <div class="mcp-card" style="--card-accent:var(--amber);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--amber);" onclick="openMcpModal('Claude in Chrome')" title="Click to view setup">
       <div class="mcp-icon">&#127760;</div>
       <div class="mcp-info">
         <h3>Claude in Chrome</h3>
         <div class="mcp-desc">Browser automation: navigate, click, fill, screenshot, GIFs.</div>
         <div class="mcp-tags"><span class="tag">Extension</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> none (runs inside the browser). This is a Chrome extension, not a config-file MCP.</div>
-            <div class="setup-label">Install</div>
-            <div>Sign in to <a href="https://claude.ai/chrome" target="_blank" rel="noopener">claude.ai/chrome</a> and install the <strong>Claude for Chrome</strong> extension. The extension registers its own <code>mcp__claude-in-chrome__*</code> tools automatically in Claude Code.</div>
-            <div class="setup-note">Works in Chrome and Chromium-based browsers (Dia, Brave, Arc).</div>
-          </div>
-        </details>
       </div>
     </div>
-    <div class="mcp-card" style="--card-accent:var(--amber);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--amber);" onclick="openMcpModal('BrowserMCP')" title="Click to view setup">
       <div class="mcp-icon">&#128421;</div>
       <div class="mcp-info">
         <h3>BrowserMCP</h3>
         <div class="mcp-desc">Browser automation via BrowserMCP package.</div>
         <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">@browsermcp/mcp</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> none. Also requires the BrowserMCP Chrome extension.</div>
-            <div class="setup-label">Install (global, via jq)</div>
-<pre><code>jq '.mcpServers.browsermcp = {"command":"npx","args":["@browsermcp/mcp@latest"]}' ~/.claude.json &gt; /tmp/t &amp;&amp; mv /tmp/t ~/.claude.json</code></pre>
-            <div class="setup-note">Install the companion extension from <a href="https://browsermcp.io" target="_blank" rel="noopener">browsermcp.io</a>.</div>
-          </div>
-        </details>
       </div>
     </div>
-    <div class="mcp-card" style="--card-accent:var(--amber);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--amber);" onclick="openMcpModal('Puppeteer')" title="Click to view setup">
       <div class="mcp-icon">&#127917;</div>
       <div class="mcp-info">
         <h3>Puppeteer</h3>
         <div class="mcp-desc">Headless browser testing and automation.</div>
         <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">@modelcontextprotocol</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> none.</div>
-            <div class="setup-label">Install (global, via jq)</div>
-<pre><code>jq '.mcpServers.puppeteer = {"type":"stdio","command":"npx","args":["-y","@modelcontextprotocol/server-puppeteer"]}' ~/.claude.json &gt; /tmp/t &amp;&amp; mv /tmp/t ~/.claude.json</code></pre>
-            <div class="setup-note">Upstream package is archived; prefer Playwright or Chrome DevTools for new setups.</div>
-          </div>
-        </details>
       </div>
     </div>
-    <div class="mcp-card" style="--card-accent:var(--amber);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--amber);" onclick="openMcpModal('Playwright')" title="Click to view setup">
       <div class="mcp-icon">&#127917;</div>
       <div class="mcp-info">
         <h3>Playwright</h3>
         <div class="mcp-desc">Browser testing and automation via Playwright.</div>
         <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">@playwright/mcp</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> none.</div>
-            <div class="setup-label">Install (global, via jq)</div>
-<pre><code>jq '.mcpServers.playwright = {"type":"stdio","command":"npx","args":["@playwright/mcp@latest","--viewport-size=1728,1013"]}' ~/.claude.json &gt; /tmp/t &amp;&amp; mv /tmp/t ~/.claude.json</code></pre>
-            <div class="setup-note">Drop <code>--viewport-size</code> to use the Playwright default.</div>
-          </div>
-        </details>
       </div>
     </div>
-    <div class="mcp-card" style="--card-accent:var(--amber);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--amber);" onclick="openMcpModal('Chrome DevTools')" title="Click to view setup">
       <div class="mcp-icon">&#128295;</div>
       <div class="mcp-info">
         <h3>Chrome DevTools</h3>
         <div class="mcp-desc">Direct Chrome DevTools Protocol automation.</div>
         <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">chrome-devtools-mcp</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> none. Requires a local Chrome install.</div>
-            <div class="setup-label">Install (global, via jq)</div>
-<pre><code>jq '.mcpServers["chrome-devtools"] = {"command":"npx","args":["chrome-devtools-mcp@latest"]}' ~/.claude.json &gt; /tmp/t &amp;&amp; mv /tmp/t ~/.claude.json</code></pre>
-          </div>
-        </details>
       </div>
     </div>
   </div>
@@ -2230,264 +2081,176 @@
   <!-- Development & Infrastructure -->
   <div class="mcp-category"><span class="cat-dot" style="background:var(--green);"></span> Development &amp; Infrastructure</div>
   <div class="mcp-grid">
-    <div class="mcp-card" style="--card-accent:var(--green);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--green);" onclick="openMcpModal('Dokploy Personal')" title="Click to view setup">
       <div class="mcp-icon" style="background:var(--green-dim);">&#128640;</div>
       <div class="mcp-info">
         <h3>Dokploy Personal</h3>
         <div class="mcp-desc">Deploy apps on Hostinger VPS (NativeAI, personal projects).</div>
         <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">@ahdev/dokploy-mcp</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> API key + URL of your Dokploy instance. In Dokploy UI: <em>Settings → Profile → API Keys</em>.</div>
-            <div class="setup-label">Install (global, via jq)</div>
-<pre><code>jq '.mcpServers["dokploy-personal"] = {"type":"stdio","command":"npx","args":["-y","@ahdev/dokploy-mcp"],"env":{"DOKPLOY_URL":"https://YOUR_DOKPLOY_HOST","DOKPLOY_API_KEY":"YOUR_KEY"}}' ~/.claude.json &gt; /tmp/t &amp;&amp; mv /tmp/t ~/.claude.json</code></pre>
-            <div class="setup-note">Use a distinct name (e.g. <code>dokploy-work</code>) per Dokploy instance to run multiple side-by-side.</div>
-          </div>
-        </details>
       </div>
     </div>
-    <div class="mcp-card" style="--card-accent:var(--green);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--green);" onclick="openMcpModal('Hostinger')" title="Click to view setup">
       <div class="mcp-icon" style="background:var(--green-dim);">&#127968;</div>
       <div class="mcp-info">
         <h3>Hostinger</h3>
         <div class="mcp-desc">VPS, domains, DNS, SSL certificates.</div>
         <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">hostinger-api-mcp</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> API token (<code>API_TOKEN</code>). Generate in Hostinger panel: <em>Account → API</em>.</div>
-            <div class="setup-label">Install (global, via jq)</div>
-<pre><code>jq '.mcpServers.hostinger = {"type":"stdio","command":"npx","args":["-y","hostinger-api-mcp@latest"],"env":{"API_TOKEN":"YOUR_TOKEN"}}' ~/.claude.json &gt; /tmp/t &amp;&amp; mv /tmp/t ~/.claude.json</code></pre>
-          </div>
-        </details>
       </div>
     </div>
-    <div class="mcp-card" style="--card-accent:var(--green);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--green);" onclick="openMcpModal('Docker (MCP Gateway)')" title="Click to view setup">
       <div class="mcp-icon" style="background:var(--green-dim);">&#128230;</div>
       <div class="mcp-info">
         <h3>Docker (MCP Gateway)</h3>
         <div class="mcp-desc">Manage containers via Docker MCP gateway.</div>
         <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">docker mcp</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> none. Requires Docker Desktop with the <em>MCP Toolkit</em> enabled.</div>
-            <div class="setup-label">Install (global, via jq)</div>
-<pre><code>jq '.mcpServers.MCP_DOCKER = {"command":"docker","args":["mcp","gateway","run"]}' ~/.claude.json &gt; /tmp/t &amp;&amp; mv /tmp/t ~/.claude.json</code></pre>
-            <div class="setup-note">Enable the gateway in Docker Desktop → Extensions → MCP Toolkit.</div>
-          </div>
-        </details>
       </div>
     </div>
-    <div class="mcp-card" style="--card-accent:var(--green);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--green);" onclick="openMcpModal('Docker (uvx)')" title="Click to view setup">
       <div class="mcp-icon" style="background:var(--green-dim);">&#128230;</div>
       <div class="mcp-info">
         <h3>Docker (uvx)</h3>
         <div class="mcp-desc">Docker management via uvx server.</div>
         <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">mcp-server-docker</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> none. Requires <code>uv</code> installed (<code>brew install uv</code>).</div>
-            <div class="setup-label">Install (global, via jq)</div>
-<pre><code>jq '.mcpServers.docker = {"type":"stdio","command":"uvx","args":["mcp-server-docker"]}' ~/.claude.json &gt; /tmp/t &amp;&amp; mv /tmp/t ~/.claude.json</code></pre>
-            <div class="setup-note">Alternative to the Docker Desktop gateway for users without Docker Desktop.</div>
-          </div>
-        </details>
       </div>
     </div>
-    <div class="mcp-card" style="--card-accent:var(--green);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--green);" onclick="openMcpModal('Dokploy Nevron')" title="Click to view setup">
       <div class="mcp-icon" style="background:var(--green-dim);">&#128640;</div>
       <div class="mcp-info">
         <h3>Dokploy Nevron</h3>
         <div class="mcp-desc">Deploy apps on Hetzner server (Nevron company projects).</div>
         <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">@ahdev/dokploy-mcp</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> API key + URL. Same package as Dokploy Personal, different instance.</div>
-            <div class="setup-label">Install (global, via jq)</div>
-<pre><code>jq '.mcpServers["dokploy-nevron"] = {"type":"stdio","command":"npx","args":["-y","@ahdev/dokploy-mcp"],"env":{"DOKPLOY_URL":"https://YOUR_DOKPLOY_HOST","DOKPLOY_API_KEY":"YOUR_KEY"}}' ~/.claude.json &gt; /tmp/t &amp;&amp; mv /tmp/t ~/.claude.json</code></pre>
-          </div>
-        </details>
       </div>
     </div>
-    <div class="mcp-card" style="--card-accent:var(--green);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--green);" onclick="openMcpModal('n8n')" title="Click to view setup">
       <div class="mcp-icon" style="background:var(--green-dim);">&#9881;</div>
       <div class="mcp-info">
         <h3>n8n</h3>
         <div class="mcp-desc">Workflow automation on Nevron infrastructure.</div>
         <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">ai.nevron.net</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> server-dependent. Self-hosted n8n with the MCP trigger node enabled.</div>
-            <div class="setup-label">Install</div>
-<pre><code>claude mcp add n8n https://YOUR_N8N_HOST/mcp-server/http -t http</code></pre>
-            <div class="setup-note">Replace the URL with your n8n MCP webhook. Guide: <a href="https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-langchain.mcptrigger/" target="_blank" rel="noopener">docs.n8n.io</a>.</div>
-          </div>
-        </details>
       </div>
     </div>
-    <div class="mcp-card" style="--card-accent:var(--green);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--green);" onclick="openMcpModal('Maestro')" title="Click to view setup">
       <div class="mcp-icon" style="background:var(--green-dim);">&#128241;</div>
       <div class="mcp-info">
         <h3>Maestro</h3>
         <div class="mcp-desc">Mobile app testing and automation.</div>
         <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">maestro</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> none. Requires the Maestro CLI installed locally.</div>
-            <div class="setup-label">Install CLI</div>
-<pre><code>brew tap mobile-dev-inc/tap &amp;&amp; brew install maestro</code></pre>
-            <div class="setup-label">Register MCP (global, via jq)</div>
-<pre><code>jq '.mcpServers.maestro = {"type":"stdio","command":"maestro","args":["mcp"]}' ~/.claude.json &gt; /tmp/t &amp;&amp; mv /tmp/t ~/.claude.json</code></pre>
-            <div class="setup-note">Requires Android Studio or Xcode for device emulators.</div>
-          </div>
-        </details>
       </div>
     </div>
   </div>
 
-  <!-- Productivity & Design -->
-  <div class="mcp-category"><span class="cat-dot" style="background:var(--purple);"></span> Productivity &amp; Design</div>
+  <!-- Productivity -->
+  <div class="mcp-category"><span class="cat-dot" style="background:var(--purple);"></span> Productivity</div>
   <div class="mcp-grid">
-    <div class="mcp-card" style="--card-accent:var(--purple);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--purple);" onclick="openMcpModal('Notion')" title="Click to view setup">
       <div class="mcp-icon" style="background:var(--purple-dim);">&#128211;</div>
       <div class="mcp-info">
         <h3>Notion</h3>
         <div class="mcp-desc">Read and write pages and databases via OAuth.</div>
         <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> OAuth (browser redirect on first connect). No API key needed.</div>
-            <div class="setup-label">Install</div>
-<pre><code>claude mcp add notion https://mcp.notion.com/mcp -t http</code></pre>
-            <div class="setup-note">Restart Claude Code; the first <code>/mcp</code> call opens the Notion OAuth flow.</div>
-          </div>
-        </details>
       </div>
     </div>
-    <div class="mcp-card" style="--card-accent:var(--purple);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--purple);" onclick="openMcpModal('Todoist')" title="Click to view setup">
       <div class="mcp-icon" style="background:var(--purple-dim);">&#9989;</div>
       <div class="mcp-info">
         <h3>Todoist</h3>
         <div class="mcp-desc">Official task management MCP.</div>
         <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">ai.todoist.net</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> OAuth (official Todoist-hosted server).</div>
-            <div class="setup-label">Install</div>
-<pre><code>claude mcp add todoist https://ai.todoist.net/mcp -t http</code></pre>
-            <div class="setup-note">There is also a community STDIO server (<code>@abhiz123/todoist-mcp-server</code>) if you prefer API-token auth.</div>
-          </div>
-        </details>
       </div>
     </div>
-    <div class="mcp-card" style="--card-accent:var(--purple);">
-      <div class="mcp-icon" style="background:var(--purple-dim);">&#127912;</div>
+    <div class="mcp-card card-clickable" style="--card-accent:var(--purple);" onclick="openMcpModal('Google Calendar')" title="Click to view setup">
+      <div class="mcp-icon" style="background:var(--purple-dim);">&#128197;</div>
       <div class="mcp-info">
-        <h3>Figma</h3>
-        <div class="mcp-desc">Inspect designs, screenshots, variables.</div>
-        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> OAuth. Requires a Figma account with access to the files you want to inspect.</div>
-            <div class="setup-label">Install</div>
-<pre><code>claude mcp add figma https://mcp.figma.com/mcp -t http</code></pre>
-          </div>
-        </details>
+        <h3>Google Calendar</h3>
+        <div class="mcp-desc">Events, scheduling, free time lookups.</div>
+        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span><span class="tag">claude.ai</span></div>
       </div>
     </div>
-    <div class="mcp-card" style="--card-accent:var(--purple);">
-      <div class="mcp-icon" style="background:var(--purple-dim);">&#128203;</div>
-      <div class="mcp-info">
-        <h3>Miro</h3>
-        <div class="mcp-desc">Visual collaboration boards and whiteboarding.</div>
-        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> OAuth.</div>
-            <div class="setup-label">Install</div>
-<pre><code>claude mcp add miro https://mcp.miro.com/ -t http</code></pre>
-          </div>
-        </details>
-      </div>
-    </div>
-    <div class="mcp-card" style="--card-accent:var(--purple);">
-      <div class="mcp-icon" style="background:var(--purple-dim);">&#128228;</div>
-      <div class="mcp-info">
-        <h3>Buffer</h3>
-        <div class="mcp-desc">Social media publishing and scheduling.</div>
-        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">buffer</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> OAuth or bearer token. Create a token at <a href="https://publish.buffer.com/settings/api" target="_blank" rel="noopener">publish.buffer.com/settings/api</a>.</div>
-            <div class="setup-label">Install (OAuth)</div>
-<pre><code>claude mcp add buffer https://mcp.buffer.com/mcp -t http</code></pre>
-            <div class="setup-label">Install (bearer token, via jq)</div>
-<pre><code>jq '.mcpServers.buffer = {"command":"npx","args":["-y","mcp-remote","https://mcp.buffer.com/mcp","--header","Authorization: Bearer YOUR_TOKEN"]}' ~/.claude.json &gt; /tmp/t &amp;&amp; mv /tmp/t ~/.claude.json</code></pre>
-          </div>
-        </details>
-      </div>
-    </div>
-    <div class="mcp-card" style="--card-accent:var(--purple);">
-      <div class="mcp-icon" style="background:var(--purple-dim);">&#127912;</div>
-      <div class="mcp-info">
-        <h3>Stitch</h3>
-        <div class="mcp-desc">UI design and screen generation.</div>
-        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">stitch</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> Google OAuth (Stitch is a Google product).</div>
-            <div class="setup-label">Install</div>
-<pre><code>claude mcp add stitch https://stitch.googleapis.com/mcp -t http</code></pre>
-          </div>
-        </details>
-      </div>
-    </div>
-    <div class="mcp-card" style="--card-accent:var(--purple);">
-      <div class="mcp-icon" style="background:var(--purple-dim);">&#9998;</div>
-      <div class="mcp-info">
-        <h3>Excalidraw</h3>
-        <div class="mcp-desc">Diagram creation and manipulation.</div>
-        <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">excalidraw-mcp</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> none (local). Requires the Excalidraw MCP server built from source + the Excalidraw web app running locally.</div>
-            <div class="setup-label">Build from source</div>
-<pre><code>git clone https://github.com/excalidraw/mcp-server
-cd mcp-server &amp;&amp; npm install &amp;&amp; npm run build</code></pre>
-            <div class="setup-label">Register MCP (global, via jq)</div>
-<pre><code>jq '.mcpServers.excalidraw = {"type":"stdio","command":"node","args":["/ABS/PATH/TO/mcp-server/dist/index.js"],"env":{"ENABLE_CANVAS_SYNC":"true","EXPRESS_SERVER_URL":"http://localhost:3333"}}' ~/.claude.json &gt; /tmp/t &amp;&amp; mv /tmp/t ~/.claude.json</code></pre>
-            <div class="setup-note">Start the Excalidraw companion app on <code>localhost:3333</code> before using the MCP.</div>
-          </div>
-        </details>
-      </div>
-    </div>
-    <div class="mcp-card" style="--card-accent:var(--purple);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--purple);" onclick="openMcpModal('Ascend')" title="Click to view setup">
       <div class="mcp-icon" style="background:var(--purple-dim);">&#127919;</div>
       <div class="mcp-info">
         <h3>Ascend</h3>
         <div class="mcp-desc">Personal dashboard: goals, habits, todos.</div>
         <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">ascend.nativeai.agency</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> OAuth. Hosted at <a href="https://ascend.nativeai.agency" target="_blank" rel="noopener">ascend.nativeai.agency</a>.</div>
-            <div class="setup-label">Install</div>
-<pre><code>claude mcp add ascend https://ascend.nativeai.agency/api/mcp -t http</code></pre>
-          </div>
-        </details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Design -->
+  <div class="mcp-category"><span class="cat-dot" style="background:var(--amber);"></span> Design</div>
+  <div class="mcp-grid">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--amber);" onclick="openMcpModal('Figma')" title="Click to view setup">
+      <div class="mcp-icon" style="background:var(--amber-dim);">&#127912;</div>
+      <div class="mcp-info">
+        <h3>Figma</h3>
+        <div class="mcp-desc">Inspect designs, screenshots, variables.</div>
+        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span></div>
+      </div>
+    </div>
+    <div class="mcp-card card-clickable" style="--card-accent:var(--amber);" onclick="openMcpModal('Miro')" title="Click to view setup">
+      <div class="mcp-icon" style="background:var(--amber-dim);">&#128203;</div>
+      <div class="mcp-info">
+        <h3>Miro</h3>
+        <div class="mcp-desc">Visual collaboration boards and whiteboarding.</div>
+        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span></div>
+      </div>
+    </div>
+    <div class="mcp-card card-clickable" style="--card-accent:var(--amber);" onclick="openMcpModal('Stitch')" title="Click to view setup">
+      <div class="mcp-icon" style="background:var(--amber-dim);">&#127912;</div>
+      <div class="mcp-info">
+        <h3>Stitch</h3>
+        <div class="mcp-desc">UI design and screen generation.</div>
+        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">stitch</span></div>
+      </div>
+    </div>
+    <div class="mcp-card card-clickable" style="--card-accent:var(--amber);" onclick="openMcpModal('Excalidraw')" title="Click to view setup">
+      <div class="mcp-icon" style="background:var(--amber-dim);">&#9998;</div>
+      <div class="mcp-info">
+        <h3>Excalidraw</h3>
+        <div class="mcp-desc">Diagram creation and manipulation.</div>
+        <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">excalidraw-mcp</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marketing & Content -->
+  <div class="mcp-category"><span class="cat-dot" style="background:var(--red);"></span> Marketing &amp; Content</div>
+  <div class="mcp-grid">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--red);" onclick="openMcpModal('Buffer')" title="Click to view setup">
+      <div class="mcp-icon" style="background:var(--red-dim);">&#128228;</div>
+      <div class="mcp-info">
+        <h3>Buffer</h3>
+        <div class="mcp-desc">Social media publishing and scheduling.</div>
+        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span></div>
+      </div>
+    </div>
+    <div class="mcp-card card-clickable" style="--card-accent:var(--red);" onclick="openMcpModal('Postiz')" title="Click to view setup">
+      <div class="mcp-icon" style="background:var(--red-dim);">&#128226;</div>
+      <div class="mcp-info">
+        <h3>Postiz</h3>
+        <div class="mcp-desc">Open-source social media scheduler. Self-hosted or cloud.</div>
+        <div class="mcp-tags"><span class="tag">HTTP/SSE</span><span class="tag">API key</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEO -->
+  <div class="mcp-category"><span class="cat-dot" style="background:var(--blue);"></span> SEO</div>
+  <div class="mcp-grid">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--blue);" onclick="openMcpModal('Semrush')" title="Click to view setup">
+      <div class="mcp-icon" style="background:var(--blue-dim);">&#128269;</div>
+      <div class="mcp-info">
+        <h3>Semrush</h3>
+        <div class="mcp-desc">Keyword research, domain analytics, SERP tracking, competitor insights.</div>
+        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span></div>
+      </div>
+    </div>
+    <div class="mcp-card card-clickable" style="--card-accent:var(--blue);" onclick="openMcpModal('Ahrefs')" title="Click to view setup">
+      <div class="mcp-icon" style="background:var(--blue-dim);">&#128270;</div>
+      <div class="mcp-info">
+        <h3>Ahrefs</h3>
+        <div class="mcp-desc">SEO analytics, keyword research, backlinks, site explorer.</div>
+        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span><span class="tag">claude.ai</span></div>
       </div>
     </div>
   </div>
@@ -2495,38 +2258,20 @@ cd mcp-server &amp;&amp; npm install &amp;&amp; npm run build</code></pre>
   <!-- Finance & Data -->
   <div class="mcp-category"><span class="cat-dot" style="background:var(--cyan);"></span> Finance &amp; Data</div>
   <div class="mcp-grid">
-    <div class="mcp-card" style="--card-accent:var(--cyan);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--cyan);" onclick="openMcpModal('Yahoo Finance')" title="Click to view setup">
       <div class="mcp-icon" style="background:var(--cyan-dim);">&#128200;</div>
       <div class="mcp-info">
         <h3>Yahoo Finance</h3>
         <div class="mcp-desc">Stock prices, earnings, dividends, historical data.</div>
         <div class="mcp-tags"><span class="tag">STDIO</span><span class="tag">uvx</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> none. Requires <code>uv</code> installed (<a href="https://docs.astral.sh/uv/getting-started/installation/" target="_blank" rel="noopener">install uv</a>).</div>
-            <div class="setup-label">Install (global, via jq)</div>
-<pre><code>jq '.mcpServers["yahoo-finance"] = {"type":"stdio","command":"uvx","args":["mcp-yahoo-finance"]}' ~/.claude.json &gt; /tmp/t &amp;&amp; mv /tmp/t ~/.claude.json</code></pre>
-            <div class="setup-note">Restart Claude Code after adding.</div>
-          </div>
-        </details>
       </div>
     </div>
-    <div class="mcp-card" style="--card-accent:var(--cyan);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--cyan);" onclick="openMcpModal('CoinMarketCap')" title="Click to view setup">
       <div class="mcp-icon" style="background:var(--cyan-dim);">&#129689;</div>
       <div class="mcp-info">
         <h3>CoinMarketCap</h3>
         <div class="mcp-desc">Crypto prices, market cap, DEX data.</div>
         <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">API key</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> API key (<code>X-CMC-MCP-API-KEY</code> header). Get one at <a href="https://pro.coinmarketcap.com/signup" target="_blank" rel="noopener">pro.coinmarketcap.com</a>.</div>
-            <div class="setup-label">Install (global, via jq)</div>
-<pre><code>jq '.mcpServers.coinmarketcap = {"type":"http","url":"https://mcp.coinmarketcap.com/mcp","headers":{"X-CMC-MCP-API-KEY":"YOUR_KEY"}}' ~/.claude.json &gt; /tmp/t &amp;&amp; mv /tmp/t ~/.claude.json</code></pre>
-            <div class="setup-note">Replace <code>YOUR_KEY</code> with your CoinMarketCap API key. Restart Claude Code after adding.</div>
-          </div>
-        </details>
       </div>
     </div>
   </div>
@@ -2534,59 +2279,28 @@ cd mcp-server &amp;&amp; npm install &amp;&amp; npm run build</code></pre>
   <!-- Knowledge & Reference -->
   <div class="mcp-category"><span class="cat-dot" style="background:var(--teal);"></span> Knowledge &amp; Reference</div>
   <div class="mcp-grid">
-    <div class="mcp-card" style="--card-accent:var(--teal);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--teal);" onclick="openMcpModal('Transcript API')" title="Click to view setup">
       <div class="mcp-icon" style="background:var(--teal-dim);">&#127909;</div>
       <div class="mcp-info">
         <h3>Transcript API</h3>
         <div class="mcp-desc">YouTube and podcast transcripts.</div>
         <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> OAuth (triggers browser on first connect). Sign up at <a href="https://transcriptapi.com" target="_blank" rel="noopener">transcriptapi.com</a>.</div>
-            <div class="setup-label">Install (global, via jq)</div>
-<pre><code>jq '.mcpServers["transcript-api"] = {"type":"http","url":"https://transcriptapi.com/mcp"}' ~/.claude.json &gt; /tmp/t &amp;&amp; mv /tmp/t ~/.claude.json</code></pre>
-            <div class="setup-note">Restart Claude Code, then authenticate via the OAuth browser flow.</div>
-          </div>
-        </details>
       </div>
     </div>
-    <div class="mcp-card" style="--card-accent:var(--teal);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--teal);" onclick="openMcpModal('Paper')" title="Click to view setup">
       <div class="mcp-icon" style="background:var(--teal-dim);">&#128220;</div>
       <div class="mcp-info">
         <h3>Paper</h3>
         <div class="mcp-desc">Local document editing and note-taking service.</div>
         <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">localhost</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> none (local service). Requires the Paper app running locally on port 29979.</div>
-            <div class="setup-label">Install (global, via jq)</div>
-<pre><code>jq '.mcpServers.paper = {"type":"http","url":"http://127.0.0.1:29979/mcp"}' ~/.claude.json &gt; /tmp/t &amp;&amp; mv /tmp/t ~/.claude.json</code></pre>
-            <div class="setup-note">Start the Paper app before using. Restart Claude Code after adding.</div>
-          </div>
-        </details>
       </div>
     </div>
-    <div class="mcp-card" style="--card-accent:var(--teal);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--teal);" onclick="openMcpModal('OpenAI Developer Docs')" title="Click to view setup">
       <div class="mcp-icon" style="background:var(--teal-dim);">&#128218;</div>
       <div class="mcp-info">
         <h3>OpenAI Developer Docs</h3>
         <div class="mcp-desc">OpenAI developer documentation.</div>
         <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">settings.json</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> none. Configured in <code>~/.claude/settings.json</code> (not <code>~/.claude.json</code>).</div>
-            <div class="setup-label">Install (settings override)</div>
-<pre><code># Add to ~/.claude/settings.json under "mcpServers":
-"openaiDeveloperDocs": {
-  "type": "http",
-  "url": "https://developers.openai.com/mcp"
-}</code></pre>
-            <div class="setup-note">Restart Claude Code after adding.</div>
-          </div>
-        </details>
       </div>
     </div>
   </div>
@@ -2594,96 +2308,20 @@ cd mcp-server &amp;&amp; npm install &amp;&amp; npm run build</code></pre>
   <!-- Claude.ai Remote -->
   <div class="mcp-category"><span class="cat-dot" style="background:var(--pink);"></span> Claude.ai Remote</div>
   <div class="mcp-grid">
-    <div class="mcp-card" style="--card-accent:var(--pink);">
-      <div class="mcp-icon" style="background:var(--pink-dim);">&#128270;</div>
-      <div class="mcp-info">
-        <h3>Ahrefs</h3>
-        <div class="mcp-desc">SEO analytics, keyword research, backlinks, site explorer.</div>
-        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span><span class="tag">claude.ai</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> OAuth via <a href="https://claude.ai/settings/connectors" target="_blank" rel="noopener">claude.ai connectors</a>. Requires an Ahrefs account.</div>
-            <div class="setup-label">Install</div>
-<pre><code>Go to claude.ai → Settings → Connectors → Add → Ahrefs → Connect</code></pre>
-            <div class="setup-note">Enabled per-project in the Claude Code UI. Values in API responses are in USD cents.</div>
-          </div>
-        </details>
-      </div>
-    </div>
-    <div class="mcp-card" style="--card-accent:var(--pink);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--pink);" onclick="openMcpModal('Gmail')" title="Click to view setup">
       <div class="mcp-icon" style="background:var(--pink-dim);">&#128231;</div>
       <div class="mcp-info">
         <h3>Gmail</h3>
         <div class="mcp-desc">Email management, search, drafts, labels.</div>
         <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span><span class="tag">claude.ai</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> OAuth via <a href="https://claude.ai/settings/connectors" target="_blank" rel="noopener">claude.ai connectors</a>. Uses your Google account.</div>
-            <div class="setup-label">Install</div>
-<pre><code>Go to claude.ai → Settings → Connectors → Add → Gmail → Connect</code></pre>
-            <div class="setup-note">Enable per-project in Claude Code. Read-only by default; grant send scope in consent screen if needed.</div>
-          </div>
-        </details>
       </div>
     </div>
-    <div class="mcp-card" style="--card-accent:var(--pink);">
-      <div class="mcp-icon" style="background:var(--pink-dim);">&#128197;</div>
-      <div class="mcp-info">
-        <h3>Google Calendar</h3>
-        <div class="mcp-desc">Events, scheduling, free time lookups.</div>
-        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span><span class="tag">claude.ai</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> OAuth via <a href="https://claude.ai/settings/connectors" target="_blank" rel="noopener">claude.ai connectors</a>. Uses your Google account.</div>
-            <div class="setup-label">Install</div>
-<pre><code>Go to claude.ai → Settings → Connectors → Add → Google Calendar → Connect</code></pre>
-            <div class="setup-note">Enable per-project in Claude Code. Respects your default calendar timezone.</div>
-          </div>
-        </details>
-      </div>
-    </div>
-    <div class="mcp-card" style="--card-accent:var(--pink);">
+    <div class="mcp-card card-clickable" style="--card-accent:var(--pink);" onclick="openMcpModal('Clay')" title="Click to view setup">
       <div class="mcp-icon" style="background:var(--pink-dim);">&#128202;</div>
       <div class="mcp-info">
         <h3>Clay</h3>
         <div class="mcp-desc">Data enrichment and CRM workflows.</div>
         <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span><span class="tag">claude.ai</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> OAuth via <a href="https://claude.ai/settings/connectors" target="_blank" rel="noopener">claude.ai connectors</a>. Requires a Clay account.</div>
-            <div class="setup-label">Install</div>
-<pre><code>Go to claude.ai → Settings → Connectors → Add → Clay → Connect</code></pre>
-            <div class="setup-note">Enable per-project in Claude Code for enrichment and workflow tools.</div>
-          </div>
-        </details>
-      </div>
-    </div>
-  </div>
-
-  <!-- SEO & Marketing -->
-  <div class="mcp-category"><span class="cat-dot" style="background:var(--blue);"></span> SEO &amp; Marketing</div>
-  <div class="mcp-grid">
-    <div class="mcp-card" style="--card-accent:var(--blue);">
-      <div class="mcp-icon" style="background:var(--blue-dim);">&#128269;</div>
-      <div class="mcp-info">
-        <h3>Semrush</h3>
-        <div class="mcp-desc">Keyword research, domain analytics, SERP tracking, competitor insights.</div>
-        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span><span class="tag">mcp.semrush.com</span></div>
-        <details class="mcp-setup">
-          <summary>Setup</summary>
-          <div class="setup-body">
-            <div class="setup-meta"><strong>Auth:</strong> OAuth 2.1 (browser flow on first connect). Requires an active Semrush subscription. Docs: <a href="https://developer.semrush.com/api/introduction/semrush-mcp/" target="_blank" rel="noopener">developer.semrush.com</a>.</div>
-            <div class="setup-label">Install (global, via jq)</div>
-<pre><code>jq '.mcpServers.semrush = {"type":"http","url":"https://mcp.semrush.com/v1/mcp"}' ~/.claude.json &gt; /tmp/t &amp;&amp; mv /tmp/t ~/.claude.json</code></pre>
-            <div class="setup-label">Or via Claude Code CLI (outside a running session)</div>
-<pre><code>claude mcp add semrush https://mcp.semrush.com/v1/mcp -t http</code></pre>
-            <div class="setup-note">Restart Claude Code after adding. The first tool call opens a browser to authorize with your Semrush account.</div>
-          </div>
-        </details>
       </div>
     </div>
   </div>
@@ -4144,6 +3782,12 @@ Then tell me to restart Claude Code for the agent to become available.`,
     model: 'Opus',
     tools: 'Read, Write, Edit, Bash, Grep, Glob',
     color: 'pink',
+    installPrompt: `Install the carousel-generator agent in my Claude Code setup.
+
+Run these commands:
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/carousel-generator.md -o ~/.claude/agents/carousel-generator.md
+
+Then tell me to restart Claude Code for the agent to become available.`,
     content: `
       <div class="persona-quote">You are a LinkedIn carousel content specialist. You create visually compelling carousel posts that drive engagement by combining persuasive copywriting with clean, professional slide design.</div>
       <h2>What It Does</h2>
@@ -4192,6 +3836,12 @@ Then tell me to restart Claude Code for the agent to become available.`,
     model: 'Opus',
     tools: 'All tools',
     color: 'amber',
+    installPrompt: `Install the sdr-blueprint agent in my Claude Code setup.
+
+Run these commands:
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/sdr-blueprint.md -o ~/.claude/agents/sdr-blueprint.md
+
+Then tell me to restart Claude Code for the agent to become available.`,
     content: `
       <div class="persona-quote">You are an outbound sales systems architect. You design and build complete SDR (Sales Development Representative) infrastructure from targeting to conversion.</div>
       <h2>What It Does</h2>
@@ -4214,6 +3864,12 @@ Then tell me to restart Claude Code for the agent to become available.`,
     model: 'Opus',
     tools: 'Read, Write, Bash, Web',
     color: 'teal',
+    installPrompt: `Install the greatest-people agent in my Claude Code setup.
+
+Run these commands:
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/greatest-people.md -o ~/.claude/agents/greatest-people.md
+
+Then tell me to restart Claude Code for the agent to become available.`,
     content: `
       <div class="persona-quote">You are a biographical researcher and pattern analyst who studies history's most successful people to extract actionable principles and mental models.</div>
       <h2>What It Does</h2>
@@ -4235,6 +3891,12 @@ Then tell me to restart Claude Code for the agent to become available.`,
     model: 'Opus',
     tools: 'Read, Write, Bash, Web',
     color: 'teal',
+    installPrompt: `Install the successful-companies agent in my Claude Code setup.
+
+Run these commands:
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/successful-companies.md -o ~/.claude/agents/successful-companies.md
+
+Then tell me to restart Claude Code for the agent to become available.`,
     content: `
       <div class="persona-quote">You are a business strategy researcher who studies successful companies to understand what makes them win in their markets.</div>
       <h2>What It Does</h2>
@@ -4985,6 +4647,489 @@ After running the command, restart Claude Code and authenticate in your browser 
         <li>Get file metadata</li>
       </ul>
     `
+  },
+  'Playwright': {
+    icon: '&#127917;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the Playwright MCP server in my Claude Code setup.
+
+Playwright needs no auth. It runs headless Chromium locally.
+
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead:
+
+jq '.mcpServers.playwright = {"type": "stdio", "command": "npx", "args": ["@playwright/mcp@latest", "--viewport-size=1728,1013"]}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
+
+Drop the --viewport-size argument to use the Playwright default. Restart Claude Code after adding.`,
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>STDIO</strong></td></tr>
+        <tr><td>Command</td><td><code>npx @playwright/mcp@latest</code></td></tr>
+        <tr><td>Auth</td><td>none</td></tr>
+        <tr><td>Config file</td><td><code>~/.claude.json</code> (global mcpServers)</td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>Navigate, click, type, screenshot</li>
+        <li>Full accessibility tree snapshots</li>
+        <li>Network request logging</li>
+        <li>Console message reading</li>
+        <li>Headless Chromium by default; configurable viewport</li>
+      </ul>
+    `
+  },
+  'Chrome DevTools': {
+    icon: '&#128295;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the Chrome DevTools MCP server in my Claude Code setup.
+
+This server drives Chrome directly via the DevTools Protocol. No auth, but you need Chrome installed locally.
+
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead:
+
+jq '.mcpServers["chrome-devtools"] = {"command": "npx", "args": ["chrome-devtools-mcp@latest"]}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
+
+Restart Claude Code after adding.`,
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>STDIO</strong></td></tr>
+        <tr><td>Command</td><td><code>npx chrome-devtools-mcp@latest</code></td></tr>
+        <tr><td>Auth</td><td>none</td></tr>
+        <tr><td>Requires</td><td>Chrome installed locally</td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>Lighthouse audits, performance traces</li>
+        <li>Network request inspection</li>
+        <li>JavaScript evaluation in the page</li>
+        <li>DOM snapshots and screenshots</li>
+        <li>Uses the real Chrome install, not a headless binary</li>
+      </ul>
+    `
+  },
+  'Maestro': {
+    icon: '&#128241;', iconBg: 'var(--green-dim)', color: 'green',
+    installPrompt: `Install the Maestro MCP server in my Claude Code setup.
+
+Before you do anything, ask me: "Do you have the Maestro CLI installed already?"
+
+If I DON'T have it installed, walk me through:
+brew tap mobile-dev-inc/tap && brew install maestro
+
+Once Maestro is installed, register the MCP.
+
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead:
+
+jq '.mcpServers.maestro = {"type": "stdio", "command": "maestro", "args": ["mcp"]}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
+
+Restart Claude Code. You also need Android Studio (for Android emulators) or Xcode (for iOS simulators) to run flows.`,
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>STDIO</strong></td></tr>
+        <tr><td>Command</td><td><code>maestro mcp</code></td></tr>
+        <tr><td>Auth</td><td>none</td></tr>
+        <tr><td>Requires</td><td>Maestro CLI + Android Studio or Xcode</td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>Run Maestro flows on simulators and real devices</li>
+        <li>Tap, scroll, input text, assert UI state</li>
+        <li>View hierarchy inspection</li>
+        <li>Screenshots and device control</li>
+      </ul>
+    `
+  },
+  'Miro': {
+    icon: '&#128203;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the Miro MCP server in my Claude Code setup.
+
+Uses OAuth. No manual token needed; a browser popup will ask for authorization on first use.
+
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead:
+
+jq '.mcpServers.miro = {"type": "http", "url": "https://mcp.miro.com/"}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
+
+Restart Claude Code and authenticate in the browser when prompted.`,
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>HTTP</strong></td></tr>
+        <tr><td>URL</td><td><code>https://mcp.miro.com/</code></td></tr>
+        <tr><td>Auth</td><td>OAuth (browser popup)</td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>Create and edit Miro boards</li>
+        <li>Add shapes, connectors, sticky notes, text</li>
+        <li>Read existing board content</li>
+      </ul>
+    `
+  },
+  'Buffer': {
+    icon: '&#128228;', iconBg: 'var(--red-dim)', color: 'red',
+    installPrompt: `Install the Buffer MCP server in my Claude Code setup.
+
+Before you do anything, ask me: "Do you want OAuth (browser) or a bearer token (for scripting)?"
+
+If OAuth: use the claude mcp add command below. A browser popup will handle authorization on first use.
+
+claude mcp add buffer https://mcp.buffer.com/mcp -t http
+
+If bearer token:
+- Tell me to create a token at https://publish.buffer.com/settings/api
+- Ask me to paste it
+- Then run this jq command (replace YOUR_TOKEN):
+
+jq --arg tok "YOUR_TOKEN" '.mcpServers.buffer = {"command": "npx", "args": ["-y", "mcp-remote", "https://mcp.buffer.com/mcp", "--header", ("Authorization: Bearer " + $tok)]}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
+
+Restart Claude Code after adding.`,
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>HTTP</strong></td></tr>
+        <tr><td>URL</td><td><code>https://mcp.buffer.com/mcp</code></td></tr>
+        <tr><td>Auth</td><td>OAuth or bearer token</td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>Create, schedule, list, delete posts</li>
+        <li>Manage channels and organizations</li>
+        <li>Capture content ideas</li>
+        <li>GraphQL introspection and raw query/mutation for advanced use</li>
+      </ul>
+    `
+  },
+  'Stitch': {
+    icon: '&#127912;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the Stitch MCP server in my Claude Code setup.
+
+Stitch is a Google product. Auth uses Google OAuth (browser popup on first use).
+
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead:
+
+jq '.mcpServers.stitch = {"type": "http", "url": "https://stitch.googleapis.com/mcp"}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
+
+Or via the CLI:
+claude mcp add stitch https://stitch.googleapis.com/mcp -t http
+
+Restart Claude Code and authenticate with your Google account when prompted.`,
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>HTTP</strong></td></tr>
+        <tr><td>URL</td><td><code>https://stitch.googleapis.com/mcp</code></td></tr>
+        <tr><td>Auth</td><td>Google OAuth</td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>Generate UI screens from text prompts</li>
+        <li>Create and manage design systems</li>
+        <li>Edit screens and generate variants</li>
+        <li>Project and screen management</li>
+      </ul>
+    `
+  },
+  'Excalidraw': {
+    icon: '&#9998;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the Excalidraw MCP server in my Claude Code setup.
+
+This MCP needs to be built from source. The companion Excalidraw web app must run locally on port 3333.
+
+Step 1: build from source
+git clone https://github.com/excalidraw/mcp-server
+cd mcp-server && npm install && npm run build
+
+Step 2: register the MCP. IMPORTANT: do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (replace ABS_PATH with the absolute path to your cloned mcp-server directory):
+
+jq --arg p "ABS_PATH/dist/index.js" '.mcpServers.excalidraw = {"type": "stdio", "command": "node", "args": [$p], "env": {"ENABLE_CANVAS_SYNC": "true", "EXPRESS_SERVER_URL": "http://localhost:3333"}}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
+
+Step 3: start the Excalidraw companion app on localhost:3333, then restart Claude Code.`,
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>STDIO</strong></td></tr>
+        <tr><td>Command</td><td><code>node /path/to/mcp-server/dist/index.js</code></td></tr>
+        <tr><td>Auth</td><td>none (local)</td></tr>
+        <tr><td>Requires</td><td>Excalidraw companion running on localhost:3333</td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>Create and update Excalidraw shapes on the canvas</li>
+        <li>Batch-create elements, align, distribute, group</li>
+        <li>Mermaid to Excalidraw conversion</li>
+        <li>Export scenes and screenshots</li>
+      </ul>
+    `
+  },
+  'Ascend': {
+    icon: '&#127919;', iconBg: 'var(--purple-dim)', color: 'purple',
+    installPrompt: `Install the Ascend MCP server in my Claude Code setup.
+
+Ascend is a personal productivity dashboard hosted at https://ascend.nativeai.agency. Auth is OAuth (browser popup on first use).
+
+claude mcp add ascend https://ascend.nativeai.agency/api/mcp -t http
+
+Restart Claude Code and authenticate in the browser when prompted.`,
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>HTTP</strong></td></tr>
+        <tr><td>URL</td><td><code>https://ascend.nativeai.agency/api/mcp</code></td></tr>
+        <tr><td>Auth</td><td>OAuth</td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>Goals, categories, todos, daily Big3</li>
+        <li>Progress tracking, stats, timeline</li>
+        <li>Context / notes store with search</li>
+        <li>Dashboard and priority views</li>
+      </ul>
+    `
+  },
+  'Paper': {
+    icon: '&#128220;', iconBg: 'var(--teal-dim)', color: 'teal',
+    installPrompt: `Install the Paper MCP server in my Claude Code setup.
+
+Paper is a local note-taking app that exposes an MCP endpoint on http://127.0.0.1:29979/mcp. Start the Paper app first, then add the MCP.
+
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead:
+
+jq '.mcpServers.paper = {"type": "http", "url": "http://127.0.0.1:29979/mcp"}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
+
+Restart Claude Code after adding. Paper must be running for the MCP to work.`,
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>HTTP</strong></td></tr>
+        <tr><td>URL</td><td><code>http://127.0.0.1:29979/mcp</code></td></tr>
+        <tr><td>Auth</td><td>none (local)</td></tr>
+        <tr><td>Requires</td><td>Paper app running on port 29979</td></tr>
+      </table>
+      <h2>Notes</h2>
+      <ul>
+        <li>Local-only; will fail when Paper is not running</li>
+        <li>Useful for reading and editing personal notes from Claude</li>
+      </ul>
+    `
+  },
+  'Semrush': {
+    icon: '&#128269;', iconBg: 'var(--blue-dim)', color: 'blue',
+    installPrompt: `Install the Semrush MCP server in my Claude Code setup.
+
+Before you do anything, ask me: "Do you have an active Semrush subscription? The MCP requires one."
+
+If I have a subscription: add the MCP using the jq command below. Auth is OAuth 2.1 (browser popup on first use). Official docs: https://developer.semrush.com/api/introduction/semrush-mcp/
+
+If I do not have a subscription: direct me to https://www.semrush.com/pricing/ first, then proceed.
+
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead:
+
+jq '.mcpServers.semrush = {"type": "http", "url": "https://mcp.semrush.com/v1/mcp"}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
+
+Or via the CLI:
+claude mcp add semrush https://mcp.semrush.com/v1/mcp -t http
+
+Restart Claude Code. The first tool call opens a browser to authorize with my Semrush account.`,
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>HTTP</strong></td></tr>
+        <tr><td>URL</td><td><code>https://mcp.semrush.com/v1/mcp</code></td></tr>
+        <tr><td>Auth</td><td>OAuth 2.1 (browser popup)</td></tr>
+        <tr><td>Docs</td><td><a href="https://developer.semrush.com/api/introduction/semrush-mcp/" target="_blank" rel="noopener">developer.semrush.com/api/introduction/semrush-mcp</a></td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>Keyword research: volume, difficulty, related terms</li>
+        <li>Domain analytics: organic/paid traffic, top pages, competitors</li>
+        <li>Backlink analysis</li>
+        <li>SERP tracking and competitor SERP comparison</li>
+        <li>Site audit issues and page-level data</li>
+      </ul>
+      <h2>Notes</h2>
+      <p>Requires an active Semrush subscription. Costs API units against your plan's quota.</p>
+    `
+  },
+  'Ahrefs': {
+    icon: '&#128270;', iconBg: 'var(--blue-dim)', color: 'blue',
+    installPrompt: `Install the Ahrefs MCP connector on claude.ai.
+
+Ahrefs runs as a remote MCP connector on claude.ai (not a local ~/.claude.json entry). Setup is UI-based.
+
+Walk me through this:
+1. Open https://claude.ai/settings/connectors
+2. Click "Add connector"
+3. Find Ahrefs in the directory and click Connect
+4. Complete the OAuth flow in the browser
+5. In Claude Code, enable the connector per project via /mcp
+
+Requires an active Ahrefs subscription. API responses return monetary values in USD cents; divide by 100 for USD.`,
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>claude.ai connector</strong></td></tr>
+        <tr><td>Setup</td><td><a href="https://claude.ai/settings/connectors" target="_blank" rel="noopener">claude.ai → Settings → Connectors → Ahrefs</a></td></tr>
+        <tr><td>Auth</td><td>OAuth via claude.ai</td></tr>
+        <tr><td>Config file</td><td>none (managed on claude.ai, enabled per-project in Claude Code)</td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>Site Explorer: organic keywords, backlinks, pages by traffic</li>
+        <li>Keywords Explorer: volume, difficulty, related terms, suggestions</li>
+        <li>Rank Tracker overview and competitor stats</li>
+        <li>Site Audit issues, page content, explorer</li>
+        <li>Web analytics: traffic sources, devices, countries, pages</li>
+        <li>Brand Radar and GSC integration</li>
+      </ul>
+      <h2>Notes</h2>
+      <p>Monetary values (value, org_cost, paid_cost, traffic_value) are returned in USD cents. Divide by 100 to display in USD. Requires an active Ahrefs subscription.</p>
+    `
+  },
+  'Gmail': {
+    icon: '&#128231;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the Gmail MCP connector on claude.ai.
+
+Gmail runs as a remote MCP connector on claude.ai (not a local ~/.claude.json entry). Setup is UI-based.
+
+Walk me through this:
+1. Open https://claude.ai/settings/connectors
+2. Click "Add connector"
+3. Find Gmail in the directory and click Connect
+4. Complete Google OAuth in the browser, granting access to my Gmail account
+5. In Claude Code, enable the connector per project via /mcp
+
+Default scopes are read + compose. Grant send scope in the OAuth consent screen if you want the MCP to send mail on your behalf.`,
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>claude.ai connector</strong></td></tr>
+        <tr><td>Setup</td><td><a href="https://claude.ai/settings/connectors" target="_blank" rel="noopener">claude.ai → Settings → Connectors → Gmail</a></td></tr>
+        <tr><td>Auth</td><td>Google OAuth via claude.ai</td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>Search messages, read threads, list labels</li>
+        <li>Create drafts, list drafts</li>
+        <li>Get profile info</li>
+      </ul>
+    `
+  },
+  'Google Calendar': {
+    icon: '&#128197;', iconBg: 'var(--purple-dim)', color: 'purple',
+    installPrompt: `Install the Google Calendar MCP connector on claude.ai.
+
+Google Calendar runs as a remote MCP connector on claude.ai (not a local ~/.claude.json entry). Setup is UI-based.
+
+Walk me through this:
+1. Open https://claude.ai/settings/connectors
+2. Click "Add connector"
+3. Find Google Calendar in the directory and click Connect
+4. Complete Google OAuth in the browser
+5. In Claude Code, enable the connector per project via /mcp
+
+The MCP respects my default calendar timezone when scheduling events.`,
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>claude.ai connector</strong></td></tr>
+        <tr><td>Setup</td><td><a href="https://claude.ai/settings/connectors" target="_blank" rel="noopener">claude.ai → Settings → Connectors → Google Calendar</a></td></tr>
+        <tr><td>Auth</td><td>Google OAuth via claude.ai</td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>List calendars and events</li>
+        <li>Create, update, delete events</li>
+        <li>Find meeting times and free slots</li>
+        <li>Respond to event invites</li>
+      </ul>
+    `
+  },
+  'Postiz': {
+    icon: '&#128226;', iconBg: 'var(--red-dim)', color: 'red',
+    installPrompt: `Install the Postiz MCP server in my Claude Code setup.
+
+Postiz is an open-source social media scheduler. The MCP is community-maintained (oculairmedia/postizz-MCP) and needs a running Postiz instance (self-hosted or cloud at https://postiz.com) plus an API key.
+
+Before you do anything, ask me:
+1. "Do you have a Postiz instance running already (cloud or self-hosted)?"
+2. "Do you have your Postiz API URL (e.g. https://platform.postiz.com/api) and API key ready?"
+
+If I DON'T have Postiz: point me to https://postiz.com (cloud) or https://docs.postiz.com/quickstart (self-hosted Docker Compose). I need a social channel connected before the MCP will do anything useful.
+
+If I HAVE the instance and key, walk me through:
+
+Step 1: run the community MCP server in Docker (replace YOUR_URL and YOUR_KEY):
+
+docker run -d --name postiz-mcp -p 3084:3084 -e POSTIZ_API_URL=YOUR_URL -e POSTIZ_API_KEY=YOUR_KEY ghcr.io/oculairmedia/postizz-mcp:latest
+
+Step 2: register the MCP in Claude Code. IMPORTANT: do NOT use Read/Edit tools on ~/.claude.json. Use jq via Bash:
+
+jq '.mcpServers.postiz = {"type": "http", "url": "http://localhost:3084/sse"}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json
+
+Step 3: restart Claude Code. The docker container must stay running for the MCP to respond.`,
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>HTTP / SSE</strong></td></tr>
+        <tr><td>MCP server</td><td>Community: <a href="https://github.com/oculairmedia/postizz-MCP" target="_blank" rel="noopener">oculairmedia/postizz-MCP</a></td></tr>
+        <tr><td>Local URL</td><td><code>http://localhost:3084/sse</code></td></tr>
+        <tr><td>Requires</td><td>Postiz instance + API key</td></tr>
+        <tr><td>Docs</td><td><a href="https://docs.postiz.com/quickstart" target="_blank" rel="noopener">docs.postiz.com</a></td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li><code>create-post</code>: schedule posts across connected channels</li>
+        <li><code>get-posts</code>: list scheduled and published posts (date range required)</li>
+        <li><code>get-integrations</code>: list connected social channels</li>
+        <li><code>get-self</code>: inspect the authenticated user</li>
+      </ul>
+      <h2>Notes</h2>
+      <p>Postiz is open source and supports 20+ networks (LinkedIn, X, Instagram, Threads, TikTok, YouTube, Bluesky, Discord, Slack, Mastodon, Reddit, Pinterest, Medium, Dev.to, Hashnode, and more). The Postiz API key is generated inside the Postiz dashboard under developer settings. The Docker container must keep running for the MCP to respond; add it to your startup or a process manager if you use it often.</p>
+    `
+  },
+  'Clay': {
+    icon: '&#128202;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the Clay MCP connector on claude.ai.
+
+Clay runs as a remote MCP connector on claude.ai (not a local ~/.claude.json entry). Setup is UI-based.
+
+Walk me through this:
+1. Open https://claude.ai/settings/connectors
+2. Click "Add connector"
+3. Find Clay in the directory and click Connect
+4. Complete OAuth with my Clay account
+5. In Claude Code, enable the connector per project via /mcp
+
+Requires an active Clay account.`,
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>claude.ai connector</strong></td></tr>
+        <tr><td>Setup</td><td><a href="https://claude.ai/settings/connectors" target="_blank" rel="noopener">claude.ai → Settings → Connectors → Clay</a></td></tr>
+        <tr><td>Auth</td><td>OAuth via claude.ai</td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>Data enrichment workflows</li>
+        <li>CRM-style lookups and appends</li>
+        <li>Table-driven automations</li>
+      </ul>
+    `
   }
 };
 
@@ -5584,6 +5729,13 @@ Then tell me to restart Claude Code. You'll also need GeminiWatermarkTool instal
   },
   '/loop': {
     icon: '&#128260;', iconBg: 'var(--blue-dim)', color: 'blue',
+    installPrompt: `The /loop skill ships with Claude Code by default. Nothing to install.
+
+Please verify it is registered in my current Claude Code install:
+1. List available skills and confirm /loop is present.
+2. If it is missing, tell me my Claude Code CLI may be outdated and suggest running \`claude update\`.
+
+Usage reminder: /loop <interval> <prompt or slash command>. Omit the interval to let the model self-pace. Example: /loop 5m /babysit-prs`,
     content: `
       <div class="persona-quote">Built-in Claude Code skill for running a prompt or slash command on a recurring interval.</div>
       <h2>What It Does</h2>
@@ -5606,6 +5758,13 @@ Then tell me to restart Claude Code. You'll also need GeminiWatermarkTool instal
   },
   '/schedule': {
     icon: '&#128339;', iconBg: 'var(--blue-dim)', color: 'blue',
+    installPrompt: `The /schedule skill ships with Claude Code by default. Nothing to install.
+
+Please verify it is registered in my current Claude Code install:
+1. List available skills and confirm /schedule is present.
+2. If it is missing, tell me my Claude Code CLI may be outdated and suggest running \`claude update\`.
+
+Usage reminder: /schedule creates, lists, updates, and runs scheduled remote agents (cron triggers). Use for recurring remote Claude Code runs.`,
     content: `
       <div class="persona-quote">Built-in skill for managing scheduled remote agents (cron triggers) that run Claude Code on a schedule.</div>
       <h2>What It Does</h2>
@@ -5630,6 +5789,13 @@ Then tell me to restart Claude Code. You'll also need GeminiWatermarkTool instal
   },
   '/update-config': {
     icon: '&#9881;&#65039;', iconBg: 'var(--blue-dim)', color: 'blue',
+    installPrompt: `The /update-config skill ships with Claude Code by default. Nothing to install.
+
+Please verify it is registered in my current Claude Code install:
+1. List available skills and confirm /update-config is present.
+2. If it is missing, tell me my Claude Code CLI may be outdated and suggest running \`claude update\`.
+
+Usage reminder: /update-config edits the Claude Code harness configuration via settings.json (permissions, hooks, env vars, automated behaviors like "each time X do Y").`,
     content: `
       <div class="persona-quote">Built-in skill for editing the Claude Code harness configuration: settings.json, hooks, permissions, and automated behaviors.</div>
       <h2>What It Does</h2>
@@ -5653,6 +5819,13 @@ Then tell me to restart Claude Code. You'll also need GeminiWatermarkTool instal
   },
   '/simplify': {
     icon: '&#128296;', iconBg: 'var(--blue-dim)', color: 'blue',
+    installPrompt: `The /simplify skill ships with Claude Code by default. Nothing to install.
+
+Please verify it is registered in my current Claude Code install:
+1. List available skills and confirm /simplify is present.
+2. If it is missing, tell me my Claude Code CLI may be outdated and suggest running \`claude update\`.
+
+Usage reminder: /simplify reviews changed code for reuse, quality, and efficiency. Run it after a batch of edits to catch dead code and over-engineering.`,
     content: `
       <div class="persona-quote">Built-in skill for reviewing and refactoring changed code. Checks for reuse opportunities, dead code, over-engineering, and quality issues, then fixes what it finds.</div>
       <h2>What It Does</h2>
@@ -5675,6 +5848,13 @@ Then tell me to restart Claude Code. You'll also need GeminiWatermarkTool instal
   },
   '/claude-api': {
     icon: '&#129302;', iconBg: 'var(--blue-dim)', color: 'blue',
+    installPrompt: `The /claude-api skill ships with Claude Code by default. Nothing to install.
+
+Please verify it is registered in my current Claude Code install:
+1. List available skills and confirm /claude-api is present.
+2. If it is missing, tell me my Claude Code CLI may be outdated and suggest running \`claude update\`.
+
+Usage reminder: /claude-api helps build, debug, and optimize Claude API and Anthropic SDK applications (prompt caching, tool use, streaming, batching).`,
     content: `
       <div class="persona-quote">Built-in skill for building, debugging, and optimizing Claude API and Anthropic SDK applications. Covers prompt caching, tool use, streaming, and batching.</div>
       <h2>What It Does</h2>
@@ -5696,6 +5876,16 @@ Then tell me to restart Claude Code. You'll also need GeminiWatermarkTool instal
     `
   }
 };
+
+// ===== MCP MODAL OPENER =====
+function openMcpModal(key) {
+  const data = mcpServers[key];
+  if (!data) {
+    console.warn('No MCP data for', key);
+    return;
+  }
+  openGenericModal(data, key);
+}
 
 // ===== GENERIC MODAL OPENER =====
 function openGenericModal(data, title) {
@@ -5743,19 +5933,9 @@ function copyInstallPrompt(itemName) {
   });
 }
 
-// ===== AUTO-WIRE MCP CARDS =====
+// ===== AUTO-WIRE CARDS =====
 document.addEventListener('DOMContentLoaded', function() {
-  // Wire MCP cards
-  document.querySelectorAll('#mcp .mcp-card').forEach(function(card) {
-    var h3 = card.querySelector('h3');
-    if (h3 && mcpServers[h3.textContent.trim()]) {
-      card.style.cursor = 'pointer';
-      card.title = 'Click to view full configuration';
-      card.addEventListener('click', function() {
-        openGenericModal(mcpServers[h3.textContent.trim()], h3.textContent.trim());
-      });
-    }
-  });
+  // MCP cards are wired inline via onclick="openMcpModal('...')" in the HTML.
 
   // Wire Skills cards
   document.querySelectorAll('#skills .card').forEach(function(card) {
