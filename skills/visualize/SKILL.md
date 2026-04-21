@@ -1,10 +1,31 @@
 # /visualize <source>
 
-Transform any text source (book, article, essay, notes) into a premium visual HTML page that explains the key principles, frameworks, and ideas. Optionally personalized to the reader based on available context.
+Transform any text source into a premium single-file HTML page.
+
+This skill has TWO modes, chosen automatically based on the source shape:
+
+- **Mode B — Book/Essay mode** (default): for books, articles, essays, and notes. Explains the key principles, frameworks, and ideas. Optionally personalised to the reader. This is the original mode; see Step 1b onwards.
+- **Mode P — Plan/PRD mode**: for implementation plans, PRDs, strategy docs, roadmaps, proposals, and other structured technical/business documents with sections like "Executive Summary", "Timeline", "Risk Register", "Budget", "Phase Plan". Produces a sticky-nav, scroll-spy, decision-maker-ready presentation with gantt-style timelines, risk heatmaps, and budget charts. See Step 1p onwards.
 
 ## Arguments
 
 - `<source>`: Path to the source file (required). Accepts `.md`, `.txt`, `.pdf`, or any text format. Can also be a URL to scrape.
+
+## Step 0: Detect Mode
+
+After ingesting the source (Step 1 is shared across modes), inspect the markdown structure and pick mode:
+
+**Mode P triggers (any ≥ 2 of these):**
+- Document contains H2 headings named (case-insensitive): "Executive Summary", "Phase Plan", "Risk Register", "Budget", "Success Metrics", "Implementation Plan", "Timeline", "Roadmap", "System Architecture", "Open Questions", "Phase 1" / "Phase 2" / "Week 1" etc.
+- Document path contains `/plans/`, `/roadmaps/`, `PRD`, `-plan-`, `strategy`, `rfc-`, or similar
+- Document has ≥ 3 tables AND at least one uses weeks/dates OR currency (€, $) OR risk/impact columns
+
+**Mode B triggers (the default if Mode P does not fire):**
+- Single-author long-form (book, essay, article)
+- Has chapters, principles, quotes
+- Source is a book or essay URL/PDF
+
+If both modes could apply, pick Mode P (structured docs benefit more from structured visualisation) but TELL the user and offer to switch if they prefer Mode B.
 
 ## Step 1: Ingest the Source and Ensure a Markdown Version Exists
 
@@ -19,7 +40,7 @@ Before doing any conversion, check if a `.md` file with the same base name alrea
 - **`.md`**: Already in working format. Use directly.
 - **`.txt`**: Rename/copy to `.md` or treat as markdown directly (text files are already plain text).
 - **`.pdf`**: Read the full PDF using the Read tool with `pages` parameter (20 pages at a time for large files). Convert the extracted content into well-structured markdown: add headings for chapters/sections, preserve paragraph breaks, format lists, and clean up any extraction artifacts (broken words, stray page numbers, headers/footers). Save the resulting markdown as `<source-name>.md` in the same directory as the PDF.
-- **URL**: Use web scraping tools to fetch the page content. Save the scraped markdown as `<topic-name>.md` in an appropriate directory.
+- **URL**: Use Firecrawl MCP (`mcp__firecrawl__firecrawl_scrape`) to scrape the page content. Save the scraped markdown as `<topic-name>.md` in the appropriate Knowledge directory.
 - **Other formats** (`.epub`, `.docx`, `.rtf`, etc.): Attempt to read with the Read tool. If the content is intelligible, convert it to clean markdown and save as `<source-name>.md` alongside the original. If the content is garbled or unreadable, inform the user and ask them to provide a `.md` or `.pdf` version instead.
 
 ### After conversion
@@ -58,7 +79,13 @@ Write these down as structured notes before moving to HTML generation.
 
 ## Step 4: If Personalized Mode, Read Context
 
-If the user chose personalized (B), look for personal context files that describe the reader's situation. Common locations include a `me/` or `personal/` directory with files like `about.md`, `experience.md`, `skills.md`, `preferences.md`, or a plans directory with goals and current priorities.
+If the user chose personalized (B), read these files to understand their situation:
+
+- `/Users/Shared/Domain/Context/Personal/me/about.md`
+- `/Users/Shared/Domain/Context/Personal/me/experience.md`
+- `/Users/Shared/Domain/Context/Personal/me/skills.md`
+- `/Users/Shared/Domain/Context/Personal/me/preferences.md`
+- `/Users/Shared/Domain/Context/Personal/plans/` (read the master plan or current active plan)
 
 Use this context to:
 - Apply each principle specifically to the reader's situation
@@ -67,11 +94,11 @@ Use this context to:
 - Identify which principles are most relevant to their current challenges
 - Map frameworks to their actual goals, businesses, habits, and circumstances
 
-If no context files exist, ask the user to briefly describe their situation, goals, and current challenges so you can personalize effectively.
+If context files don't exist or the user is not Amadej, ask the user to briefly describe their situation, goals, and current challenges so you can personalize effectively.
 
 ## Step 5: Generate the HTML
 
-Create a single, self-contained HTML file. No external dependencies except Google Fonts. The design language must match this established visual system:
+Create a single, self-contained HTML file. No external dependencies except Google Fonts. The design language must match the established visual system:
 
 ### Design System
 
@@ -154,13 +181,240 @@ Include a `@media (max-width: 380px)` block for small phones with further size r
 
 Save the HTML file in the same directory as the source file, named: `<source-name>-applied.html` (if personalized) or `<source-name>-visual.html` (if principles only).
 
+If the source is a URL, save to `/Users/Shared/Domain/Context/Knowledge/` in an appropriate subfolder.
+
 Tell the user the file path and offer to open it in the browser with `open <path>`.
 
-## Key Rules
+## Key Rules (Mode B)
 
 - Never start generating HTML before getting the user's mode and depth answers
 - The HTML must be a single self-contained file (inline CSS, no external stylesheets beyond Google Fonts)
 - Every section needs both desktop and mobile styling
 - Color scheme should feel intentional and themed to the source material
 - If personalized, read the actual context files; do not guess or fabricate personal details
+- No dashes as punctuation in any text content
+- No dramatic fragment pairs ("Not X. Y.")
 - Quotes must be real quotes from the source, never fabricated
+
+---
+
+# MODE P (Plan / PRD / Strategy Document Mode)
+
+Use this branch when Step 0 selected Mode P. Mode P produces a sticky-nav, scroll-spy, decision-maker-ready single-file HTML with gantt timelines, risk heatmaps, budget charts, and collapsible appendices.
+
+Do NOT ask the "mode / depth" questions from Mode B. Mode P renders the whole document; depth is controlled by collapsible sections, not by trimming content.
+
+## Step 1p: Already Done
+
+Mode P inherits Step 1 ingestion unchanged: convert to `.md` first, save alongside source, work from the `.md`.
+
+## Step 2p: Parse the Document Structure
+
+Produce an internal outline:
+
+- Document title (first H1) and optional subtitle (first paragraph after H1).
+- All H2 sections in order, with their H3 children.
+- For each section: inventory tables, code blocks, fenced mermaid blocks, callouts.
+- Classify each table:
+  - **Timeline** if column headers include "week", "day", "date", "when", "phase", "sprint"
+  - **Risk** if column headers include "likelihood", "impact", "probability", "severity", "mitigation"
+  - **Budget / Cost** if any cell contains `€`, `$`, `£`, `USD`, `EUR`, `GBP`, `/yr`, `/mo`, or "total"
+  - **Metric / SLO** if columns mention targets, SLOs, percentages, time units (ms, s)
+  - **Mapping / Reference** for everything else
+
+Classification drives rendering in Step 4p.
+
+Also detect these high-value elements for the hero:
+- A 5-bullet TL;DR list (if an H2/H3 called "TL;DR" or "5-bullet" exists)
+- Budget totals (first prominent currency figure)
+- Timeline span (first-week to last-week from a phase-plan table)
+- Top 3 risks (first 3 rows of a risk table)
+
+## Step 3p: Apply the Brand
+
+**Nevron** document detection: path contains `/nevron/`, OR the first H1 or first paragraph mentions "Nevron", "NevronCore", "ebiplatform".
+
+If Nevron: delegate to the `nevron-brand` agent via Task tool to fetch current brand tokens. Prompt the agent:
+> I am building a single-file HTML presentation of a Nevron implementation plan. Return: (1) primary colour hex, (2) accent colour hex, (3) success / warning / danger hex, (4) display font family + Google Fonts URL, (5) body font family + Google Fonts URL, (6) any hard constraints (forbidden colours, spacing tokens). Reply as a small markdown table.
+
+Use the returned tokens verbatim in CSS custom properties.
+
+If not Nevron OR the agent fails, use these defaults:
+
+```css
+:root {
+  --c-bg: #0B0F1A;
+  --c-surface: #111726;
+  --c-surface-2: #1A2138;
+  --c-text: #F5F7FB;
+  --c-text-mute: #A7B0C5;
+  --c-primary: #6366F1;
+  --c-accent: #22D3EE;
+  --c-success: #10B981;
+  --c-warning: #F59E0B;
+  --c-danger: #EF4444;
+  --c-border: #2A3250;
+  --font-display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+```
+
+## Step 4p: Generate the HTML
+
+Write ONE single-file HTML document with this structure (adapt to source, but these sections are required when the source provides the data):
+
+### 4p.1 `<head>`
+
+- Viewport meta, theme-color meta, favicon (inline SVG dot in brand primary)
+- Google Fonts preconnect + stylesheet for display + body fonts
+- Inline `<style>` with custom properties from Step 3p and all layout rules
+- Title: document title
+
+### 4p.2 Header bar (sticky)
+
+- Left: brand mark (SVG) + document title condensed
+- Right: print button (`window.print()`), outline toggle (mobile), theme toggle (if light/dark both supported)
+
+### 4p.3 Hero section (full viewport height on desktop)
+
+- Eyebrow label (document version + date)
+- Big H1 (document title, display font)
+- Subtitle paragraph (first paragraph after H1 in source, if present)
+- **TL;DR cards**: 5 cards from the detected TL;DR, each with a number badge + 1-line summary
+- **Snapshot strip**: 3 or 4 big numbers pulled from the document — budget total, timeline span in weeks, risk count, decision count
+- Subtle downward chevron / scroll hint
+
+### 4p.4 Layout
+
+Desktop:
+```
+[sticky header]
+[left sidebar nav: 240px]  [main: flex, max 900px centered]
+```
+
+Mobile:
+```
+[sticky header with hamburger]
+[nav drawer slides from left when open]
+[main content full-width]
+```
+
+### 4p.5 Sticky left sidebar navigation
+
+- Document title (small, muted)
+- Ordered list of all H2 sections with section numbers
+- Nested H3s visible when parent is active
+- Scroll-spy: the currently-in-view section's nav item is highlighted (use IntersectionObserver)
+- On click: smooth scroll to anchor
+- `aria-current="page"` on active item
+
+### 4p.6 Main content (per section)
+
+For each H2 section in source order, output:
+
+```html
+<section id="sec-<slug>" class="plan-section">
+  <header class="plan-section-header">
+    <span class="plan-section-number">01</span>
+    <h2>Executive Summary</h2>
+    <p class="plan-section-lede">{first paragraph}</p>
+  </header>
+  <div class="plan-section-body">
+    {rendered content}
+  </div>
+</section>
+```
+
+Content rendering rules:
+
+- **Paragraphs**: standard, good typography (17px body, 1.6 line-height).
+- **Bullet lists**: standard, but with brand-coloured custom markers.
+- **Ordered lists**: brand-coloured number badges.
+- **Tables (Timeline type)**: render as a horizontal gantt-style track. For a phase plan with weeks 1–8, produce 8 vertical swimlanes; within each, stack task cards. Card shows task title + owner badge + hours. Acceptance criteria go inside `<details>`.
+- **Tables (Risk type)**: render as a grid of risk cards. Each card:
+  - Left border colour by Likelihood × Impact (green = low×low, amber = medium, red = high/critical)
+  - Header: risk name + `Lk | Im` badges
+  - Body: mitigation + detection paragraphs
+  - If the source orders risks by priority, preserve that order
+- **Tables (Budget type)**: render as a two-panel layout. Left: line-item list with label + value right-aligned. Right: horizontal-bar chart (Chart.js) showing item weights. Bottom: total as a prominent card with large number. If two budget tables exist (one-time + recurring), render them side-by-side on desktop, stacked on mobile.
+- **Tables (Metric type)**: render as a responsive stat grid, one card per row. Big number + unit + description. Small target badge.
+- **Tables (Mapping/Reference type)**: native HTML table with sticky header, zebra striping, hover highlighting, horizontal scroll on mobile.
+- **Code blocks**: Prism.js syntax highlighting via CDN. Add a small "Copy" button in the top-right that writes to clipboard. Language label badge in top-left.
+- **Mermaid blocks**: render with mermaid.js via CDN. Centred, max-width 100 %, dark theme consistent with brand.
+- **Quote blocks** (`> `): left-bordered pull quote in muted surface colour.
+
+### 4p.7 Collapsible sections
+
+By default collapse (with a "Show {N} items" button):
+- Risk Register if > 8 rows
+- Week-by-week Phase Plan (one `<details>` per week, collapsed)
+- Every Appendix
+
+User can click to expand. Print mode expands all.
+
+### 4p.8 Footer
+
+- Document version + date
+- "Generated from {source path}" with a copy-path button
+- Back-to-top floating button on mobile (appears after 400 px scroll)
+
+## Step 5p: CDN Dependencies (only when needed)
+
+Include via `<link>` / `<script>` in head or pre-body:
+
+- Google Fonts: display + body fonts resolved in Step 3p
+- `https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js` — ONLY if source has mermaid blocks
+- `https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js` + theme CSS — ONLY if source has code blocks in known languages
+- `https://cdn.jsdelivr.net/npm/chart.js@4` — ONLY if source has a Budget table with ≥ 3 line items
+
+Do not pull in Tailwind, Bootstrap, or any framework. Write plain CSS with custom properties. Under 800 lines of inline CSS. Target output file size < 400 KB.
+
+## Step 6p: Accessibility
+
+- Contrast ratio ≥ 4.5:1 on text
+- All interactive elements tab-focusable with visible focus ring
+- `aria-expanded` on `<details>` + collapsibles
+- `aria-current="page"` on active nav item
+- `prefers-reduced-motion` disables smooth scroll + fade-in transitions
+- Semantic HTML: `<nav>`, `<main>`, `<section>`, `<article>`, `<aside>`, `<header>`, `<footer>`
+
+## Step 7p: Save + Open
+
+- Save to `<source-directory>/<source-basename>-visualization.html` (suffix `-visualization` to distinguish from Mode B's `-visual` / `-applied` suffixes).
+- Run `open <path>` via Bash on macOS to open in the default browser.
+- Report to user in ≤ 40 words: path saved, number of sections rendered, which table types were auto-converted (timeline, risks, budget, metrics).
+
+## Step 8p: Self-Rate Before Announcing Done
+
+Score 1–10 on five criteria:
+
+1. **Visual hierarchy**: can a reader find any section in ≤ 5 s?
+2. **Information fidelity**: is every non-appendix data point from the source present?
+3. **Interaction quality**: scroll-spy, collapsibles, print all working?
+4. **Brand consistency**: feels like a premium Nevron (or unbranded) output?
+5. **File size**: under 500 KB (excluding CDN fetches)?
+
+Any score < 8 → fix before announcing done.
+
+## Mode P Failure Modes to Avoid
+
+- Do NOT output multiple files. One `.html` file only.
+- Do NOT depend on any locally-hosted asset that needs to be served separately.
+- Do NOT translate the source content. Render as written.
+- Do NOT add editorial commentary, caveats, or your own opinions in the output.
+- Do NOT use emoji or long-dashes as punctuation (global rule).
+- Do NOT strip information from tables in the name of "simplification". Convert to visuals OR keep as a table, never silently drop columns.
+- Do NOT render a mermaid block twice (once as mermaid, once as fallback text). Render once via mermaid.js only.
+- Do NOT ask the user mode/depth questions in Mode P. Just render.
+
+## Mode P Examples
+
+```
+/visualize /Users/Shared/Domain/Context/Business/nevron/mobile-apps/implementation-plan-phase1.md
+```
+Generates `…/implementation-plan-phase1-visualization.html` (Nevron-branded) and opens it.
+
+```
+/visualize ./roadmap-q3.md
+```
+Generates `./roadmap-q3-visualization.html` beside the source with neutral default palette.
