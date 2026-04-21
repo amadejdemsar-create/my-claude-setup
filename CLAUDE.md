@@ -4,7 +4,6 @@
 
 ## Model Preference
 
-- **ALWAYS use Opus 4.6 (claude-opus-4-6) for everything:** main session, Task tool subagents, custom agents, plan mode. Never fall back to Sonnet or Haiku regardless of complexity.
 - When using the Task tool, always set `model: "opus"` in the agent configuration.
 - If Claude Code attempts to auto-downgrade to a smaller model, override it back to Opus.
 
