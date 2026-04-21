@@ -5587,6 +5587,32 @@ Then tell me to restart Claude Code. You'll also need the Firecrawl MCP configur
       <p><strong>Type:</strong> Custom Skill (multi-file) &middot; <strong>Location:</strong> <code>~/.claude/skills/firecrawl/</code></p>
     `
   },
+  '/visualize': {
+    icon: '&#127912;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /visualize skill in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/skills/visualize
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/visualize/SKILL.md -o ~/.claude/skills/visualize/SKILL.md
+
+Then tell me to restart Claude Code. After that I can use /visualize <source> to turn any text document into a premium single-file HTML page.`,
+    content: `
+      <div class="persona-quote">Transform any text source (book, essay, PRD, plan, roadmap) into a premium single-file HTML page. Two auto-detected modes handle different document shapes.</div>
+      <h2>Two Modes</h2>
+      <ul>
+        <li><strong>Mode B &mdash; Book/Essay:</strong> default for books, articles, essays, notes. Explains key principles, frameworks, and ideas. Optionally personalised to the reader.</li>
+        <li><strong>Mode P &mdash; Plan/PRD:</strong> for implementation plans, PRDs, strategy docs, roadmaps, proposals. Produces sticky-nav, scroll-spy, decision-maker-ready presentation with gantt-style timelines, risk heatmaps, and budget charts.</li>
+      </ul>
+      <h2>Usage</h2>
+      <p><code>/visualize &lt;source&gt;</code> &mdash; source is a path (<code>.md</code>, <code>.txt</code>, <code>.pdf</code>) or a URL. Mode detection is automatic based on document structure.</p>
+      <h2>Mode P Triggers</h2>
+      <p>Detected when a document contains at least two of: Executive Summary, Phase Plan, Risk Register, Budget, Success Metrics, Implementation Plan, Timeline, Roadmap, System Architecture, Open Questions, "Phase 1"/"Week 1" headings &mdash; or the file path contains <code>/plans/</code>, <code>/roadmaps/</code>, <code>PRD</code>, <code>strategy</code>, etc.</p>
+      <h2>Output</h2>
+      <p>A single self-contained HTML file you can host anywhere, share as a link, or preview locally. All styling, typography, and interactions are baked in &mdash; no build step, no dependencies.</p>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/visualize/SKILL.md</code></p>
+    `
+  },
   '/portfolio': {
     icon: '&#128188;', iconBg: 'var(--pink-dim)', color: 'pink',
     installPrompt: `Install the /portfolio command in my Claude Code setup.
