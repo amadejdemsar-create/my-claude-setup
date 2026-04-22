@@ -2793,6 +2793,16 @@
         <span class="tag">Content &amp; Design</span>
       </div>
     </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#128202;</div>
+      <h3>/hotel-review-analysis</h3>
+      <p>Turn a JSON of Booking.com scraped reviews for one hotel into a full Slovenian sentiment analysis with score distribution, guest segments, themes with verbatim multilingual quotes, phased action plan, and a vendor pitch section. Nevron-branded template.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Custom Skill</span>
+        <span class="tag">Hospitality</span>
+      </div>
+    </div>
   </div>
 
   <!-- System & Built-in Skills -->
@@ -5954,6 +5964,56 @@ Then tell me to restart Claude Code. After that I can use /visualize <source> to
       <p>A single self-contained HTML file you can host anywhere, share as a link, or preview locally. All styling, typography, and interactions are baked in &mdash; no build step, no dependencies.</p>
       <hr>
       <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/visualize/SKILL.md</code></p>
+    `
+  },
+  '/hotel-review-analysis': {
+    icon: '&#128202;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /hotel-review-analysis skill in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/skills/hotel-review-analysis/scripts ~/.claude/skills/hotel-review-analysis/templates
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/hotel-review-analysis/SKILL.md -o ~/.claude/skills/hotel-review-analysis/SKILL.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/hotel-review-analysis/scripts/inspect_reviews.py -o ~/.claude/skills/hotel-review-analysis/scripts/inspect_reviews.py
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/hotel-review-analysis/scripts/analyze_reviews.py -o ~/.claude/skills/hotel-review-analysis/scripts/analyze_reviews.py
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/hotel-review-analysis/templates/review-analysis-template.md -o ~/.claude/skills/hotel-review-analysis/templates/review-analysis-template.md
+
+Then tell me to restart Claude Code. After that I can turn any Booking.com reviews JSON into a full Slovenian sentiment analysis by saying "analyze reviews for &lt;hotel&gt; using this JSON: &lt;path&gt;" or typing /hotel-review-analysis.`,
+    content: `
+      <div class="persona-quote">Turn a JSON of Booking.com scraped reviews for one hotel into a full Slovenian sentiment analysis deliverable in the Nevron format. Built for Nevron coworkers running the same playbook Amadej uses for Habakuk, Julian Alps, and other Slovenian hotel clients.</div>
+      <h2>What It Does</h2>
+      <p>Takes a scraped Booking reviews JSON, runs a Python inspector to confirm field mapping, computes statistics (score distribution, segments, room types, countries, monthly trend, before/after cutoff split, keyword hits across 30+ multilingual themes), then drafts the full Slovenian analysis document:</p>
+      <ol>
+        <li>Overview tables (score distribution, guest segments, top rooms, countries, monthly trend)</li>
+        <li>8 to 15 positive themes with verbatim multilingual quotes</li>
+        <li>10 to 20 negative themes split into KRITIČNA / VISOKA / SREDNJA priority, each with a concrete <strong>Priporočilo</strong> line</li>
+        <li>Revenue uplift formula (Cornell/STR: 0,1 score = ~10 EUR/room/night)</li>
+        <li>Three-phase action plan (0 to 30 days, 1 to 3 months, 3 to 12 months)</li>
+        <li>Tailored Nevron product pitch (NevronCore, Nevron Mobile PWA, IPTV, Digital Signage) based on which products the hotel already uses</li>
+      </ol>
+      <h2>Inputs It Asks For</h2>
+      <ul>
+        <li>Path to the reviews JSON</li>
+        <li>Hotel name (Slovenian)</li>
+        <li>Slug, room count, occupancy estimate, star rating, one-line location</li>
+        <li>Current Nevron products used: None / IPTV only / IPTV+Mobile / Full suite</li>
+        <li>Output directory on your machine</li>
+        <li>Optional before/after cutoff date (if the hotel had a major renovation in the dataset window)</li>
+      </ul>
+      <h2>Usage</h2>
+      <p>Drop a Booking reviews JSON into the conversation and say <code>analyze reviews for &lt;hotel&gt;</code>, or type <code>/hotel-review-analysis</code>. Claude asks the input questions, runs the scripts, reads the liked/disliked text dumps to cluster themes, then writes <code>&lt;output_dir&gt;/&lt;slug&gt;/&lt;slug&gt;-review-analysis.md</code>.</p>
+      <h2>Field Mapping</h2>
+      <p>The inspector auto-detects the most common Booking scraper schemas (Apify, ScrapingBee, custom). Override field names with <code>--field key=actualName</code> flags or edit <code>DEFAULT_FIELDS</code> in <code>scripts/analyze_reviews.py</code> once for your schema.</p>
+      <h2>Files</h2>
+      <ul>
+        <li><code>SKILL.md</code> &mdash; playbook (inputs, steps, style rules, quality checklist)</li>
+        <li><code>scripts/inspect_reviews.py</code> &mdash; field mapping guess + sample record</li>
+        <li><code>scripts/analyze_reviews.py</code> &mdash; statistics, trend, keyword counts, optional text dumps</li>
+        <li><code>templates/review-analysis-template.md</code> &mdash; full Slovenian skeleton with placeholders</li>
+      </ul>
+      <h2>Scope</h2>
+      <p>Booking.com sources only (1 to 10 score scale). Per-hotel (not aggregate). Output is Slovenian markdown; branded HTML is a separate follow-up step.</p>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/hotel-review-analysis/</code></p>
     `
   },
   '/portfolio': {
