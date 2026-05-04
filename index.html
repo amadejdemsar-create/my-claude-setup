@@ -2174,6 +2174,14 @@
         <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">ascend.nativeai.agency</span></div>
       </div>
     </div>
+    <div class="mcp-card card-clickable" style="--card-accent:var(--purple);" onclick="openMcpModal('Monday')" title="Click to view setup">
+      <div class="mcp-icon" style="background:var(--purple-dim);">&#128203;</div>
+      <div class="mcp-info">
+        <h3>Monday</h3>
+        <div class="mcp-desc">Boards, items, and updates via OAuth.</div>
+        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span><span class="tag">mcp.monday.com</span></div>
+      </div>
+    </div>
   </div>
 
   <!-- Design -->
@@ -3973,6 +3981,44 @@ function openModal(agentName) {
 
 // ===== MCP SERVER DATA =====
 const mcpServers = {
+  'Monday': {
+    icon: '&#128203;', iconBg: 'var(--purple-dim)', color: 'purple',
+    installPrompt: `Install the Monday.com MCP server in my Claude Code setup.
+
+Before you do anything, ask me: "Do you have a Monday.com workspace?"
+
+If I say YES:
+- Add the Monday MCP config using the jq command below
+- Tell me to restart Claude Code; on first use a browser popup will ask me to authorize Monday access (OAuth). No API key needed.
+
+If I say NO:
+- Tell me to create a free workspace at https://monday.com
+- Once I confirm, add the config using the jq command below and tell me to restart Claude Code
+
+IMPORTANT: Do NOT use Read/Edit tools on ~/.claude.json. Claude Code continuously writes to this file, so edits will fail. Use this jq command via Bash instead (it reads, modifies, and writes atomically):
+
+jq '.mcpServers.monday = {"type": "http", "url": "https://mcp.monday.com/mcp"}' ~/.claude.json > /tmp/claude-json-tmp && mv /tmp/claude-json-tmp ~/.claude.json`,
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>HTTP</strong></td></tr>
+        <tr><td>URL</td><td><code>https://mcp.monday.com/mcp</code></td></tr>
+        <tr><td>Auth</td><td>OAuth (browser popup on first connect, no manual token needed)</td></tr>
+        <tr><td>Config file</td><td><code>~/.claude.json</code> (global mcpServers)</td></tr>
+      </table>
+      <h2>Available Tools</h2>
+      <ul>
+        <li>Read and create boards, groups, and items</li>
+        <li>Update item statuses, assignees, dates, and custom columns</li>
+        <li>Post and read updates / comments on items</li>
+        <li>Query workspace structure and people</li>
+        <li>Run saved board views and filters</li>
+      </ul>
+      <h2>Use Cases</h2>
+      <p>Project tracking, sprint boards, client deliverables, and any workflow already running on Monday boards. Useful when a project lives in Monday and Claude needs to read status or push updates without manual copy-paste.</p>
+    `
+  },
   'Notion': {
     icon: '&#128211;', iconBg: 'var(--amber-dim)', color: 'amber',
     installPrompt: `Install the Notion MCP server in my Claude Code setup.
