@@ -69,6 +69,23 @@ Phase header pattern:
 
 Phase dots: green (Phase 1, takoj), `var(--m4)` cyan (Phase 2, kratkoročno), `var(--m3)` deep blue (Phase 3, srednjeročno).
 
+## Internal template names must NEVER appear in customer-facing copy (NON-NEGOTIABLE)
+
+The Hospitality Index templates (`LAKE_GRAND`, `LAKE_WELLNESS`, `BOUTIQUE`, `WELLNESS`, `THERMAL_WELLNESS`, `SEASIDE_GRAND`, `SEASIDE_FAMILY`, `GARNI`) are INTERNAL identifiers. They must NEVER appear in subtitles, captions, body copy, or any visible text. Translate them to natural Slovenian prose instead:
+
+| Template code (internal) | Customer-facing prose (Slovenian) |
+|---|---|
+| `LAKE_GRAND` | jezerski hotel višjega razreda |
+| `LAKE_WELLNESS` | blejski wellness hotel |
+| `BOUTIQUE` | butični hotel / aparthotel |
+| `WELLNESS` | wellness hotel |
+| `THERMAL_WELLNESS` | termalni spa hotel |
+| `SEASIDE_GRAND` | prestižni obmorski hotel |
+| `SEASIDE_FAMILY` | obmorski družinski hotel |
+| `GARNI` | garni hotel |
+
+Forbidden: "po predlogi LAKE_GRAND", "(predloga BOUTIQUE)", "WELLNESS template", any all-caps code in body copy. Acceptable: "prilagojenih jezerskemu hotelu višjega razreda", "značilnosti butičnega hotela", "tipičen termalni spa".
+
 ## Quote handling rules (NON-NEGOTIABLE)
 
 Every subagent run must enforce these. The rule was inverted earlier; this is the correct version.
@@ -187,6 +204,9 @@ grep -cE '\b(kljucn|povprecn|povprecj|nacrt|nacin|znacil|specifin|specificn|sest
 
 # No ASCII country names
 grep -cE '\b(Nemcija|Hrvaska|Madzarska|Ceska|Spanija|Svica|Slovaska|Grcija)\b' <output>.html  # MUST be 0
+
+# No internal template names leaking into customer copy
+grep -cE '\b(LAKE_GRAND|LAKE_WELLNESS|BOUTIQUE|WELLNESS|THERMAL_WELLNESS|SEASIDE_GRAND|SEASIDE_FAMILY|GARNI)\b' <output>.html  # MUST be 0
 ```
 
 If any check fails, fix and re-verify before declaring done.
