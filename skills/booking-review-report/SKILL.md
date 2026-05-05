@@ -390,6 +390,24 @@ These exist BECAUSE the chain page has a sticky tabbar and a hotel switcher; the
 - Tabbar drag-scroll JS (mousedown / mousemove / mouseup with click suppression for moves > 4px, plus vertical-wheel-to-horizontal translation) so the hotel switcher pans without a visible scrollbar.
 - Per-hotel detail panels can be plaintext (default) or AES-GCM encrypted with `cryptography` PBKDF2-SHA256 (100.000 iterations) + AES-256-GCM. Encrypted variant lives in `/Users/Shared/Domain/Context/Business/nevron/products/new-entry/review-sentiment/sava-hotels/build/build_chain_html.py`. The unlocked reference template here has all panels plaintext for editing convenience.
 
+## Step 9.5 — Auto-fix Slovenian diacritics (mandatory)
+
+After the subagent writes the HTML, run the diacritic auto-fix script. The
+subagent reliably strips č/š/ž from common Slovenian word stems (Mesecni,
+Vkljucen, Pricakuj, Specifincn, Najvecja, etc.). This script catches them
+all in one pass — every confirmed loss from the Bled Rose run is included:
+
+```bash
+python3 ~/.claude/skills/booking-review-report/scripts/fix_diacritics.py \
+  /Users/Shared/Domain/Context/Business/nevron/products/new-entry/review-sentiment/<slug>/<slug>-review-analysis.html
+```
+
+The script rewrites the file in place and prints a summary. If it reports
+"clean", you're done. If it lists fixes, those were silent bugs the
+subagent shipped. The file is now corrected.
+
+This is NOT optional. Run it every time before declaring done.
+
 ## Step 10 — Open
 
 ```bash
