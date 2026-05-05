@@ -2804,11 +2804,12 @@
 
     <div class="card card-pink">
       <div class="card-icon">&#128202;</div>
-      <h3>/hotel-review-analysis</h3>
-      <p>Turn a JSON of Booking.com scraped reviews for one hotel into a full Slovenian sentiment analysis with score distribution, guest segments, themes with verbatim multilingual quotes, phased action plan, and a vendor pitch section. Nevron-branded template.</p>
+      <h3>/booking-review-report</h3>
+      <p>Internal-research pipeline. Hotel name or Booking URL in, full Nevron-branded Slovenian review-sentiment HTML out. Resolves the property, scrapes every review via Firecrawl, parses to JSON, runs theme extraction with before/after split, and renders the deliverable. Single-hotel and chain reference templates included.</p>
       <div class="card-tags">
         <span class="tag tag-highlight">Custom Skill</span>
         <span class="tag">Hospitality</span>
+        <span class="tag">Internal Only</span>
       </div>
     </div>
   </div>
@@ -6012,54 +6013,63 @@ Then tell me to restart Claude Code. After that I can use /visualize <source> to
       <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/visualize/SKILL.md</code></p>
     `
   },
-  '/hotel-review-analysis': {
+  '/booking-review-report': {
     icon: '&#128202;', iconBg: 'var(--pink-dim)', color: 'pink',
-    installPrompt: `Install the /hotel-review-analysis skill in my Claude Code setup.
+    installPrompt: `Install the /booking-review-report skill in my Claude Code setup.
 
 Run these commands:
-mkdir -p ~/.claude/skills/hotel-review-analysis/scripts ~/.claude/skills/hotel-review-analysis/templates
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/hotel-review-analysis/SKILL.md -o ~/.claude/skills/hotel-review-analysis/SKILL.md
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/hotel-review-analysis/scripts/inspect_reviews.py -o ~/.claude/skills/hotel-review-analysis/scripts/inspect_reviews.py
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/hotel-review-analysis/scripts/analyze_reviews.py -o ~/.claude/skills/hotel-review-analysis/scripts/analyze_reviews.py
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/hotel-review-analysis/templates/review-analysis-template.md -o ~/.claude/skills/hotel-review-analysis/templates/review-analysis-template.md
+mkdir -p ~/.claude/skills/booking-review-report/scripts ~/.claude/skills/booking-review-report/templates
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/booking-review-report/SKILL.md -o ~/.claude/skills/booking-review-report/SKILL.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/booking-review-report/scripts/inspect_reviews.py -o ~/.claude/skills/booking-review-report/scripts/inspect_reviews.py
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/booking-review-report/scripts/analyze_reviews.py -o ~/.claude/skills/booking-review-report/scripts/analyze_reviews.py
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/booking-review-report/scripts/parse_reviewlist.py -o ~/.claude/skills/booking-review-report/scripts/parse_reviewlist.py
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/booking-review-report/templates/single-hotel-reference.html -o ~/.claude/skills/booking-review-report/templates/single-hotel-reference.html
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/booking-review-report/templates/chain-reference.html -o ~/.claude/skills/booking-review-report/templates/chain-reference.html
 
-Then tell me to restart Claude Code. After that I can turn any Booking.com reviews JSON into a full Slovenian sentiment analysis by saying "analyze reviews for &lt;hotel&gt; using this JSON: &lt;path&gt;" or typing /hotel-review-analysis.`,
+Then tell me to restart Claude Code. After that I can run the full pipeline by saying "make a review analysis for &lt;hotel&gt;" or pasting a Booking URL.`,
     content: `
-      <div class="persona-quote">Turn a JSON of Booking.com scraped reviews for one hotel into a full Slovenian sentiment analysis deliverable in the Nevron format. Built for Nevron coworkers running the same playbook Amadej uses for Habakuk, Julian Alps, and other Slovenian hotel clients.</div>
+      <div class="persona-quote">End-to-end pipeline that turns a hotel name or Booking URL into a finished Nevron-branded Slovenian review-sentiment HTML report. Replaces the older /hotel-review-analysis and /booking-review-scrape skills.</div>
+      <h2 style="color: var(--red);">&#9888;&#65039; Internal-Use Only</h2>
+      <p>Booking.com Terms section A15.2 prohibits automated scraping (including AI assistants), and <code>robots.txt</code> disallows <code>/reviewlist.*.html</code>. This skill scrapes that exact path. Use it only for internal research and prospecting. <strong>Do NOT ship as a SaaS, hotel-facing webapp, or partner-facing API.</strong> If a hotel wants a report, switch to legitimate sources: their Booking Extranet review export (CSV they download themselves), a partner-API provider (Revinate / TrustYou / ReviewPro), Google Business Profile API, or TripAdvisor Content API.</p>
       <h2>What It Does</h2>
-      <p>Takes a scraped Booking reviews JSON, runs a Python inspector to confirm field mapping, computes statistics (score distribution, segments, room types, countries, monthly trend, before/after cutoff split, keyword hits across 30+ multilingual themes), then drafts the full Slovenian analysis document:</p>
+      <p>Ten-step pipeline with confirmation gates at every spend or commit:</p>
       <ol>
-        <li>Overview tables (score distribution, guest segments, top rooms, countries, monthly trend)</li>
-        <li>8 to 15 positive themes with verbatim multilingual quotes</li>
-        <li>10 to 20 negative themes split into KRITIČNA / VISOKA / SREDNJA priority, each with a concrete <strong>Priporočilo</strong> line</li>
-        <li>Revenue uplift formula (Cornell/STR: 0,1 score = ~10 EUR/room/night)</li>
-        <li>Three-phase action plan (0 to 30 days, 1 to 3 months, 3 to 12 months)</li>
-        <li>Tailored Nevron product pitch (NevronCore, Nevron Mobile PWA, IPTV, Digital Signage) based on which products the hotel already uses</li>
+        <li><strong>Resolve URL</strong> from hotel name (search Booking) or accept a URL directly. Builds the legacy <code>reviewlist.en-gb.html</code> URL needed for scraping.</li>
+        <li><strong>Live header fetch</strong>: total reviews, overall score, sub-scores, language list. Confirmation gate.</li>
+        <li><strong>Gather facts</strong>: rooms (web-lookup), occupancy default, Hospitality Index template (BOUTIQUE / WELLNESS / THERMAL / SEASIDE / GARNI / LAKE), Nevron status, before/after cutoff date.</li>
+        <li><strong>Cost preview</strong>: ceil(N/25) pages &times; 1 Firecrawl credit, ~M minutes wall time. Confirmation gate.</li>
+        <li><strong>Parallel scrape</strong> via Firecrawl <code>proxy: "basic"</code> (1 credit / page, 8-10 concurrent). Saves raw markdown per page.</li>
+        <li><strong>Parse</strong> markdown to canonical <code>reviews.json</code> via <code>parse_reviewlist.py</code> with deduplication, language detection, country-code from flag URL.</li>
+        <li><strong>Stats</strong> via <code>analyze_reviews.py --cutoff &lt;date&gt;</code>: distribution, segments, countries, monthly trend, keyword counts, before/after split. Outputs <code>liked.txt</code> and <code>disliked.txt</code>.</li>
+        <li><strong>Theme extraction</strong> by an Opus subagent: 8+ strengths with verbatim quotes, 2 to 6 fixed/partial themes with before/after evidence, 10+ tiered weaknesses with recommendations, action plan with revenue formula, Nevron product cards.</li>
+        <li><strong>HTML render</strong> using the included single-hotel or chain reference template, with Nevron CSS tokens, gauge animations, scroll-reveal, color-coded charts.</li>
+        <li><strong>Open</strong> in browser and visually verify before declaring done.</li>
       </ol>
       <h2>Inputs It Asks For</h2>
       <ul>
-        <li>Path to the reviews JSON</li>
-        <li>Hotel name (Slovenian)</li>
-        <li>Slug, room count, occupancy estimate, star rating, one-line location</li>
-        <li>Current Nevron products used: None / IPTV only / IPTV+Mobile / Full suite</li>
-        <li>Output directory on your machine</li>
-        <li>Optional before/after cutoff date (if the hotel had a major renovation in the dataset window)</li>
+        <li>Hotel name (with optional city) <strong>OR</strong> Booking.com URL <strong>OR</strong> existing <code>reviews.json</code> path</li>
+        <li>Slovenian display name (defaults to Booking property name)</li>
+        <li>Rooms (auto-detected from web; user confirms)</li>
+        <li>Occupancy estimate (default 0,65)</li>
+        <li>Hospitality Index template (auto-suggested; user confirms or overrides weights)</li>
+        <li>Current Nevron products: None / IPTV only / IPTV+Mobile / Full suite</li>
+        <li>Cutoff date for before/after split (default: 9 months back from latest review)</li>
       </ul>
-      <h2>Usage</h2>
-      <p>Drop a Booking reviews JSON into the conversation and say <code>analyze reviews for &lt;hotel&gt;</code>, or type <code>/hotel-review-analysis</code>. Claude asks the input questions, runs the scripts, reads the liked/disliked text dumps to cluster themes, then writes <code>&lt;output_dir&gt;/&lt;slug&gt;/&lt;slug&gt;-review-analysis.md</code>.</p>
-      <h2>Field Mapping</h2>
-      <p>The inspector auto-detects the most common Booking scraper schemas (Apify, ScrapingBee, custom). Override field names with <code>--field key=actualName</code> flags or edit <code>DEFAULT_FIELDS</code> in <code>scripts/analyze_reviews.py</code> once for your schema.</p>
       <h2>Files</h2>
       <ul>
-        <li><code>SKILL.md</code> &mdash; playbook (inputs, steps, style rules, quality checklist)</li>
-        <li><code>scripts/inspect_reviews.py</code> &mdash; field mapping guess + sample record</li>
-        <li><code>scripts/analyze_reviews.py</code> &mdash; statistics, trend, keyword counts, optional text dumps</li>
-        <li><code>templates/review-analysis-template.md</code> &mdash; full Slovenian skeleton with placeholders</li>
+        <li><code>SKILL.md</code> &mdash; the full pipeline spec, ToS warning, confirmation gates, theme-extraction brief, quality checklist</li>
+        <li><code>scripts/inspect_reviews.py</code> &mdash; verify schema of any Booking JSON</li>
+        <li><code>scripts/analyze_reviews.py</code> &mdash; stats + dumps, supports <code>--cutoff</code> for before/after split</li>
+        <li><code>scripts/parse_reviewlist.py</code> &mdash; markdown to JSON with dedup, language detection, country codes</li>
+        <li><code>templates/single-hotel-reference.html</code> &mdash; reference structure for one-property reports</li>
+        <li><code>templates/chain-reference.html</code> &mdash; reference structure for chains with hotel switcher and compare mode</li>
       </ul>
+      <h2>Cost</h2>
+      <p>~1 Firecrawl credit per 25 reviews scraped (basic proxy). A 3.500-review property costs ~140 credits and ~3-5 minutes of wall time. Stealth proxy is 5x more expensive and is only used as a fallback if Booking blocks the page.</p>
       <h2>Scope</h2>
-      <p>Booking.com sources only (1 to 10 score scale). Per-hotel (not aggregate). Output is Slovenian markdown; branded HTML is a separate follow-up step.</p>
+      <p>Booking.com only. Single-hotel pipeline is fully wired through this skill; chain pipeline (multiple JSONs, encrypted panels, compare mode) still uses the legacy <code>build_chain_html.py</code> in the Sava Hotels project for now.</p>
       <hr>
-      <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/hotel-review-analysis/</code></p>
+      <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/booking-review-report/</code></p>
     `
   },
   '/portfolio': {

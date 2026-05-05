@@ -1,0 +1,2878 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel Habakuk: Analiza ocen gostov | Nevron</title>
+<style>
+/* ============================================
+   NEVRON BRAND TOKENS
+   ============================================ */
+:root {
+  /* Primary Blues */
+  --m1: #000126;
+  --m2: #00317A;
+  --m3: #0067B2;
+  --m4: #009CDE;
+  --m5: #7BCAED;
+  --m6: #E1F4FF;
+
+  /* Secondary Grays */
+  --s1: #080C13;
+  --s2: #2C3038;
+  --s3: #6B7077;
+  --s4: #A4A7AB;
+  --s5: #D3D5D6;
+  --s6: #EFF0F0;
+
+  /* Supporting */
+  --red: #DA2025;
+  --orange: #E56600;
+  --yellow: #F6A900;
+  --green: #36A058;
+
+  /* Neutrals */
+  --black: #000000;
+  --white: #FFFFFF;
+
+  /* Typography */
+  --font: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+
+  /* Spacing */
+  --section-pad: 6rem 2rem;
+  --card-radius: 0.75rem;
+  --card-shadow: 0 4px 24px rgba(0,1,38,0.18);
+}
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--m1);
+  color: var(--white);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+a { color: var(--m4); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+img { max-width: 100%; height: auto; }
+
+/* ============================================
+   UTILITY
+   ============================================ */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section {
+  padding: var(--section-pad);
+}
+
+.section-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  line-height: 1.15;
+}
+
+.section-subtitle {
+  font-size: 1.125rem;
+  color: var(--s4);
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 2rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge--red { background: var(--red); color: var(--white); }
+.badge--orange { background: var(--orange); color: var(--white); }
+.badge--yellow { background: var(--yellow); color: var(--s1); }
+.badge--green { background: var(--green); color: var(--white); }
+.badge--blue { background: var(--m3); color: var(--white); }
+
+/* ============================================
+   ANIMATIONS (Scroll reveal)
+   ============================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered children */
+.stagger > .reveal:nth-child(1) { transition-delay: 0.05s; }
+.stagger > .reveal:nth-child(2) { transition-delay: 0.1s; }
+.stagger > .reveal:nth-child(3) { transition-delay: 0.15s; }
+.stagger > .reveal:nth-child(4) { transition-delay: 0.2s; }
+.stagger > .reveal:nth-child(5) { transition-delay: 0.25s; }
+.stagger > .reveal:nth-child(6) { transition-delay: 0.3s; }
+.stagger > .reveal:nth-child(7) { transition-delay: 0.35s; }
+.stagger > .reveal:nth-child(8) { transition-delay: 0.4s; }
+.stagger > .reveal:nth-child(9) { transition-delay: 0.45s; }
+
+/* ============================================
+   NAV
+   ============================================ */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(0,1,38,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(123,202,237,0.1);
+  padding: 0.75rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav__logo svg { height: 28px; width: auto; }
+
+.nav__links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  font-size: 0.875rem;
+}
+
+.nav__links a {
+  color: var(--s4);
+  transition: color 0.2s;
+}
+
+.nav__links a:hover { color: var(--white); text-decoration: none; }
+
+@media (max-width: 768px) {
+  .nav__links { display: none; }
+}
+
+/* ============================================
+   HERO
+   ============================================ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8rem 2rem 6rem;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, var(--m1) 0%, #000a3d 40%, var(--m2) 100%);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -20%;
+  width: 800px;
+  height: 800px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,103,178,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -20%;
+  left: -10%;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,156,222,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero__logo {
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeInDown 0.8s ease forwards 0.2s;
+}
+
+.hero__logo svg { height: 48px; width: auto; }
+
+.hero__pretitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--m4);
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeInDown 0.8s ease forwards 0.4s;
+}
+
+.hero__title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  max-width: 800px;
+  opacity: 0;
+  animation: fadeInDown 0.8s ease forwards 0.6s;
+}
+
+.hero__subtitle {
+  font-size: 1.125rem;
+  color: var(--m5);
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+  opacity: 0;
+  animation: fadeInDown 0.8s ease forwards 0.8s;
+}
+
+.hero__date {
+  font-size: 0.875rem;
+  color: var(--s4);
+  opacity: 0;
+  animation: fadeInDown 0.8s ease forwards 1s;
+}
+
+.hero__scroll {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  animation: fadeInDown 0.8s ease forwards 1.2s;
+}
+
+.hero__scroll svg {
+  width: 24px;
+  height: 24px;
+  fill: var(--s4);
+  animation: bounce 2s infinite;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(8px); }
+  60% { transform: translateY(4px); }
+}
+
+/* ============================================
+   HOSPITALITY INDEX (Section 2)
+   ============================================ */
+.index-section {
+  background: linear-gradient(180deg, var(--m1) 0%, var(--s1) 100%);
+  padding: var(--section-pad);
+}
+
+.index-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .index-grid { grid-template-columns: 1fr; }
+}
+
+.gauge-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gauge-svg {
+  width: 280px;
+  height: 280px;
+}
+
+.gauge-label {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.gauge-label__score {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.gauge-label__max {
+  font-size: 1.25rem;
+  color: var(--s4);
+}
+
+.gauge-label__name {
+  font-size: 1rem;
+  color: var(--m5);
+  margin-top: 0.25rem;
+}
+
+.component-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.comp-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.comp-bar__header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+}
+
+.comp-bar__name { color: var(--s5); }
+.comp-bar__value { color: var(--white); font-weight: 600; }
+
+.comp-bar__track {
+  height: 8px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.comp-bar__fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1.2s ease;
+  width: 0;
+}
+
+.comp-bar__fill--green { background: var(--green); }
+.comp-bar__fill--yellow { background: var(--yellow); }
+.comp-bar__fill--red { background: var(--red); }
+
+.comp-bar__desc {
+  font-size: 0.75rem;
+  color: var(--s4);
+  line-height: 1.4;
+}
+
+/* ============================================
+   OVERVIEW STATS (Section 3)
+   ============================================ */
+.overview-section {
+  background: var(--s1);
+  padding: var(--section-pad);
+}
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--card-radius);
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.stat-card__value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--m4);
+  line-height: 1.1;
+}
+
+.stat-card__label {
+  font-size: 0.875rem;
+  color: var(--s4);
+  margin-top: 0.5rem;
+}
+
+/* Chart containers */
+.chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-top: 3rem;
+}
+
+@media (max-width: 900px) {
+  .chart-grid { grid-template-columns: 1fr; }
+}
+
+.chart-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--card-radius);
+  padding: 2rem;
+}
+
+.chart-card__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--white);
+}
+
+/* Horizontal bar chart for score distribution */
+.h-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.h-bar__label {
+  width: 40px;
+  text-align: right;
+  font-size: 0.875rem;
+  color: var(--s4);
+  flex-shrink: 0;
+}
+
+.h-bar__track {
+  flex: 1;
+  height: 24px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.h-bar__fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1s ease;
+  width: 0;
+  display: flex;
+  align-items: center;
+  padding-left: 0.5rem;
+}
+
+.h-bar__percent {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--white);
+  white-space: nowrap;
+}
+
+/* Line chart SVG */
+.line-chart-svg {
+  width: 100%;
+  height: auto;
+}
+
+/* ============================================
+   STRENGTHS (Section 4)
+   ============================================ */
+.strengths-section {
+  background: linear-gradient(180deg, var(--s1) 0%, var(--m1) 100%);
+  padding: var(--section-pad);
+}
+
+.strength-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.strength-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--card-radius);
+  padding: 2rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.strength-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(0,103,178,0.15);
+}
+
+.strength-card__icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.strength-card__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+
+.strength-card__mentions {
+  font-size: 0.875rem;
+  color: var(--m4);
+  margin-bottom: 1rem;
+}
+
+.strength-card__quote {
+  font-size: 0.875rem;
+  color: var(--s4);
+  font-style: italic;
+  line-height: 1.5;
+  border-left: 3px solid var(--m3);
+  padding-left: 1rem;
+}
+
+/* ============================================
+   WEAKNESSES (Section 4b)
+   ============================================ */
+.weaknesses-section {
+  background: linear-gradient(180deg, var(--m1) 0%, var(--s1) 100%);
+  padding: var(--section-pad);
+}
+
+.weakness-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.weakness-card {
+  background: rgba(218,32,37,0.04);
+  border: 1px solid rgba(218,32,37,0.12);
+  border-radius: var(--card-radius);
+  padding: 2rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.weakness-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(218,32,37,0.12);
+}
+
+.weakness-card__icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.weakness-card__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+
+.weakness-card__mentions {
+  font-size: 0.875rem;
+  color: var(--red);
+  margin-bottom: 1rem;
+}
+
+.weakness-card__quote {
+  font-size: 0.875rem;
+  color: var(--s4);
+  font-style: italic;
+  line-height: 1.5;
+  border-left: 3px solid var(--red);
+  padding-left: 1rem;
+}
+
+/* ============================================
+   FIXED / RESOLVED (Section 5)
+   ============================================ */
+.fixed-section {
+  background: var(--m1);
+  padding: var(--section-pad);
+}
+
+.fixed-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+.fixed-card {
+  background: rgba(54,160,88,0.06);
+  border: 1px solid rgba(54,160,88,0.2);
+  border-radius: var(--card-radius);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.fixed-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--green);
+}
+
+.fixed-card__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 1rem;
+}
+
+.fixed-card__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.fixed-card__before,
+.fixed-card__after {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+}
+
+.fixed-card__before {
+  background: rgba(218,32,37,0.08);
+  border: 1px solid rgba(218,32,37,0.2);
+  color: var(--s5);
+}
+
+.fixed-card__after {
+  background: rgba(54,160,88,0.08);
+  border: 1px solid rgba(54,160,88,0.2);
+  color: var(--s5);
+}
+
+.fixed-card__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.fixed-card__label--before { color: var(--red); }
+.fixed-card__label--after { color: var(--green); }
+
+.fixed-card__status {
+  display: inline-block;
+  margin-top: 0.75rem;
+}
+
+/* ============================================
+   ISSUES (Section 6)
+   ============================================ */
+.issues-section {
+  background: linear-gradient(180deg, var(--m1) 0%, var(--s1) 100%);
+  padding: var(--section-pad);
+}
+
+.issues-tier {
+  margin-bottom: 3rem;
+}
+
+.issues-tier__title {
+  font-size: 1.375rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.issue-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1rem;
+}
+
+.issue-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--card-radius);
+  padding: 1.5rem;
+  position: relative;
+}
+
+.issue-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.issue-card__name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--white);
+  flex: 1;
+  padding-right: 0.75rem;
+}
+
+.issue-card__mentions {
+  font-size: 0.75rem;
+  color: var(--m4);
+  white-space: nowrap;
+}
+
+.issue-card__desc {
+  font-size: 0.875rem;
+  color: var(--s4);
+  line-height: 1.5;
+}
+
+/* Bubble chart */
+.bubble-chart {
+  margin-top: 3rem;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--card-radius);
+  padding: 2rem;
+}
+
+.bubble-chart__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.bubble-chart svg { width: 100%; height: auto; }
+
+/* ============================================
+   GUEST TECHNOLOGY (Section 6b)
+   ============================================ */
+.tech-section {
+  background: linear-gradient(180deg, var(--s1) 0%, #0a0e1a 50%, var(--s1) 100%);
+  padding: var(--section-pad);
+}
+
+.tech-hero-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 4rem;
+  align-items: center;
+  margin-bottom: 4rem;
+}
+
+@media (max-width: 900px) {
+  .tech-hero-grid { grid-template-columns: 1fr; gap: 2rem; }
+}
+
+.tech-gauge-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tech-gauge-svg {
+  width: 220px;
+  height: 220px;
+}
+
+.tech-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.tech-stat {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.tech-stat__value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.tech-stat__label {
+  font-size: 0.75rem;
+  color: var(--s4);
+  margin-top: 0.35rem;
+  line-height: 1.3;
+}
+
+.tech-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.tech-cat-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--card-radius);
+  padding: 1.75rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tech-cat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(0,103,178,0.12);
+}
+
+.tech-cat-card__icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.tech-cat-card__name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 0.25rem;
+}
+
+.tech-cat-card__product {
+  font-size: 0.75rem;
+  color: var(--m4);
+  margin-bottom: 1rem;
+}
+
+.tech-cat-card__bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--s4);
+  margin-bottom: 0.35rem;
+}
+
+.tech-cat-card__bar {
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  display: flex;
+  background: rgba(255,255,255,0.06);
+  margin-bottom: 0.75rem;
+}
+
+.tech-cat-card__bar-pos {
+  height: 100%;
+  background: var(--green);
+  transition: width 1.2s ease;
+  width: 0;
+}
+
+.tech-cat-card__bar-neg {
+  height: 100%;
+  background: var(--red);
+  transition: width 1.2s ease;
+  width: 0;
+}
+
+.tech-cat-card__score {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.tech-quote-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.tech-quote {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--card-radius);
+  padding: 1.5rem;
+  position: relative;
+}
+
+.tech-quote::before {
+  content: '\201C';
+  position: absolute;
+  top: 0.5rem;
+  left: 1rem;
+  font-size: 3rem;
+  line-height: 1;
+  color: rgba(255,255,255,0.06);
+  font-family: Georgia, serif;
+}
+
+.tech-quote__text {
+  font-size: 0.875rem;
+  color: var(--s5);
+  line-height: 1.6;
+  font-style: italic;
+  margin-bottom: 0.75rem;
+  padding-top: 0.5rem;
+}
+
+.tech-quote__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+}
+
+.tech-quote__name {
+  color: var(--s4);
+}
+
+.tech-quote__score {
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.7rem;
+}
+
+.tech-quote__score--low {
+  background: rgba(218,32,37,0.15);
+  color: var(--red);
+}
+
+.tech-quote__score--mid {
+  background: rgba(246,169,0,0.15);
+  color: var(--yellow);
+}
+
+.tech-quote__score--high {
+  background: rgba(54,160,88,0.15);
+  color: var(--green);
+}
+
+.tech-quote__translated {
+  display: inline-block;
+  font-size: 0.6rem;
+  font-style: normal;
+  color: var(--s4);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 0.25rem;
+  padding: 0.1rem 0.4rem;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+  letter-spacing: 0.02em;
+}
+
+.tech-insight-box {
+  background: linear-gradient(135deg, rgba(0,103,178,0.08), rgba(0,156,222,0.05));
+  border: 1px solid rgba(0,156,222,0.2);
+  border-radius: var(--card-radius);
+  padding: 2rem;
+}
+
+.tech-insight-box__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--m4);
+  margin-bottom: 1rem;
+}
+
+.tech-insight-box__text {
+  font-size: 0.875rem;
+  color: var(--s5);
+  line-height: 1.7;
+}
+
+/* ============================================
+   ACTION PLAN (Section 7)
+   ============================================ */
+.plan-section {
+  background: var(--s1);
+  padding: var(--section-pad);
+}
+
+.timeline {
+  position: relative;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 24px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--m3), var(--m4), var(--m5));
+}
+
+@media (max-width: 768px) {
+  .timeline::before { left: 16px; }
+}
+
+.phase {
+  position: relative;
+  padding-left: 64px;
+  margin-bottom: 3rem;
+}
+
+@media (max-width: 768px) {
+  .phase { padding-left: 48px; }
+}
+
+.phase__dot {
+  position: absolute;
+  left: 14px;
+  top: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--m3);
+  border: 3px solid var(--s1);
+}
+
+.phase__header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.phase__name {
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.phase__time {
+  font-size: 0.875rem;
+  color: var(--m4);
+}
+
+.phase__actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 0.75rem;
+}
+
+.action-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.action-card__name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.action-card__badges {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.action-card__badge {
+  font-size: 0.625rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.action-card__badge--impact-high { background: rgba(54,160,88,0.15); color: var(--green); border: 1px solid rgba(54,160,88,0.3); }
+.action-card__badge--impact-med { background: rgba(246,169,0,0.12); color: var(--yellow); border: 1px solid rgba(246,169,0,0.3); }
+.action-card__badge--cost-low { background: rgba(0,156,222,0.1); color: var(--m4); border: 1px solid rgba(0,156,222,0.2); }
+.action-card__badge--cost-med { background: rgba(229,102,0,0.1); color: var(--orange); border: 1px solid rgba(229,102,0,0.2); }
+.action-card__badge--cost-none { background: rgba(255,255,255,0.05); color: var(--s4); border: 1px solid rgba(255,255,255,0.1); }
+.action-card__badge--cost-high { background: rgba(218,32,37,0.1); color: var(--red); border: 1px solid rgba(218,32,37,0.2); }
+
+/* ============================================
+   NEVRON SOLUTIONS (Section 8)
+   ============================================ */
+.solutions-section {
+  background: linear-gradient(180deg, var(--s1) 0%, var(--m1) 100%);
+  padding: var(--section-pad);
+}
+
+/* Problem to solution flow */
+.flow-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1rem;
+  align-items: start;
+  margin-bottom: 4rem;
+}
+
+@media (max-width: 900px) {
+  .flow-grid {
+    grid-template-columns: 1fr;
+  }
+  .flow-arrow { transform: rotate(90deg); }
+}
+
+.flow-col__title {
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid;
+}
+
+.flow-col--problems .flow-col__title {
+  color: var(--red);
+  border-color: var(--red);
+}
+
+.flow-col--solutions .flow-col__title {
+  color: var(--green);
+  border-color: var(--green);
+}
+
+.flow-item {
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.flow-col--problems .flow-item {
+  background: rgba(218,32,37,0.06);
+  border: 1px solid rgba(218,32,37,0.15);
+  color: var(--s5);
+}
+
+.flow-col--solutions .flow-item {
+  background: rgba(54,160,88,0.06);
+  border: 1px solid rgba(54,160,88,0.15);
+  color: var(--s5);
+}
+
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 4rem;
+  color: var(--m4);
+}
+
+.flow-arrow svg { width: 32px; height: 32px; fill: currentColor; }
+
+/* Product cards */
+.product-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+}
+
+.product-card {
+  background: rgba(0,103,178,0.06);
+  border: 1px solid rgba(0,103,178,0.2);
+  border-radius: var(--card-radius);
+  padding: 2rem;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover { transform: translateY(-4px); }
+
+.product-card__icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.product-card__name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--m4);
+  margin-bottom: 0.5rem;
+}
+
+.product-card__desc {
+  font-size: 0.875rem;
+  color: var(--s4);
+  line-height: 1.5;
+}
+
+/* Revenue impact */
+.revenue-box {
+  background: linear-gradient(135deg, rgba(0,103,178,0.12) 0%, rgba(0,156,222,0.08) 100%);
+  border: 1px solid rgba(0,156,222,0.25);
+  border-radius: var(--card-radius);
+  padding: 3rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.revenue-box::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,156,222,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.revenue-box__pretitle {
+  font-size: 0.875rem;
+  color: var(--m5);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.revenue-box__formula {
+  font-size: 1rem;
+  color: var(--s5);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.revenue-box__number {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  color: var(--m4);
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+
+.revenue-box__label {
+  font-size: 1rem;
+  color: var(--s4);
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.footer {
+  background: linear-gradient(180deg, var(--s1) 0%, var(--m1) 100%);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 4rem 2rem 3rem;
+  text-align: center;
+}
+
+.footer__logo {
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: center;
+}
+.footer__logo svg { height: 40px; width: auto; }
+
+.footer__text {
+  font-size: 0.875rem;
+  color: var(--s4);
+  line-height: 1.8;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.footer__tagline {
+  font-size: 0.75rem;
+  color: var(--s3);
+  margin-top: 1.5rem;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================
+   DONUT CHART ANIMATION
+   ============================================ */
+.donut-ring {
+  transition: stroke-dasharray 1.5s ease;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+  body { background: white; color: var(--s1); }
+  .nav { display: none; }
+  .hero { min-height: auto; padding: 2rem; background: white; }
+  .hero__title, .section-title { color: var(--m1); }
+  .hero__subtitle, .hero__pretitle { color: var(--m3); }
+  .section { padding: 2rem 1rem; break-inside: avoid; }
+  .stat-card, .strength-card, .issue-card, .product-card, .action-card, .fixed-card {
+    background: white;
+    border-color: var(--s5);
+    color: var(--s1);
+    break-inside: avoid;
+  }
+  .stat-card__value { color: var(--m3); }
+  .strength-card__title, .issue-card__name, .product-card__name, .chart-card__title {
+    color: var(--m1);
+  }
+  .strength-card__quote, .issue-card__desc, .product-card__desc { color: var(--s2); }
+  .comp-bar__name, .h-bar__label { color: var(--s2); }
+  .comp-bar__track, .h-bar__track { background: var(--s6); }
+  .revenue-box { background: var(--m6); border-color: var(--m3); }
+  .revenue-box__number { color: var(--m3); }
+  .reveal { opacity: 1 !important; transform: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================
+     NAVIGATION
+     ============================================ -->
+<nav class="nav">
+  <div class="nav__logo">
+    <svg viewBox="0 0 960 276.9" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M244.3,93.9h30.5V2.1H183v30.5h61.3V93.9z M30.5,185.1H0v91.8h91.8v-30.5H30.5V185.1z M274.8,185.1h-30.5V233L30.5,2.1H0v91.8h30.5V45.7l213.7,231.1h30.5L274.8,185.1z" fill="#fff"/>
+      <path d="M467.4,0c-15.3,0-25.3,7.5-29.8,16.7V2.1h-25.4v91.8h25.4v-53c0-13.5,8.2-20.2,19.1-20.2c11.2,0,16.1,6,16.1,18.4v54.7h25.4V35.4C498.3,10.9,485.5,0,467.4,0z M557.3,0c-26.7,0-47.2,18.8-47.2,47.7v1.4c0,29.3,20.2,46.7,47.9,46.7c25.1,0,40.9-11.1,43.9-30.9h-24c-1.6,7.7-7.4,12.8-19.1,12.8c-13.9,0-22.1-8.8-22.8-24h66.2v-7C602.1,13.9,581,0,557.3,0z M536.3,38.1c1.9-13,9.7-20.5,21.1-20.5c12.1,0,19.1,6.7,20,20.5H536.3z M813.3,0c-27.5,0-48.4,18.8-48.4,47.6V49c0,28.6,20.9,46.8,48.3,46.8c27.5,0,48.4-18.4,48.4-47.4V47C861.5,18.4,840.8,0,813.3,0z M835.7,48.6c0,17.4-8.2,27.9-22.5,27.9c-14.4,0-22.5-10.5-22.5-28.1V47c0-17.5,8.4-27.7,22.5-27.7c14.2,0,22.5,10.5,22.5,28.1V48.6z M929.1,0c-15.3,0-25.3,7.5-29.8,16.7V2.1h-25.4v91.8h25.4v-53c0-13.5,8.2-20.2,19.1-20.2c11.2,0,16.1,6,16.1,18.4v54.7H960V35.4C960,10.9,947.2,0,929.1,0z M730.6,19.7V2.1h-25.4v91.8h25.4v-46c0-17.5,10.9-23.7,29.7-23.5V0.7C745.4,0.9,736.4,7.4,730.6,19.7z M650.9,67.7L629,2.1h-27.2l33.5,91.8h28.6l33.3-91.8h-24.6L650.9,67.7z" fill="#fff"/>
+    </svg>
+  </div>
+  <ul class="nav__links">
+    <li><a href="#index">Indeks</a></li>
+    <li><a href="#overview">Pregled</a></li>
+    <li><a href="#strengths">Prednosti</a></li>
+    <li><a href="#weaknesses">Slabosti</a></li>
+    <li><a href="#fixed">Rešeno</a></li>
+    <li><a href="#issues">Težave</a></li>
+    <li><a href="#tech">Tehnologija</a></li>
+    <li><a href="#plan">Načrt</a></li>
+    <li><a href="#solutions">Nevron</a></li>
+  </ul>
+</nav>
+
+<!-- ============================================
+     HERO
+     ============================================ -->
+<section class="hero" id="top">
+  <div class="hero__logo">
+    <svg viewBox="0 0 1000 298.8" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M254.4,97.8h31.8V2.1h-95.6v31.8h63.8v63.8h0ZM31.8,192.8H0v95.6h95.6v-31.8H31.8v-63.8ZM286.2,192.8h-31.8v49.9L31.8,2.1H0v95.6h31.8v-50.2l222.6,240.8h31.8v-95.6Z" fill="#fff"/>
+      <path d="M486.9,0c-15.9,0-26.3,7.9-31.1,17.4V2.1h-26.5v95.6h26.5v-55.2c0-14.1,8.6-21,19.9-21s16.8,6.2,16.8,19.2v57h26.5v-60.9C519,11.2,505.7,0,486.9,0ZM580.5,0c-27.8,0-49.2,19.6-49.2,49.7v1.5c0,30.5,21,48.6,49.9,48.6s42.6-11.5,45.7-32.2h-25c-1.6,8-7.7,13.3-19.9,13.3s-23-9.1-23.8-25h68.9v-7.3c0-34.2-21.9-48.6-46.6-48.6ZM558.6,39.6c2-13.5,10.1-21.4,21.9-21.4s19.9,6.9,20.8,21.4h-42.7ZM847.1,0c-28.7,0-50.4,19.6-50.4,49.5v1.5c0,29.8,21.8,48.8,50.3,48.8s50.4-19.2,50.4-49.3v-1.5c0-29.8-21.6-49-50.3-49ZM870.5,50.5c0,18.1-8.6,29.1-23.4,29.1s-23.4-11-23.4-29.2v-1.5c0-18.3,8.8-28.9,23.4-28.9s23.4,11,23.4,29.2v1.3ZM967.8,0c-15.9,0-26.3,7.9-31.1,17.4V2.1h-26.5v95.6h26.5v-55.2c0-14.1,8.6-21,19.9-21s16.8,6.2,16.8,19.2v57h26.5v-60.9c0-25.6-13.3-36.9-32.1-36.9ZM761.1,20.4V2.1h-26.5v95.6h26.5v-47.9c0-18.3,11.3-24.7,30.9-24.5V.6c-15.6.2-24.9,7-30.9,19.8ZM678,70.5l-22.8-68.4h-28.3l34.9,95.6h29.8L726.3,2.1h-25.6l-22.7,68.4Z" fill="#fff"/>
+      <!-- tagline line (simplified from SVG) -->
+      <text x="430" y="220" fill="rgba(255,255,255,0.6)" font-family="Inter, Helvetica Neue, Arial, sans-serif" font-size="28" font-weight="400" letter-spacing="6">smart solutions for smart hotels</text>
+    </svg>
+  </div>
+  <div class="hero__pretitle">Nevron Guest Intelligence Report</div>
+  <h1 class="hero__title">Hotel Habakuk:<br>Analiza ocen gostov</h1>
+  <p class="hero__subtitle">Celovita analiza 2.369 ocen na Booking.com za obdobje od marca 2023 do marca 2026</p>
+  <p class="hero__date">2. marec 2026</p>
+  <div class="hero__scroll">
+    <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+  </div>
+</section>
+
+<!-- ============================================
+     SECTION 2: HOSPITALITY INDEX
+     ============================================ -->
+<section class="index-section section" id="index">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">Nevron Hospitality Index</h2>
+      <p class="section-subtitle">Indeks kakovosti gostoljubnosti, sestavljen iz 7 ključnih komponent</p>
+    </div>
+
+    <div class="index-grid">
+      <!-- Gauge -->
+      <div class="gauge-wrapper reveal">
+        <svg class="gauge-svg" viewBox="0 0 200 200">
+          <!-- Background ring -->
+          <circle cx="100" cy="100" r="85" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="14"/>
+          <!-- Score ring -->
+          <circle cx="100" cy="100" r="85" fill="none" stroke="url(#gaugeGrad)" stroke-width="14"
+            stroke-linecap="round"
+            stroke-dasharray="0 534"
+            class="donut-ring"
+            data-target="331"
+            transform="rotate(-90 100 100)"/>
+          <defs>
+            <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#F6A900"/>
+              <stop offset="60%" stop-color="#009CDE"/>
+              <stop offset="100%" stop-color="#0067B2"/>
+            </linearGradient>
+          </defs>
+          <!-- Center text -->
+          <text x="100" y="98" text-anchor="middle" fill="#fff" font-size="42" font-weight="700" font-family="Inter, sans-serif">62</text>
+          <text x="100" y="120" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="14" font-family="Inter, sans-serif">od 100</text>
+        </svg>
+        <div class="gauge-label">
+          <div class="gauge-label__name">Skupni rezultat za Hotel Habakuk</div>
+        </div>
+      </div>
+
+      <!-- Component bars -->
+      <div class="component-bars stagger">
+        <!-- Guest Satisfaction: 85 -->
+        <div class="comp-bar reveal">
+          <div class="comp-bar__header">
+            <span class="comp-bar__name">Zadovoljstvo gostov (20 %)</span>
+            <span class="comp-bar__value">85</span>
+          </div>
+          <div class="comp-bar__track">
+            <div class="comp-bar__fill comp-bar__fill--green" data-width="85%"></div>
+          </div>
+          <div class="comp-bar__desc">Povprečna ocena 8,5/10 na Booking.com</div>
+        </div>
+        <!-- Wellness & Amenities: 62 -->
+        <div class="comp-bar reveal">
+          <div class="comp-bar__header">
+            <span class="comp-bar__name">Wellness in ponudba (15 %)</span>
+            <span class="comp-bar__value">62</span>
+          </div>
+          <div class="comp-bar__track">
+            <div class="comp-bar__fill comp-bar__fill--yellow" data-width="62%"></div>
+          </div>
+          <div class="comp-bar__desc">Močne savne in bazen, a prehladna voda, omejen urnik, brez jacuzzija</div>
+        </div>
+        <!-- F&B Quality: 60 -->
+        <div class="comp-bar reveal">
+          <div class="comp-bar__header">
+            <span class="comp-bar__name">Hrana in pijača (15 %)</span>
+            <span class="comp-bar__value">60</span>
+          </div>
+          <div class="comp-bar__track">
+            <div class="comp-bar__fill comp-bar__fill--yellow" data-width="60%"></div>
+          </div>
+          <div class="comp-bar__desc">Zajtrk dober, večerja slabo razmerje cena/kakovost, težave s svežino</div>
+        </div>
+        <!-- Service Quality: 58 -->
+        <div class="comp-bar reveal">
+          <div class="comp-bar__header">
+            <span class="comp-bar__name">Kakovost storitev (15 %)</span>
+            <span class="comp-bar__value">58</span>
+          </div>
+          <div class="comp-bar__track">
+            <div class="comp-bar__fill comp-bar__fill--yellow" data-width="58%"></div>
+          </div>
+          <div class="comp-bar__desc">Osebje na splošno prijazno, a težave z recepcijo in čistočo</div>
+        </div>
+        <!-- Room Quality: 55 -->
+        <div class="comp-bar reveal">
+          <div class="comp-bar__header">
+            <span class="comp-bar__name">Kakovost sob (15 %)</span>
+            <span class="comp-bar__value">55</span>
+          </div>
+          <div class="comp-bar__track">
+            <div class="comp-bar__fill comp-bar__fill--yellow" data-width="55%"></div>
+          </div>
+          <div class="comp-bar__desc">Prenovljene sobe odlične, neprenovljene še vedno problematične</div>
+        </div>
+        <!-- Value Perception: 50 -->
+        <div class="comp-bar reveal">
+          <div class="comp-bar__header">
+            <span class="comp-bar__name">Zaznava vrednosti (10 %)</span>
+            <span class="comp-bar__value">50</span>
+          </div>
+          <div class="comp-bar__track">
+            <div class="comp-bar__fill comp-bar__fill--red" data-width="50%"></div>
+          </div>
+          <div class="comp-bar__desc">Parkirnina, skriti stroški in pritožbe glede razmerja cena/kakovost</div>
+        </div>
+        <!-- Room Technology: 45 -->
+        <div class="comp-bar reveal">
+          <div class="comp-bar__header">
+            <span class="comp-bar__name">Sobna tehnologija (10 %)</span>
+            <span class="comp-bar__value">46</span>
+          </div>
+          <div class="comp-bar__track">
+            <div class="comp-bar__fill comp-bar__fill--red" data-width="46%"></div>
+          </div>
+          <div class="comp-bar__desc">Wi-Fi, digitalna komunikacija in TV/IPTV; 85,2 % omemb negativnih</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Methodology -->
+    <div class="chart-card reveal" style="margin-top:3rem;">
+      <div class="chart-card__title">Kako je izračunan indeks</div>
+      <div style="font-size:0.875rem;color:var(--s5);line-height:1.7;margin-bottom:1.5rem;">
+        Skupni indeks (62/100) je uteženo povprečje 7 komponent. Vsaka komponenta je ocenjena na lestvici 0 do 100 na podlagi kvantitativnih podatkov iz 2.369 ocen na Booking.com. Uteži odražajo relativni vpliv posamezne komponente na celotno izkušnjo gosta v wellness hotelu.
+      </div>
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+          <thead>
+            <tr style="border-bottom:2px solid rgba(255,255,255,0.1);">
+              <th style="text-align:left;padding:0.6rem;color:var(--m5);font-weight:600;">Komponenta</th>
+              <th style="text-align:center;padding:0.6rem;color:var(--m5);font-weight:600;">Utež</th>
+              <th style="text-align:center;padding:0.6rem;color:var(--m5);font-weight:600;">Ocena</th>
+              <th style="text-align:left;padding:0.6rem;color:var(--m5);font-weight:600;">Način izračuna</th>
+              <th style="text-align:left;padding:0.6rem;color:var(--m5);font-weight:600;">Zakaj ta utež</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:0.6rem;color:var(--white);font-weight:500;">Zadovoljstvo gostov</td>
+              <td style="padding:0.6rem;text-align:center;color:var(--m4);">20%</td>
+              <td style="padding:0.6rem;text-align:center;color:var(--green);font-weight:600;">85</td>
+              <td style="padding:0.6rem;color:var(--s4);">Povprečna ocena Booking.com (8,48/10) pretvorjena na lestvico 0 do 100. Ocena 8,5 = 85 točk.</td>
+              <td style="padding:0.6rem;color:var(--s3);font-style:italic;">Booking.com ocena je najpomembnejša javna metrika, ki neposredno vpliva na vidnost hotela v iskalniku in odločitve gostov pri rezervaciji.</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:0.6rem;color:var(--white);font-weight:500;">Wellness in ponudba</td>
+              <td style="padding:0.6rem;text-align:center;color:var(--m4);">15%</td>
+              <td style="padding:0.6rem;text-align:center;color:var(--yellow);font-weight:600;">62</td>
+              <td style="padding:0.6rem;color:var(--s4);">Razmerje pozitivnih in negativnih omemb wellness storitev (bazen, savne, jacuzzi, urniki). Savne in bazen dobro ocenjeni, a prehladna voda, omejen urnik (11:00 do 20:00) in odsotnost jacuzzija znižajo oceno.</td>
+              <td style="padding:0.6rem;color:var(--s3);font-style:italic;">Habakuk se pozicionira kot wellness hotel. Wellness je osnovna obljuba, zaradi katere gostje izberejo ta hotel. Vsako odstopanje od pričakovanj je zlom obljube.</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:0.6rem;color:var(--white);font-weight:500;">Hrana in pijača</td>
+              <td style="padding:0.6rem;text-align:center;color:var(--m4);">15%</td>
+              <td style="padding:0.6rem;text-align:center;color:var(--yellow);font-weight:600;">60</td>
+              <td style="padding:0.6rem;color:var(--s4);">Analiza sentimenta omemb zajtrka, večerje in restavracije. Zajtrk pretežno pozitiven, večerja in razmerje cena/kakovost pretežno negativna (45+ pritožb).</td>
+              <td style="padding:0.6rem;color:var(--s3);font-style:italic;">Večina gostov rezervira polpenzion, zato je kakovost hrane ključen del vsakodnevne izkušnje. S 45+ pritožbami o večerji je to eno izmed najpogosteje omenjenih področij.</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:0.6rem;color:var(--white);font-weight:500;">Kakovost storitev</td>
+              <td style="padding:0.6rem;text-align:center;color:var(--m4);">15%</td>
+              <td style="padding:0.6rem;text-align:center;color:var(--yellow);font-weight:600;">58</td>
+              <td style="padding:0.6rem;color:var(--s4);">Razmerje pozitivnih in negativnih omemb osebja, recepcije, čiščenja in odzivnosti. Osebje pogosto pohvaljeno kot prijazno, a ponavljajoče pritožbe glede recepcije (počasnost, hladnost) in čistoče (30+ omemb) znižajo rezultat.</td>
+              <td style="padding:0.6rem;color:var(--s3);font-style:italic;">Kakovost storitev je v hotelirstvu poglavitni dejavnik zadovoljstva in lojalnosti gostov. Recepcija je prva in zadnja točka stika, čistoča pa temeljna higienska zahteva.</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:0.6rem;color:var(--white);font-weight:500;">Kakovost sob</td>
+              <td style="padding:0.6rem;text-align:center;color:var(--m4);">15%</td>
+              <td style="padding:0.6rem;text-align:center;color:var(--yellow);font-weight:600;">55</td>
+              <td style="padding:0.6rem;color:var(--s4);">Analiza sentimenta omemb sob, pohištva in opreme. Prenovljene sobe ocenjene odlično (9+), neprenovljene zelo slabo (5 do 6). Ker del hotela še ni prenovljen, se obe skupini povprečita na 55.</td>
+              <td style="padding:0.6rem;color:var(--s3);font-style:italic;">Soba je prostor, v katerem gostje preživijo največ časa. Izrazita razlika med prenovljenimi in neprenovljenimi sobami (9+ vs. 5) kaže, da je to področje z velikim vplivom na splošno oceno.</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:0.6rem;color:var(--white);font-weight:500;">Zaznava vrednosti</td>
+              <td style="padding:0.6rem;text-align:center;color:var(--m4);">10%</td>
+              <td style="padding:0.6rem;text-align:center;color:var(--red);font-weight:600;">50</td>
+              <td style="padding:0.6rem;color:var(--s4);">Analiza omemb cene, stroškov in razmerja cena/kakovost. Parkirnina (15 EUR/noč), skriti dodatni stroški (zajtrk, savna, turistična taksa) in občutek neupravičene cene večernega bifeja generirajo 20+ negativnih omemb z malo pozitivnimi protiutežmi.</td>
+              <td style="padding:0.6rem;color:var(--s3);font-style:italic;">Cena je manj neposredno vplivna na izkušnjo kot storitev ali sobe, a vpliva na ponovne rezervacije in priporočila. Nižja utež, ker hotel na cenovno percepcijo težje vpliva kratkoročno.</td>
+            </tr>
+            <tr>
+              <td style="padding:0.6rem;color:var(--white);font-weight:500;">Sobna tehnologija</td>
+              <td style="padding:0.6rem;text-align:center;color:var(--m4);">10%</td>
+              <td style="padding:0.6rem;text-align:center;color:var(--red);font-weight:600;">46</td>
+              <td style="padding:0.6rem;color:var(--s4);">Technology Index: uteženo povprečje sentimenta in ocen 58 reviewjev, ki omenjajo Wi-Fi, digitalno komunikacijo ali TV/IPTV. 85,2% omemb negativnih, povprečna ocena teh gostov 6,72/10 (vs. 8,48 skupno).</td>
+              <td style="padding:0.6rem;color:var(--s3);font-style:italic;">Le 3,7% ocen (87 od 2.369) omenja sobno tehnologijo, kar je bistveno manj kot storitve, sobe ali hrana (po več sto omemb). Utež 10% odraža manjši delež omemb v celotnem vzorcu, vpliv na oceno pa je podrobneje razviden v ločenem Technology Indexu.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,0.06);font-size:0.8rem;color:var(--s4);line-height:1.6;">
+        <strong style="color:var(--m5);">Formula:</strong> Skupni indeks = (85 × 0,20) + (62 × 0,15) + (60 × 0,15) + (58 × 0,15) + (55 × 0,15) + (50 × 0,10) + (46 × 0,10) = <strong style="color:var(--white);">61,85 ≈ 62</strong>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================
+     SECTION 3: OVERVIEW
+     ============================================ -->
+<section class="overview-section section" id="overview">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">Pregled</h2>
+      <p class="section-subtitle">Ključne metrike iz 2.369 ocen na Booking.com</p>
+    </div>
+
+    <div class="stat-cards stagger">
+      <div class="stat-card reveal">
+        <div class="stat-card__value">2.369</div>
+        <div class="stat-card__label">Skupno ocen</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-card__value">8,5</div>
+        <div class="stat-card__label">Povprečna ocena (/10)</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-card__value">60%</div>
+        <div class="stat-card__label">Ocena 9 ali 10</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-card__value">4</div>
+        <div class="stat-card__label">Glavni segmenti gostov</div>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <!-- Score Distribution -->
+      <div class="chart-card reveal">
+        <div class="chart-card__title">Porazdelitev ocen</div>
+        <div class="h-bar">
+          <span class="h-bar__label">10</span>
+          <div class="h-bar__track"><div class="h-bar__fill" data-width="100%" style="background:var(--m3)"><span class="h-bar__percent">36,3 % (860)</span></div></div>
+        </div>
+        <div class="h-bar">
+          <span class="h-bar__label">9</span>
+          <div class="h-bar__track"><div class="h-bar__fill" data-width="65.1%" style="background:var(--m3)"><span class="h-bar__percent">23,6 % (560)</span></div></div>
+        </div>
+        <div class="h-bar">
+          <span class="h-bar__label">8</span>
+          <div class="h-bar__track"><div class="h-bar__fill" data-width="54.7%" style="background:var(--m4)"><span class="h-bar__percent">19,8 % (470)</span></div></div>
+        </div>
+        <div class="h-bar">
+          <span class="h-bar__label">7</span>
+          <div class="h-bar__track"><div class="h-bar__fill" data-width="24.2%" style="background:var(--m5)"><span class="h-bar__percent">8,8 % (208)</span></div></div>
+        </div>
+        <div class="h-bar">
+          <span class="h-bar__label">6</span>
+          <div class="h-bar__track"><div class="h-bar__fill" data-width="11.6%" style="background:var(--yellow)"><span class="h-bar__percent">4,2 %</span></div></div>
+        </div>
+        <div class="h-bar">
+          <span class="h-bar__label">5</span>
+          <div class="h-bar__track"><div class="h-bar__fill" data-width="8%" style="background:var(--orange)"><span class="h-bar__percent">2,9 %</span></div></div>
+        </div>
+        <div class="h-bar">
+          <span class="h-bar__label">4</span>
+          <div class="h-bar__track"><div class="h-bar__fill" data-width="4.5%" style="background:var(--orange)"><span class="h-bar__percent">1,6 %</span></div></div>
+        </div>
+        <div class="h-bar">
+          <span class="h-bar__label">3</span>
+          <div class="h-bar__track"><div class="h-bar__fill" data-width="2.9%" style="background:var(--red)"><span class="h-bar__percent">1,1 %</span></div></div>
+        </div>
+        <div class="h-bar">
+          <span class="h-bar__label">2</span>
+          <div class="h-bar__track"><div class="h-bar__fill" data-width="1.5%" style="background:var(--red)"><span class="h-bar__percent">0,5 %</span></div></div>
+        </div>
+        <div class="h-bar">
+          <span class="h-bar__label">1</span>
+          <div class="h-bar__track"><div class="h-bar__fill" data-width="2.9%" style="background:var(--red)"><span class="h-bar__percent">1,1 %</span></div></div>
+        </div>
+      </div>
+
+      <!-- Monthly Trend Line Chart -->
+      <div class="chart-card reveal">
+        <div class="chart-card__title">Mesečni trend ocen (2025/2026)</div>
+        <svg viewBox="0 0 500 260" class="line-chart-svg">
+          <!-- Grid lines -->
+          <line x1="50" y1="20" x2="50" y2="210" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <line x1="50" y1="210" x2="480" y2="210" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <!-- Y-axis labels -->
+          <text x="44" y="25" fill="rgba(255,255,255,0.3)" font-size="10" text-anchor="end" font-family="Inter,sans-serif">9.5</text>
+          <text x="44" y="68" fill="rgba(255,255,255,0.3)" font-size="10" text-anchor="end" font-family="Inter,sans-serif">9.0</text>
+          <text x="44" y="111" fill="rgba(255,255,255,0.3)" font-size="10" text-anchor="end" font-family="Inter,sans-serif">8.5</text>
+          <text x="44" y="154" fill="rgba(255,255,255,0.3)" font-size="10" text-anchor="end" font-family="Inter,sans-serif">8.0</text>
+          <text x="44" y="197" fill="rgba(255,255,255,0.3)" font-size="10" text-anchor="end" font-family="Inter,sans-serif">7.5</text>
+          <!-- Horizontal grid -->
+          <line x1="50" y1="67" x2="480" y2="67" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="50" y1="110" x2="480" y2="110" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="50" y1="153" x2="480" y2="153" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="50" y1="196" x2="480" y2="196" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="4,4"/>
+          <!-- Area fill -->
+          <!-- Y mapping: 7.5=210, 9.5=20 => scale: (val-7.5)/(9.5-7.5) * 190 from bottom 210
+               Feb25:9.0=67, Mar25:8.7=92.5, Apr25:8.4=118.5, Maj25:8.1=144, Jun25:8.7=92.5,
+               Jul25:8.2=135, Avg25:8.0=153, Sep25:8.6=101.5, Okt25:8.4=118.5, Nov25:8.8=83.5,
+               Dec25:8.4=118.5, Jan26:8.9=75.5, Feb26:9.0=67 -->
+          <polygon points="83,67 116,92 149,118 182,144 215,92 248,135 281,153 314,101 347,118 380,83 413,118 446,75 480,67 480,210 83,210"
+            fill="url(#areaGrad)" opacity="0.3"/>
+          <defs>
+            <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#009CDE" stop-opacity="0.4"/>
+              <stop offset="100%" stop-color="#009CDE" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <!-- Line -->
+          <polyline points="83,67 116,92 149,118 182,144 215,92 248,135 281,153 314,101 347,118 380,83 413,118 446,75 480,67"
+            fill="none" stroke="#009CDE" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+          <!-- Dots -->
+          <circle cx="83" cy="67" r="4" fill="#009CDE"/>
+          <circle cx="116" cy="92" r="4" fill="#009CDE"/>
+          <circle cx="149" cy="118" r="4" fill="#009CDE"/>
+          <circle cx="182" cy="144" r="4" fill="#009CDE"/>
+          <circle cx="215" cy="92" r="4" fill="#009CDE"/>
+          <circle cx="248" cy="135" r="4" fill="#009CDE"/>
+          <circle cx="281" cy="153" r="4" fill="#009CDE"/>
+          <circle cx="314" cy="101" r="4" fill="#009CDE"/>
+          <circle cx="347" cy="118" r="4" fill="#009CDE"/>
+          <circle cx="380" cy="83" r="4" fill="#009CDE"/>
+          <circle cx="413" cy="118" r="4" fill="#009CDE"/>
+          <circle cx="446" cy="75" r="4" fill="#009CDE"/>
+          <circle cx="480" cy="67" r="4" fill="#009CDE"/>
+          <!-- Value labels -->
+          <text x="83" y="58" fill="#fff" font-size="9" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">9.0</text>
+          <text x="182" y="160" fill="var(--red)" font-size="9" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">8.1</text>
+          <text x="281" y="169" fill="var(--red)" font-size="9" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">8.0</text>
+          <text x="380" y="74" fill="#fff" font-size="9" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">8.8</text>
+          <text x="446" y="66" fill="#fff" font-size="9" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">8.9</text>
+          <text x="480" y="58" fill="#fff" font-size="9" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">9.0</text>
+          <!-- X-axis labels -->
+          <text x="83" y="230" fill="rgba(255,255,255,0.3)" font-size="8" text-anchor="middle" font-family="Inter,sans-serif">Feb 25</text>
+          <text x="116" y="230" fill="rgba(255,255,255,0.3)" font-size="8" text-anchor="middle" font-family="Inter,sans-serif">Mar</text>
+          <text x="149" y="230" fill="rgba(255,255,255,0.3)" font-size="8" text-anchor="middle" font-family="Inter,sans-serif">Apr</text>
+          <text x="182" y="230" fill="rgba(255,255,255,0.3)" font-size="8" text-anchor="middle" font-family="Inter,sans-serif">Maj</text>
+          <text x="215" y="230" fill="rgba(255,255,255,0.3)" font-size="8" text-anchor="middle" font-family="Inter,sans-serif">Jun</text>
+          <text x="248" y="230" fill="rgba(255,255,255,0.3)" font-size="8" text-anchor="middle" font-family="Inter,sans-serif">Jul</text>
+          <text x="281" y="230" fill="rgba(255,255,255,0.3)" font-size="8" text-anchor="middle" font-family="Inter,sans-serif">Avg</text>
+          <text x="314" y="230" fill="rgba(255,255,255,0.3)" font-size="8" text-anchor="middle" font-family="Inter,sans-serif">Sep</text>
+          <text x="347" y="230" fill="rgba(255,255,255,0.3)" font-size="8" text-anchor="middle" font-family="Inter,sans-serif">Okt</text>
+          <text x="380" y="230" fill="rgba(255,255,255,0.3)" font-size="8" text-anchor="middle" font-family="Inter,sans-serif">Nov</text>
+          <text x="413" y="230" fill="rgba(255,255,255,0.3)" font-size="8" text-anchor="middle" font-family="Inter,sans-serif">Dec</text>
+          <text x="446" y="230" fill="rgba(255,255,255,0.3)" font-size="8" text-anchor="middle" font-family="Inter,sans-serif">Jan 26</text>
+          <text x="480" y="230" fill="rgba(255,255,255,0.3)" font-size="8" text-anchor="middle" font-family="Inter,sans-serif">Feb</text>
+          <!-- Annotation: summer dip -->
+          <rect x="170" y="165" width="125" height="18" rx="3" fill="rgba(218,32,37,0.15)"/>
+          <text x="232" y="177" fill="var(--red)" font-size="8" text-anchor="middle" font-family="Inter,sans-serif">Poletni padec ocen</text>
+          <!-- Annotation: winter peak -->
+          <rect x="420" y="42" width="90" height="18" rx="3" fill="rgba(54,160,88,0.15)"/>
+          <text x="465" y="54" fill="var(--green)" font-size="8" text-anchor="middle" font-family="Inter,sans-serif">Zimski vrh</text>
+        </svg>
+        <p style="font-size:0.75rem;color:var(--s4);margin-top:0.75rem;line-height:1.4;">Poletni meseci (maj, julij, avgust) dosegajo konsistentno nižje ocene. Najvišje zadovoljstvo je v zimski smučarski sezoni in novembru.</p>
+      </div>
+    </div>
+
+    <!-- Guest segments -->
+    <div class="stat-cards stagger" style="margin-top:3rem;">
+      <div class="stat-card reveal">
+        <div class="stat-card__value" style="font-size:1.75rem;">40%</div>
+        <div class="stat-card__label">Družine</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-card__value" style="font-size:1.75rem;">40%</div>
+        <div class="stat-card__label">Pari</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-card__value" style="font-size:1.75rem;">12%</div>
+        <div class="stat-card__label">Posamezniki</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-card__value" style="font-size:1.75rem;">8%</div>
+        <div class="stat-card__label">Skupine</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     SECTION 4: STRENGTHS
+     ============================================ -->
+<section class="strengths-section section" id="strengths">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">Kaj gostom všeč</h2>
+      <p class="section-subtitle">Ključne prednosti hotela po številu omemb v ocenah</p>
+    </div>
+
+    <div class="strength-cards stagger">
+      <div class="strength-card reveal">
+        <div class="strength-card__icon">&#9968;</div>
+        <div class="strength-card__title">Lokacija ob gondoli</div>
+        <div class="strength-card__mentions">150+ omemb</div>
+        <div class="strength-card__quote">"Hotel je približno 20 metrov od gondole, ki pelje na vrh Pohorja." <span class="tech-quote__translated">prevedeno iz EN</span></div>
+      </div>
+
+      <div class="strength-card reveal">
+        <div class="strength-card__icon">&#9832;</div>
+        <div class="strength-card__title">Wellness, spa in savne</div>
+        <div class="strength-card__mentions">130+ omemb</div>
+        <div class="strength-card__quote">"Wellness oddelek je fantastičen. Več savn, turška parna kopel in velik bazen." <span class="tech-quote__translated">prevedeno iz DE</span></div>
+      </div>
+
+      <div class="strength-card reveal">
+        <div class="strength-card__icon">&#127860;</div>
+        <div class="strength-card__title">Zajtrk</div>
+        <div class="strength-card__mentions">110+ omemb</div>
+        <div class="strength-card__quote">"Zajtrk je bil eden najboljših, kar sem jih kdaj jedel v hotelu." <span class="tech-quote__translated">prevedeno iz DE</span></div>
+      </div>
+
+      <div class="strength-card reveal">
+        <div class="strength-card__icon">&#128716;</div>
+        <div class="strength-card__title">Prenovljene sobe</div>
+        <div class="strength-card__mentions">100+ omemb</div>
+        <div class="strength-card__quote">"Najboljše postelje doslej. Po eni noči spanja sem se počutil 20 let mlajšega." <span class="tech-quote__translated">prevedeno iz EN</span></div>
+      </div>
+
+      <div class="strength-card reveal">
+        <div class="strength-card__icon">&#128578;</div>
+        <div class="strength-card__title">Prijaznost osebja</div>
+        <div class="strength-card__mentions">90+ omemb</div>
+        <div class="strength-card__quote">"Od trenutka prijave je bilo osebje neverjetno prijazno in pozorno." <span class="tech-quote__translated">prevedeno iz EN</span></div>
+      </div>
+
+      <div class="strength-card reveal">
+        <div class="strength-card__icon">&#127960;</div>
+        <div class="strength-card__title">Dizajn in prenova</div>
+        <div class="strength-card__mentions">60+ omemb</div>
+        <div class="strength-card__quote">"Arhitektura, dizajn in kakovost materialov so vrhunski, zlahka bi zamenjali za petzvezdični hotel." <span class="tech-quote__translated">prevedeno iz EN</span></div>
+      </div>
+    </div>
+
+    <!-- Strengths bar chart -->
+    <div class="chart-card reveal" style="max-width:700px;">
+      <div class="chart-card__title">Število omemb po prednosti</div>
+      <div class="h-bar">
+        <span class="h-bar__label" style="width:110px;text-align:left;font-size:0.8rem;">Lokacija</span>
+        <div class="h-bar__track"><div class="h-bar__fill" data-width="100%" style="background:var(--m3)"><span class="h-bar__percent">150+</span></div></div>
+      </div>
+      <div class="h-bar">
+        <span class="h-bar__label" style="width:110px;text-align:left;font-size:0.8rem;">Wellness</span>
+        <div class="h-bar__track"><div class="h-bar__fill" data-width="87%" style="background:var(--m3)"><span class="h-bar__percent">130+</span></div></div>
+      </div>
+      <div class="h-bar">
+        <span class="h-bar__label" style="width:110px;text-align:left;font-size:0.8rem;">Zajtrk</span>
+        <div class="h-bar__track"><div class="h-bar__fill" data-width="73%" style="background:var(--m4)"><span class="h-bar__percent">110+</span></div></div>
+      </div>
+      <div class="h-bar">
+        <span class="h-bar__label" style="width:110px;text-align:left;font-size:0.8rem;">Sobe</span>
+        <div class="h-bar__track"><div class="h-bar__fill" data-width="67%" style="background:var(--m4)"><span class="h-bar__percent">100+</span></div></div>
+      </div>
+      <div class="h-bar">
+        <span class="h-bar__label" style="width:110px;text-align:left;font-size:0.8rem;">Osebje</span>
+        <div class="h-bar__track"><div class="h-bar__fill" data-width="60%" style="background:var(--m5)"><span class="h-bar__percent">90+</span></div></div>
+      </div>
+      <div class="h-bar">
+        <span class="h-bar__label" style="width:110px;text-align:left;font-size:0.8rem;">Čistoča</span>
+        <div class="h-bar__track"><div class="h-bar__fill" data-width="47%" style="background:var(--m5)"><span class="h-bar__percent">70+</span></div></div>
+      </div>
+      <div class="h-bar">
+        <span class="h-bar__label" style="width:110px;text-align:left;font-size:0.8rem;">Dizajn</span>
+        <div class="h-bar__track"><div class="h-bar__fill" data-width="40%" style="background:var(--m5)"><span class="h-bar__percent">60+</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     SECTION 4b: WEAKNESSES
+     ============================================ -->
+<section class="weaknesses-section section" id="weaknesses">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">Kaj gostom ni všeč</h2>
+      <p class="section-subtitle">Najpogostejše pritožbe gostov po številu omemb v ocenah</p>
+    </div>
+
+    <div class="weakness-cards stagger">
+      <div class="weakness-card reveal">
+        <div class="weakness-card__icon">&#127860;</div>
+        <div class="weakness-card__title">Kakovost hrane glede na ceno</div>
+        <div class="weakness-card__mentions">45+ omemb</div>
+        <div class="weakness-card__quote">"Večerni bife za 30+ EUR je bil razočaranje, omejene možnosti in povprečna kakovost." <span class="tech-quote__translated">prevedeno iz EN</span></div>
+      </div>
+
+      <div class="weakness-card reveal">
+        <div class="weakness-card__icon">&#128663;</div>
+        <div class="weakness-card__title">Parkiranje: cena in izkušnja</div>
+        <div class="weakness-card__mentions">40+ omemb</div>
+        <div class="weakness-card__quote">"15 EUR na noč za garažo? Za 4-zvezdnični hotel bi morala biti vključena." <span class="tech-quote__translated">prevedeno iz EN</span></div>
+      </div>
+
+      <div class="weakness-card reveal">
+        <div class="weakness-card__icon">&#128719;</div>
+        <div class="weakness-card__title">Stanje neprenovljenih sob</div>
+        <div class="weakness-card__mentions">40+ omemb</div>
+        <div class="weakness-card__quote">"Hotel je bil le delno prenovljen. Cene so se zvišale, a pričakuješ, da bo vse novo in vzdrževano." <span class="tech-quote__translated">prevedeno iz EN</span></div>
+      </div>
+
+      <div class="weakness-card reveal">
+        <div class="weakness-card__icon">&#9200;</div>
+        <div class="weakness-card__title">Obratovalni čas wellnessa</div>
+        <div class="weakness-card__mentions">35+ omemb</div>
+        <div class="weakness-card__quote">"Wellness odprt od 14:00 do 20:00? To je šala. 6 ur na dan za wellness hotel je zapravljanje virov." <span class="tech-quote__translated">prevedeno iz EN</span></div>
+      </div>
+
+      <div class="weakness-card reveal">
+        <div class="weakness-card__icon">&#127777;</div>
+        <div class="weakness-card__title">Temperatura bazena in sob</div>
+        <div class="weakness-card__mentions">30+ omemb</div>
+        <div class="weakness-card__quote">"Voda v bazenu mora biti 2 do 3 stopinje toplejša, potem bi dobili 10/10." <span class="tech-quote__translated">prevedeno iz EN</span></div>
+      </div>
+
+      <div class="weakness-card reveal">
+        <div class="weakness-card__icon">&#128701;</div>
+        <div class="weakness-card__title">Kakovost čiščenja</div>
+        <div class="weakness-card__mentions">30+ omemb</div>
+        <div class="weakness-card__quote">"Soba ni bila posesana ob prihodu. Po pritožbi na recepciji smo dobili novo, boljšo sobo." <span class="tech-quote__translated">prevedeno iz EN</span></div>
+      </div>
+
+      <div class="weakness-card reveal">
+        <div class="weakness-card__icon">&#10052;</div>
+        <div class="weakness-card__title">Klimatizacija in ogrevanje</div>
+        <div class="weakness-card__mentions">25+ omemb</div>
+        <div class="weakness-card__quote">"V sobi je bilo mrzlo, klime ni bilo mogoče izklopiti, ker je centralno vodena. Hladilnik prav tako ni deloval." <span class="tech-quote__translated">prevedeno iz EN</span></div>
+      </div>
+
+      <div class="weakness-card reveal">
+        <div class="weakness-card__icon">&#128100;</div>
+        <div class="weakness-card__title">Odnos osebja</div>
+        <div class="weakness-card__mentions">25+ omemb</div>
+        <div class="weakness-card__quote">"Osebje je nesramno, obnašajo se, kot da ne vidijo strank. Za preprosto prijavo in odjavo čakaš dlje kot običajno." <span class="tech-quote__translated">prevedeno iz EN</span></div>
+      </div>
+
+      <div class="weakness-card reveal">
+        <div class="weakness-card__icon">&#127966;</div>
+        <div class="weakness-card__title">Zapuščen zunanji bazen</div>
+        <div class="weakness-card__mentions">25+ omemb</div>
+        <div class="weakness-card__quote">"Sobe gledajo na ogromno razbito, grdo sivo streho in poškodovane fasade." <span class="tech-quote__translated">prevedeno iz EN</span></div>
+      </div>
+
+      <div class="weakness-card reveal">
+        <div class="weakness-card__icon">&#128168;</div>
+        <div class="weakness-card__title">Smrad iz odtokov</div>
+        <div class="weakness-card__mentions">18+ omemb</div>
+        <div class="weakness-card__quote">"Soba je bila lepa, a smrad iz kopalniških cevi je bil zelo neprijeten." <span class="tech-quote__translated">prevedeno iz EN</span></div>
+      </div>
+    </div>
+
+    <!-- Weaknesses bar chart -->
+    <div class="chart-card reveal" style="max-width:700px;">
+      <div class="chart-card__title">Število omemb po slabosti</div>
+      <div class="h-bar">
+        <span class="h-bar__label" style="width:110px;text-align:left;font-size:0.8rem;">Hrana</span>
+        <div class="h-bar__track"><div class="h-bar__fill" data-width="100%" style="background:var(--red)"><span class="h-bar__percent">45+</span></div></div>
+      </div>
+      <div class="h-bar">
+        <span class="h-bar__label" style="width:110px;text-align:left;font-size:0.8rem;">Parkiranje</span>
+        <div class="h-bar__track"><div class="h-bar__fill" data-width="89%" style="background:var(--red)"><span class="h-bar__percent">40+</span></div></div>
+      </div>
+      <div class="h-bar">
+        <span class="h-bar__label" style="width:110px;text-align:left;font-size:0.8rem;">Sobe</span>
+        <div class="h-bar__track"><div class="h-bar__fill" data-width="89%" style="background:var(--red)"><span class="h-bar__percent">40+</span></div></div>
+      </div>
+      <div class="h-bar">
+        <span class="h-bar__label" style="width:110px;text-align:left;font-size:0.8rem;">Wellness čas</span>
+        <div class="h-bar__track"><div class="h-bar__fill" data-width="78%" style="background:var(--orange)"><span class="h-bar__percent">35+</span></div></div>
+      </div>
+      <div class="h-bar">
+        <span class="h-bar__label" style="width:110px;text-align:left;font-size:0.8rem;">Temp. bazena</span>
+        <div class="h-bar__track"><div class="h-bar__fill" data-width="67%" style="background:var(--orange)"><span class="h-bar__percent">30+</span></div></div>
+      </div>
+      <div class="h-bar">
+        <span class="h-bar__label" style="width:110px;text-align:left;font-size:0.8rem;">Čiščenje</span>
+        <div class="h-bar__track"><div class="h-bar__fill" data-width="67%" style="background:var(--orange)"><span class="h-bar__percent">30+</span></div></div>
+      </div>
+      <div class="h-bar">
+        <span class="h-bar__label" style="width:110px;text-align:left;font-size:0.8rem;">Klima</span>
+        <div class="h-bar__track"><div class="h-bar__fill" data-width="56%" style="background:var(--yellow)"><span class="h-bar__percent">25+</span></div></div>
+      </div>
+      <div class="h-bar">
+        <span class="h-bar__label" style="width:110px;text-align:left;font-size:0.8rem;">Osebje</span>
+        <div class="h-bar__track"><div class="h-bar__fill" data-width="56%" style="background:var(--yellow)"><span class="h-bar__percent">25+</span></div></div>
+      </div>
+      <div class="h-bar">
+        <span class="h-bar__label" style="width:110px;text-align:left;font-size:0.8rem;">Zunanji b.</span>
+        <div class="h-bar__track"><div class="h-bar__fill" data-width="56%" style="background:var(--yellow)"><span class="h-bar__percent">25+</span></div></div>
+      </div>
+      <div class="h-bar">
+        <span class="h-bar__label" style="width:110px;text-align:left;font-size:0.8rem;">Smrad</span>
+        <div class="h-bar__track"><div class="h-bar__fill" data-width="40%" style="background:var(--yellow)"><span class="h-bar__percent">18+</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     SECTION 5: FIXED
+     ============================================ -->
+<section class="fixed-section section" id="fixed">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">Verjetno že rešeno</h2>
+      <p class="section-subtitle">Težave izpred marca 2025, ki so verjetno odpravljene ali bistveno zmanjšane</p>
+    </div>
+
+    <div class="fixed-cards stagger">
+      <div class="fixed-card reveal">
+        <div class="fixed-card__title">Zaprtje bazena/wellnessa brez obvestila</div>
+        <div class="fixed-card__row">
+          <div class="fixed-card__before">
+            <div class="fixed-card__label fixed-card__label--before">Prej</div>
+            35+ omemb, skoncentriranih v sep/okt 2024. Gostje ob prihodu ugotovili, da je wellness zaprt.
+          </div>
+          <div class="fixed-card__after">
+            <div class="fixed-card__label fixed-card__label--after">Zdaj</div>
+            Praktično izginilo. Wellness območje deluje konsistentno. Prenova zaključena.
+          </div>
+        </div>
+        <span class="badge badge--green fixed-card__status">Rešeno</span>
+      </div>
+
+      <div class="fixed-card reveal">
+        <div class="fixed-card__title">Kakovost WiFi/interneta</div>
+        <div class="fixed-card__row">
+          <div class="fixed-card__before">
+            <div class="fixed-card__label fixed-card__label--before">Prej</div>
+            15 omemb o šibkem ali nedelujočem WiFi (~1,3 % ocen).
+          </div>
+          <div class="fixed-card__after">
+            <div class="fixed-card__label fixed-card__label--after">Zdaj</div>
+            Stopnja pritožb se je znižala na ~0,9 % ocen. Verjetno nadgrajeno.
+          </div>
+        </div>
+        <span class="badge badge--yellow fixed-card__status">Delno izboljšano</span>
+      </div>
+
+      <div class="fixed-card reveal">
+        <div class="fixed-card__title">Težave z dvigalom</div>
+        <div class="fixed-card__row">
+          <div class="fixed-card__before">
+            <div class="fixed-card__label fixed-card__label--before">Prej</div>
+            6 omemb o le enem delujočem dvigalu in dolgih čakalnih vrstah.
+          </div>
+          <div class="fixed-card__after">
+            <div class="fixed-card__label fixed-card__label--after">Zdaj</div>
+            5 omemb. Stopnja pritožb je podobna, a zelo nizka v obeh obdobjih.
+          </div>
+        </div>
+        <span class="badge badge--orange fixed-card__status">Nedoločeno</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     SECTION 6: ISSUES
+     ============================================ -->
+<section class="issues-section section" id="issues">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">Aktualne težave</h2>
+      <p class="section-subtitle">Težave, ki še vedno potrebujejo pozornost, razdeljene po prioriteti</p>
+    </div>
+
+    <!-- CRITICAL -->
+    <div class="issues-tier reveal">
+      <div class="issues-tier__title">
+        <span class="badge badge--red">Kritična prioriteta</span>
+      </div>
+      <div class="issue-cards stagger">
+        <div class="issue-card reveal">
+          <div class="issue-card__header">
+            <span class="issue-card__name">Obratovalni čas wellnessa/bazena</span>
+            <span class="issue-card__mentions">35+ omemb</span>
+          </div>
+          <div class="issue-card__desc">Bazen se odpre ob 11:00 (pozimi) ali 14:00 (poleti), zapre ob 20:00. Gostje ob odjavi bazena ne morejo uporabiti. Konkurenca ima odprto od 7:00 do 22:00.</div>
+        </div>
+        <div class="issue-card reveal">
+          <div class="issue-card__header">
+            <span class="issue-card__name">Temperatura vode v bazenu</span>
+            <span class="issue-card__mentions">30+ omemb</span>
+          </div>
+          <div class="issue-card__desc">Voda konsistentno opisana kot prehladna (~28 C). Ni masažnega bazena, jacuzzija ali bazena s toplo vodo. Prejšnji masažni bazen zalit z betonom.</div>
+        </div>
+        <div class="issue-card reveal">
+          <div class="issue-card__header">
+            <span class="issue-card__name">Parkiranje: cena in izkušnja</span>
+            <span class="issue-card__mentions">40+ omemb</span>
+          </div>
+          <div class="issue-card__desc">15 EUR/noč za garažo, ki bi po mnenju gostov morala biti vključena. Slaba osvetlitev, zmedljiva signalizacija, stresen 15-minutni rok izhodne kartice.</div>
+        </div>
+        <div class="issue-card reveal">
+          <div class="issue-card__header">
+            <span class="issue-card__name">Kakovost hrane glede na ceno</span>
+            <span class="issue-card__mentions">45+ omemb</span>
+          </div>
+          <div class="issue-card__desc">Pregreti trdo kuhani jajca, posušena umešana jajca, razredčen sok, le en kavni aparat. Večerni bife za 30+ EUR ocenjen kot zelo slabo razmerje cena/kakovost.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HIGH -->
+    <div class="issues-tier reveal">
+      <div class="issues-tier__title">
+        <span class="badge badge--orange">Visoka prioriteta</span>
+      </div>
+      <div class="issue-cards stagger">
+        <div class="issue-card reveal">
+          <div class="issue-card__header">
+            <span class="issue-card__name">Stanje neprenovljenih sob</span>
+            <span class="issue-card__mentions">40+ omemb</span>
+          </div>
+          <div class="issue-card__desc">Obrabljeno pohištvo, stare preproge, pokvarjene stvari. Oster kontrast med prenovljenim in neprenovljenim krilom.</div>
+        </div>
+        <div class="issue-card reveal">
+          <div class="issue-card__header">
+            <span class="issue-card__name">Kakovost čiščenja</span>
+            <span class="issue-card__mentions">30+ omemb</span>
+          </div>
+          <div class="issue-card__desc">Sobe niso čiščene ali čiščene vsak drugi dan. Ko se čišči, je to površno: brez sesanja, brisanja prahu ali čiščenja kopalnice.</div>
+        </div>
+        <div class="issue-card reveal">
+          <div class="issue-card__header">
+            <span class="issue-card__name">Klimatizacija in temperatura</span>
+            <span class="issue-card__mentions">25+ omemb</span>
+          </div>
+          <div class="issue-card__desc">Centralni sistem brez individualnega prilagajanja. Pozimi prehladne sobe, poleti nedelujoca klima. Presvetel zaslon termostata ponoči.</div>
+        </div>
+        <div class="issue-card reveal">
+          <div class="issue-card__header">
+            <span class="issue-card__name">Odnos osebja</span>
+            <span class="issue-card__mentions">25+ omemb</span>
+          </div>
+          <div class="issue-card__desc">Recepcija opisana kot neprijazna in hladna. Osebje v restavraciji počasno. Kontrast med prijaznimi sobaricami in nezainteresiranim osebjem v ospredju.</div>
+        </div>
+        <div class="issue-card reveal">
+          <div class="issue-card__header">
+            <span class="issue-card__name">Smrad iz odtokov</span>
+            <span class="issue-card__mentions">18+ omemb</span>
+          </div>
+          <div class="issue-card__desc">Sistemska vodovodna težava. Kanalizacijski smrad iz odtokov v kopalnici pronica v sobe. Verjetno suhi sifoni ali težava z odzračevanjem.</div>
+        </div>
+        <div class="issue-card reveal">
+          <div class="issue-card__header">
+            <span class="issue-card__name">Zapuščen zunanji bazen</span>
+            <span class="issue-card__mentions">25+ omemb</span>
+          </div>
+          <div class="issue-card__desc">Sobe gledajo na ruševine nekdanjega zunanjega bazena, opisane kot "betonska puščava" in "vojno območje". Ni zunanjega prostora za počitek.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEDIUM -->
+    <div class="issues-tier reveal">
+      <div class="issues-tier__title">
+        <span class="badge badge--yellow">Srednja prioriteta</span>
+      </div>
+      <div class="issue-cards stagger">
+        <div class="issue-card reveal">
+          <div class="issue-card__header">
+            <span class="issue-card__name">Prenatrpan bazen z otroki</span>
+            <span class="issue-card__mentions">20+ omemb</span>
+          </div>
+          <div class="issue-card__desc">Bazen deluje kot otroški vodni park. Ni ločitve med cono za sprostitev in družinsko cono.</div>
+        </div>
+        <div class="issue-card reveal">
+          <div class="issue-card__header">
+            <span class="issue-card__name">Hrup od dogodkov</span>
+            <span class="issue-card__mentions">15+ omemb</span>
+          </div>
+          <div class="issue-card__desc">Hotelski dogodki slišni v sobah do 3:00 ponoči. Niso sporočeni gostom pred prihodom.</div>
+        </div>
+        <div class="issue-card reveal">
+          <div class="issue-card__header">
+            <span class="issue-card__name">Brez minibara in vode</span>
+            <span class="issue-card__mentions">12+ omemb</span>
+          </div>
+          <div class="issue-card__desc">Prazen hladilnik, brez brezplačnih plastenk vode (standard v večini 4-zvezdničnih hotelov).</div>
+        </div>
+        <div class="issue-card reveal">
+          <div class="issue-card__header">
+            <span class="issue-card__name">Prekinitev elektrike ob odjavi</span>
+            <span class="issue-card__mentions">5 omemb</span>
+          </div>
+          <div class="issue-card__desc">Natanko ob 11:00 se električna energija prekine: luči ugasnejo, rolete se zaprejo, prha preneha delovati. Sproža virusne negativne ocene.</div>
+        </div>
+        <div class="issue-card reveal">
+          <div class="issue-card__header">
+            <span class="issue-card__name">Zaznava cena/vrednost</span>
+            <span class="issue-card__mentions">20+ omemb</span>
+          </div>
+          <div class="issue-card__desc">Soba + zajtrk (20 EUR/os) + parkiranje (15 EUR) + večerja (30+ EUR/os) ustvari skupni znesek, ki se zdi neupravičen.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bubble chart -->
+    <div class="bubble-chart reveal">
+      <div class="bubble-chart__title">Relativna velikost težav po številu omemb</div>
+      <svg viewBox="0 0 800 320">
+        <!-- Critical (red) -->
+        <circle cx="120" cy="140" r="55" fill="rgba(218,32,37,0.2)" stroke="var(--red)" stroke-width="1.5"/>
+        <text x="120" y="135" fill="#fff" font-size="10" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">Hrana</text>
+        <text x="120" y="150" fill="var(--red)" font-size="9" text-anchor="middle" font-family="Inter,sans-serif">45+</text>
+
+        <circle cx="270" cy="130" r="50" fill="rgba(218,32,37,0.2)" stroke="var(--red)" stroke-width="1.5"/>
+        <text x="270" y="125" fill="#fff" font-size="10" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">Parkiranje</text>
+        <text x="270" y="140" fill="var(--red)" font-size="9" text-anchor="middle" font-family="Inter,sans-serif">40+</text>
+
+        <circle cx="400" cy="145" r="45" fill="rgba(218,32,37,0.2)" stroke="var(--red)" stroke-width="1.5"/>
+        <text x="400" y="140" fill="#fff" font-size="9" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">Wellness čas</text>
+        <text x="400" y="155" fill="var(--red)" font-size="9" text-anchor="middle" font-family="Inter,sans-serif">35+</text>
+
+        <circle cx="520" cy="150" r="42" fill="rgba(218,32,37,0.2)" stroke="var(--red)" stroke-width="1.5"/>
+        <text x="520" y="145" fill="#fff" font-size="9" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">Temp. bazena</text>
+        <text x="520" y="160" fill="var(--red)" font-size="9" text-anchor="middle" font-family="Inter,sans-serif">30+</text>
+
+        <!-- High (orange) -->
+        <circle cx="180" cy="260" r="50" fill="rgba(229,102,0,0.15)" stroke="var(--orange)" stroke-width="1.5"/>
+        <text x="180" y="255" fill="#fff" font-size="10" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">Sobe</text>
+        <text x="180" y="270" fill="var(--orange)" font-size="9" text-anchor="middle" font-family="Inter,sans-serif">40+</text>
+
+        <circle cx="320" cy="265" r="42" fill="rgba(229,102,0,0.15)" stroke="var(--orange)" stroke-width="1.5"/>
+        <text x="320" y="260" fill="#fff" font-size="9" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">Čiščenje</text>
+        <text x="320" y="275" fill="var(--orange)" font-size="9" text-anchor="middle" font-family="Inter,sans-serif">30+</text>
+
+        <circle cx="440" cy="268" r="38" fill="rgba(229,102,0,0.15)" stroke="var(--orange)" stroke-width="1.5"/>
+        <text x="440" y="263" fill="#fff" font-size="9" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">Zunanji b.</text>
+        <text x="440" y="278" fill="var(--orange)" font-size="9" text-anchor="middle" font-family="Inter,sans-serif">25+</text>
+
+        <circle cx="550" cy="260" r="38" fill="rgba(229,102,0,0.15)" stroke="var(--orange)" stroke-width="1.5"/>
+        <text x="550" y="255" fill="#fff" font-size="9" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">Klima</text>
+        <text x="550" y="270" fill="var(--orange)" font-size="9" text-anchor="middle" font-family="Inter,sans-serif">25+</text>
+
+        <circle cx="660" cy="255" r="35" fill="rgba(229,102,0,0.15)" stroke="var(--orange)" stroke-width="1.5"/>
+        <text x="660" y="250" fill="#fff" font-size="9" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">Osebje</text>
+        <text x="660" y="265" fill="var(--orange)" font-size="9" text-anchor="middle" font-family="Inter,sans-serif">25+</text>
+
+        <!-- Medium (yellow) -->
+        <circle cx="650" cy="130" r="32" fill="rgba(246,169,0,0.12)" stroke="var(--yellow)" stroke-width="1.5"/>
+        <text x="650" y="125" fill="#fff" font-size="9" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">Cena/vr.</text>
+        <text x="650" y="140" fill="var(--yellow)" font-size="9" text-anchor="middle" font-family="Inter,sans-serif">20+</text>
+
+        <circle cx="745" cy="145" r="28" fill="rgba(246,169,0,0.12)" stroke="var(--yellow)" stroke-width="1.5"/>
+        <text x="745" y="140" fill="#fff" font-size="8" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600">Hrup</text>
+        <text x="745" y="153" fill="var(--yellow)" font-size="8" text-anchor="middle" font-family="Inter,sans-serif">15+</text>
+
+        <!-- Legend -->
+        <circle cx="60" cy="20" r="6" fill="rgba(218,32,37,0.3)" stroke="var(--red)" stroke-width="1"/>
+        <text x="72" y="24" fill="var(--s4)" font-size="9" font-family="Inter,sans-serif">Kritična</text>
+        <circle cx="150" cy="20" r="6" fill="rgba(229,102,0,0.2)" stroke="var(--orange)" stroke-width="1"/>
+        <text x="162" y="24" fill="var(--s4)" font-size="9" font-family="Inter,sans-serif">Visoka</text>
+        <circle cx="225" cy="20" r="6" fill="rgba(246,169,0,0.15)" stroke="var(--yellow)" stroke-width="1"/>
+        <text x="237" y="24" fill="var(--s4)" font-size="9" font-family="Inter,sans-serif">Srednja</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     SECTION 6b: GUEST TECHNOLOGY
+     ============================================ -->
+<section class="tech-section section" id="tech">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">Guest Experience Technology</h2>
+      <p class="section-subtitle">Kako gostje ocenjujejo tehnologijo v sobah in digitalno izkušnjo. Analiza 58 ocen (2,4 % vseh), ki omenjajo TV, Wi-Fi in digitalno komunikacijo.</p>
+    </div>
+
+    <!-- Technology Index + Key Stats -->
+    <div class="tech-hero-grid reveal">
+      <!-- Tech Index Gauge -->
+      <div class="tech-gauge-wrapper">
+        <svg class="tech-gauge-svg" viewBox="0 0 200 200">
+          <circle cx="100" cy="100" r="78" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="12"/>
+          <circle cx="100" cy="100" r="78" fill="none" stroke="url(#techGaugeGrad)" stroke-width="12"
+            stroke-linecap="round"
+            stroke-dasharray="0 490"
+            class="tech-donut-ring"
+            data-target="225"
+            transform="rotate(-90 100 100)"/>
+          <defs>
+            <linearGradient id="techGaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#DA2025"/>
+              <stop offset="50%" stop-color="#E56600"/>
+              <stop offset="100%" stop-color="#F6A900"/>
+            </linearGradient>
+          </defs>
+          <text x="100" y="96" text-anchor="middle" fill="#fff" font-size="38" font-weight="700" font-family="Inter, sans-serif">46</text>
+          <text x="100" y="116" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="13" font-family="Inter, sans-serif">od 100</text>
+        </svg>
+        <div class="gauge-label">
+          <div class="gauge-label__name">Technology Index</div>
+        </div>
+      </div>
+
+      <!-- Key Stats -->
+      <div class="tech-stats-grid">
+        <div class="tech-stat">
+          <div class="tech-stat__value" style="color:var(--red);">6,72</div>
+          <div class="tech-stat__label">Povprečna ocena gostov, ki omenjajo tehnologijo (od 10)</div>
+        </div>
+        <div class="tech-stat">
+          <div class="tech-stat__value" style="color:var(--m4);">8,48</div>
+          <div class="tech-stat__label">Skupna povprečna ocena vseh gostov (od 10)</div>
+        </div>
+        <div class="tech-stat">
+          <div class="tech-stat__value" style="color:var(--red);">85,2 %</div>
+          <div class="tech-stat__label">Delež negativnih omemb tehnologije med vsemi tech omembami</div>
+        </div>
+        <div class="tech-stat">
+          <div class="tech-stat__value" style="color:var(--orange);">58</div>
+          <div class="tech-stat__label">Ocen, ki izrecno omenjajo tehnologijo v sobi ali digitalno izkušnjo</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Breakdown -->
+    <div class="reveal" style="margin-bottom:1.5rem;">
+      <h3 style="font-size:1.375rem;font-weight:600;margin-bottom:0.5rem;">Razčlenitev po kategorijah</h3>
+      <p style="font-size:0.875rem;color:var(--s4);">Tri ključna področja guest technology, ki jih gostje omenjajo v ocenah</p>
+    </div>
+
+    <div class="tech-cat-grid stagger">
+      <!-- Digital Communication -->
+      <div class="tech-cat-card reveal">
+        <div class="tech-cat-card__icon">&#128241;</div>
+        <div class="tech-cat-card__name">Digitalna komunikacija</div>
+        <div class="tech-cat-card__product">Nevron Mobile App + Welcome Screen</div>
+        <div class="tech-cat-card__bar-label">
+          <span>5 pozitivnih</span>
+          <span>20 negativnih</span>
+        </div>
+        <div class="tech-cat-card__bar">
+          <div class="tech-cat-card__bar-pos" data-width="20%"></div>
+          <div class="tech-cat-card__bar-neg" data-width="80%"></div>
+        </div>
+        <div class="tech-cat-card__score" style="color:var(--red);">Povp. ocena: 6,60 / 10</div>
+        <div style="font-size:0.8rem;color:var(--s4);line-height:1.5;">Predolg check-out (35+ min), slaba informiranost o urnikih, brez digitalnih kanalov za komunikacijo z gosti.</div>
+      </div>
+
+      <!-- Wi-Fi / Internet -->
+      <div class="tech-cat-card reveal">
+        <div class="tech-cat-card__icon">&#128246;</div>
+        <div class="tech-cat-card__name">Wi-Fi in internet</div>
+        <div class="tech-cat-card__product">Nevron Mobile App (digitalni vratar)</div>
+        <div class="tech-cat-card__bar-label">
+          <span>2 pozitivni</span>
+          <span>17 negativnih</span>
+        </div>
+        <div class="tech-cat-card__bar">
+          <div class="tech-cat-card__bar-pos" data-width="10.5%"></div>
+          <div class="tech-cat-card__bar-neg" data-width="89.5%"></div>
+        </div>
+        <div class="tech-cat-card__score" style="color:var(--red);">Povp. ocena: 6,84 / 10</div>
+        <div style="font-size:0.8rem;color:var(--s4);line-height:1.5;">Počasen ali nedelujoč Wi-Fi v sobah, neuporabljiv internet. Predpogoj za delovanje vseh digitalnih storitev.</div>
+      </div>
+
+      <!-- TV / IPTV -->
+      <div class="tech-cat-card reveal">
+        <div class="tech-cat-card__icon">&#128250;</div>
+        <div class="tech-cat-card__name">TV in zabava v sobi</div>
+        <div class="tech-cat-card__product">Nevron IPTV (že nameščen)</div>
+        <div class="tech-cat-card__bar-label">
+          <span>2 pozitivni</span>
+          <span>15 negativnih</span>
+        </div>
+        <div class="tech-cat-card__bar">
+          <div class="tech-cat-card__bar-pos" data-width="11.8%"></div>
+          <div class="tech-cat-card__bar-neg" data-width="88.2%"></div>
+        </div>
+        <div class="tech-cat-card__score" style="color:var(--red);">Povp. ocena: 5,65 / 10</div>
+        <div style="font-size:0.8rem;color:var(--s4);line-height:1.5;">TV nedelujoč, obrnjen stran od postelje, premalo kanalov. Najnižja povprečna ocena med vsemi kategorijami.</div>
+      </div>
+    </div>
+
+    <!-- Guest Quotes -->
+    <div class="reveal" style="margin-bottom:1.5rem;">
+      <h3 style="font-size:1.375rem;font-weight:600;margin-bottom:0.5rem;">Kaj pravijo gostje</h3>
+      <p style="font-size:0.875rem;color:var(--s4);">Dejanski citati iz ocen, ki se nanašajo na tehnologijo v sobah</p>
+    </div>
+
+    <div class="tech-quote-grid stagger">
+      <div class="tech-quote reveal">
+        <div class="tech-quote__text">V sobi ni delovala nobena internetna povezava. <span class="tech-quote__translated">prevedeno iz FR</span></div>
+        <div class="tech-quote__meta">
+          <span class="tech-quote__name">Clément, Francija</span>
+          <span class="tech-quote__score tech-quote__score--low">1/10</span>
+        </div>
+      </div>
+
+      <div class="tech-quote reveal">
+        <div class="tech-quote__text">Nič ni delovalo. Šele pozneje smo izvedeli, da wellness s savnami ne deluje. Televizor ni deloval in tako naprej. <span class="tech-quote__translated">prevedeno iz DE</span></div>
+        <div class="tech-quote__meta">
+          <span class="tech-quote__name">Mersudin, Nemčija</span>
+          <span class="tech-quote__score tech-quote__score--low">3/10</span>
+        </div>
+      </div>
+
+      <div class="tech-quote reveal">
+        <div class="tech-quote__text">Stara soba, potrebna izdatne renovacije. Internet izjemno počasen, skorajda nedelujoč.</div>
+        <div class="tech-quote__meta">
+          <span class="tech-quote__name">B, Slovenija</span>
+          <span class="tech-quote__score tech-quote__score--low">4/10</span>
+        </div>
+      </div>
+
+      <div class="tech-quote reveal">
+        <div class="tech-quote__text">Televizor v sobi se ni samodejno vklopil, Wi-Fi je bil počasen. <span class="tech-quote__translated">prevedeno iz DE</span></div>
+        <div class="tech-quote__meta">
+          <span class="tech-quote__name">Günter, Avstrija</span>
+          <span class="tech-quote__score tech-quote__score--low">4/10</span>
+        </div>
+      </div>
+
+      <div class="tech-quote reveal">
+        <div class="tech-quote__text">Bazen neuporaben, parkirišče plačljivo 15 evrov na noč, za odjavo sem porabil 35 minut. <span class="tech-quote__translated">prevedeno iz IT</span></div>
+        <div class="tech-quote__meta">
+          <span class="tech-quote__name">Andrea, Italija</span>
+          <span class="tech-quote__score tech-quote__score--low">3/10</span>
+        </div>
+      </div>
+
+      <div class="tech-quote reveal">
+        <div class="tech-quote__text">Hotel zelo moderen, z veliko tehnologije, še posebej v kopalnici. <span class="tech-quote__translated">prevedeno iz RO</span></div>
+        <div class="tech-quote__meta">
+          <span class="tech-quote__name">Cosmin, Romunija</span>
+          <span class="tech-quote__score tech-quote__score--high">9/10</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Insight box -->
+    <div class="tech-insight-box reveal">
+      <div class="tech-insight-box__title">Kaj to pomeni za Hotel Habakuk</div>
+      <div class="tech-insight-box__text">
+        Gostje, ki omenjajo tehnologijo, dajo hotelu v povprečju <strong style="color:var(--red);">1,76 točke nižjo oceno</strong> kot preostali gostje (6,72 proti 8,48). To pomeni, da je guest experience technology trenutno <strong>negativni multiplikator</strong>, ki aktivno znižuje skupno oceno hotela.<br><br>
+        Več kot 85 % omemb tehnologije je negativnih. Najslabše ocenjena kategorija je TV in zabava v sobi (povprečje le 5,65/10), sledita digitalna komunikacija (6,60) in Wi-Fi (6,84). Gostje pričakujejo delujoč Wi-Fi, sodobno TV izkušnjo in digitalne komunikacijske kanale.<br><br>
+        Ker Habakuk že ima nameščen <strong style="color:var(--m4);">Nevron IPTV</strong>, obstaja neposredna priložnost za dvig tega indeksa z aktivacijo dodatnih modulov (naročanje, ankete, welcome screen) in uvedbo <strong style="color:var(--m4);">Nevron Mobile</strong> aplikacije za celovito digitalno izkušnjo gosta.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================
+     SECTION 7: ACTION PLAN
+     ============================================ -->
+<section class="plan-section section" id="plan">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">Akcijski načrt</h2>
+      <p class="section-subtitle">Tri faze za dvig ocene z 8,5 na 9,0+</p>
+    </div>
+
+    <div class="timeline">
+      <!-- Phase 1 -->
+      <div class="phase reveal">
+        <div class="phase__dot" style="background:var(--green);"></div>
+        <div class="phase__header">
+          <span class="phase__name">Faza 1: Takojšnji ukrepi</span>
+          <span class="phase__time">0 do 30 dni</span>
+        </div>
+        <div class="phase__actions stagger">
+          <div class="action-card reveal">
+            <div class="action-card__name">Podaljšati obratovalni čas bazena (7:00 do 21:00)</div>
+            <div class="action-card__badges">
+              <span class="action-card__badge action-card__badge--impact-high">Visok vpliv</span>
+              <span class="action-card__badge action-card__badge--cost-low">Nizek strošek</span>
+            </div>
+          </div>
+          <div class="action-card reveal">
+            <div class="action-card__name">Dvigniti temperaturo bazena na 30 do 31 C</div>
+            <div class="action-card__badges">
+              <span class="action-card__badge action-card__badge--impact-high">Visok vpliv</span>
+              <span class="action-card__badge action-card__badge--cost-low">Nizek strošek</span>
+            </div>
+          </div>
+          <div class="action-card reveal">
+            <div class="action-card__name">Zajtrk: jajca kuhati sproti, sok ne redčiti, oba kavna aparata</div>
+            <div class="action-card__badges">
+              <span class="action-card__badge action-card__badge--impact-high">Visok vpliv</span>
+              <span class="action-card__badge action-card__badge--cost-low">Nizek strošek</span>
+            </div>
+          </div>
+          <div class="action-card reveal">
+            <div class="action-card__name">2 brezplačni plastenki vode na sobo na dan</div>
+            <div class="action-card__badges">
+              <span class="action-card__badge action-card__badge--impact-med">Srednji vpliv</span>
+              <span class="action-card__badge action-card__badge--cost-none">Zanemarljiv</span>
+            </div>
+          </div>
+          <div class="action-card reveal">
+            <div class="action-card__name">Dnevno čiščenje kot privzeto, jasno komunicirano</div>
+            <div class="action-card__badges">
+              <span class="action-card__badge action-card__badge--impact-med">Srednji vpliv</span>
+              <span class="action-card__badge action-card__badge--cost-low">Nizek strošek</span>
+            </div>
+          </div>
+          <div class="action-card reveal">
+            <div class="action-card__name">Podaljšati rok prekinitve elektrike na 11:30</div>
+            <div class="action-card__badges">
+              <span class="action-card__badge action-card__badge--impact-high">Visok vpliv</span>
+              <span class="action-card__badge action-card__badge--cost-none">Brez stroška</span>
+            </div>
+          </div>
+          <div class="action-card reveal">
+            <div class="action-card__name">Obvestila o dogodkih pred prihodom gosta</div>
+            <div class="action-card__badges">
+              <span class="action-card__badge action-card__badge--impact-med">Srednji vpliv</span>
+              <span class="action-card__badge action-card__badge--cost-none">Brez stroška</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="phase reveal">
+        <div class="phase__dot" style="background:var(--m4);"></div>
+        <div class="phase__header">
+          <span class="phase__name">Faza 2: Kratkoročni ukrepi</span>
+          <span class="phase__time">1 do 3 mesece</span>
+        </div>
+        <div class="phase__actions stagger">
+          <div class="action-card reveal">
+            <div class="action-card__name">Program usposabljanja osebja za recepcijo in restavracijo</div>
+            <div class="action-card__badges">
+              <span class="action-card__badge action-card__badge--impact-high">Visok vpliv</span>
+              <span class="action-card__badge action-card__badge--cost-med">Srednji strošek</span>
+            </div>
+          </div>
+          <div class="action-card reveal">
+            <div class="action-card__name">Pregled in popravilo vodovodnih sifonov (smrad)</div>
+            <div class="action-card__badges">
+              <span class="action-card__badge action-card__badge--impact-high">Visok vpliv</span>
+              <span class="action-card__badge action-card__badge--cost-med">Srednji strošek</span>
+            </div>
+          </div>
+          <div class="action-card reveal">
+            <div class="action-card__name">Transparentno oblikovanje cen (parkiranje vključiti v sobo)</div>
+            <div class="action-card__badges">
+              <span class="action-card__badge action-card__badge--impact-high">Visok vpliv</span>
+              <span class="action-card__badge action-card__badge--cost-none">Brez stroška</span>
+            </div>
+          </div>
+          <div class="action-card reveal">
+            <div class="action-card__name">Zamenjava najslabših vzmetnic in popravilo pokvarjenih elementov</div>
+            <div class="action-card__badges">
+              <span class="action-card__badge action-card__badge--impact-med">Srednji vpliv</span>
+              <span class="action-card__badge action-card__badge--cost-med">Srednji strošek</span>
+            </div>
+          </div>
+          <div class="action-card reveal">
+            <div class="action-card__name">Zaslon gradbišča zunanjega bazena</div>
+            <div class="action-card__badges">
+              <span class="action-card__badge action-card__badge--impact-med">Srednji vpliv</span>
+              <span class="action-card__badge action-card__badge--cost-low">Nizek strošek</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="phase reveal">
+        <div class="phase__dot" style="background:var(--m5);"></div>
+        <div class="phase__header">
+          <span class="phase__name">Faza 3: Srednjeročni ukrepi</span>
+          <span class="phase__time">3 do 12 mesecev</span>
+        </div>
+        <div class="phase__actions stagger">
+          <div class="action-card reveal">
+            <div class="action-card__name">Nadaljevanje prenove preostalih sob</div>
+            <div class="action-card__badges">
+              <span class="action-card__badge action-card__badge--impact-high">Zelo visok vpliv</span>
+              <span class="action-card__badge action-card__badge--cost-high">Visok strošek</span>
+            </div>
+          </div>
+          <div class="action-card reveal">
+            <div class="action-card__name">Namestitev masažnega bazena/jacuzzija</div>
+            <div class="action-card__badges">
+              <span class="action-card__badge action-card__badge--impact-high">Visok vpliv</span>
+              <span class="action-card__badge action-card__badge--cost-high">Srednji do visok</span>
+            </div>
+          </div>
+          <div class="action-card reveal">
+            <div class="action-card__name">Individualno uravnavanje temperature (HVAC nadgradnja)</div>
+            <div class="action-card__badges">
+              <span class="action-card__badge action-card__badge--impact-med">Srednji vpliv</span>
+              <span class="action-card__badge action-card__badge--cost-high">Visok strošek</span>
+            </div>
+          </div>
+          <div class="action-card reveal">
+            <div class="action-card__name">Ureditev zunanjega prostora (ležalniki, sončna terasa)</div>
+            <div class="action-card__badges">
+              <span class="action-card__badge action-card__badge--impact-high">Visok vpliv</span>
+              <span class="action-card__badge action-card__badge--cost-high">Srednji do visok</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Impact estimate -->
+    <div class="revenue-box reveal" style="margin-top:3rem;">
+      <div class="revenue-box__pretitle">Ocenjeni vpliv vseh treh faz</div>
+      <div class="revenue-box__formula">
+        Faza 1 + Faza 2 dvigneta oceno z <strong>8,5 na 8,8 do 9,0</strong> v 6 do 12 mesecih.<br>
+        Faza 3 stabilizira oceno <strong>nad 9,0</strong>.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     SECTION 8: NEVRON SOLUTIONS
+     ============================================ -->
+<section class="solutions-section section" id="solutions">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">Kako Nevron pomaga</h2>
+      <p class="section-subtitle">Hotel Habakuk že uporablja Nevron IPTV. Z aktivacijo dodatnih modulov in Nevron Mobile aplikacije lahko neposredno naslovite več kot 240 omemb težav, identificiranih v tej analizi.</p>
+    </div>
+
+    <!-- Problem -> Solution flow -->
+    <div class="flow-grid reveal">
+      <div class="flow-col flow-col--problems">
+        <div class="flow-col__title">Težave iz analize</div>
+        <div class="flow-item">Urniki wellnessa niso jasni gostom (80+ omemb)</div>
+        <div class="flow-item">Čiščenje ni izvedeno ali je površno (55+ omemb)</div>
+        <div class="flow-item">Kakovost hrane in naročanje (45+ omemb)</div>
+        <div class="flow-item">Recepcija počasna, dolge vrste (25+ omemb)</div>
+        <div class="flow-item">Cene niso transparentne (20+ omemb)</div>
+        <div class="flow-item">Jezikovna ovira z osebjem (15+ omemb)</div>
+      </div>
+      <div class="flow-arrow">
+        <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+      </div>
+      <div class="flow-col flow-col--solutions">
+        <div class="flow-col__title">Nevron rešitev</div>
+        <div class="flow-item">CMS, push obvestila, digital signage za realno-časno komunikacijo</div>
+        <div class="flow-item">Room Care modul: digitalni zahtevki z beleženjem in sledenjem</div>
+        <div class="flow-item">Digitalni meniji, naročanje prek TV/telefona, sobna postrežba</div>
+        <div class="flow-item">Fast Check-in, digitalni checkout brez čakalnih vrst</div>
+        <div class="flow-item">Digitalni katalogi z jasnimi cenami na vseh kanalih</div>
+        <div class="flow-item">AI Chatbot v vseh jezikih 24/7, večjezični CMS</div>
+      </div>
+    </div>
+
+    <!-- Product cards -->
+    <div class="product-cards stagger">
+      <div class="product-card reveal">
+        <div class="product-card__icon">&#128187;</div>
+        <div class="product-card__name">NevronCore</div>
+        <div class="product-card__desc">Osrednja platforma, ki poganja vse rešitve iz enega zaledja. CMS za objavo urnikov, pravil in cen v realnem času na vseh kanalih. Modul Room Care za digitalne zahtevke gostov. Ankete med bivanjem za pravočasno odkrivanje težav.</div>
+      </div>
+      <div class="product-card reveal">
+        <div class="product-card__icon">&#128241;</div>
+        <div class="product-card__name">Nevron Mobile</div>
+        <div class="product-card__desc">PWA aplikacija brez namestitve. Gost skenira QR kodo in dobi dostop do vseh storitev: naročanje hrane, wellness urniki, digitalni checkout, AI chatbot v jeziku gosta. Kontekstualni upselli za večji prihodek na gosta.</div>
+      </div>
+      <div class="product-card reveal" style="border:1px solid var(--green);position:relative;">
+        <div style="position:absolute;top:-0.5rem;right:1rem;background:var(--green);color:var(--s1);font-size:0.65rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:2rem;text-transform:uppercase;letter-spacing:0.05em;">Že nameščen</div>
+        <div class="product-card__icon">&#128250;</div>
+        <div class="product-card__name">Nevron IPTV</div>
+        <div class="product-card__desc">Hotel Habakuk že uporablja Nevron IPTV. Naslednji korak: aktivacija dodatnih modulov (Room Care, naročanje hrane, ankete, dobrodošlični zaslon s personalizacijo) in integracija z Nevron Mobile za celovito digitalno izkušnjo.</div>
+      </div>
+      <div class="product-card reveal">
+        <div class="product-card__icon">&#128242;</div>
+        <div class="product-card__name">Digital Signage</div>
+        <div class="product-card__desc">Digitalni zasloni v lobiju, restavraciji, wellness vhodu, garaži in hodnikih. Aktualne informacije o vremenu, smučarskih razmerah, jedilnih časih, wellness urnikih in navigaciji po hotelu.</div>
+      </div>
+    </div>
+
+    <!-- Revenue impact -->
+    <div class="revenue-box reveal">
+      <div class="revenue-box__pretitle">Ocena kot valuta: Formula za Hotel Habakuk</div>
+      <div class="revenue-box__formula">
+        Raziskave (Cornell/STR) kažejo, da 0,1 višja ocena na OTA platformah pomeni približno 10 EUR višjo ceno na sobo na noč, ne glede na bazni ADR.<br>
+        Za Hotel Habakuk (~137 sob) pri 65 % zasedenosti:
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:2rem;align-items:center;margin:2rem 0;">
+        <div style="text-align:center;">
+          <div style="font-size:2rem;font-weight:700;color:var(--yellow);">8,5</div>
+          <div style="font-size:0.875rem;color:var(--s4);">Trenutna ocena</div>
+        </div>
+        <div style="color:var(--m4);font-size:2rem;">&#8594;</div>
+        <div style="text-align:center;">
+          <div style="font-size:2rem;font-weight:700;color:var(--green);">9,0</div>
+          <div style="font-size:0.875rem;color:var(--s4);">Ciljna ocena</div>
+        </div>
+      </div>
+      <div class="revenue-box__formula" style="font-size:0.875rem;opacity:0.7;">
+        137 sob x 65 % zasedenost x 5 (0,5 točke) x 10 EUR x 365 dni
+      </div>
+      <div class="revenue-box__number">+1,63 mio EUR</div>
+      <div class="revenue-box__label">dodatnega letnega prihodka</div>
+      <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.08);">
+        <div style="font-size:0.875rem;color:var(--s4);margin-bottom:0.5rem;">Nevron platforma neposredno prispeva k dvigu ocene za 0,15 do 0,3 točke samo z digitalizacijo:</div>
+        <div style="font-size:1.5rem;font-weight:700;color:var(--m4);">+0,49 do 0,98 mio EUR / leto</div>
+      </div>
+    </div>
+
+    <!-- Impact table -->
+    <div class="chart-card reveal" style="margin-top:3rem;">
+      <div class="chart-card__title">Kategorije pritožb, ki jih Nevron naslavlja</div>
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.875rem;">
+          <thead>
+            <tr style="border-bottom:2px solid rgba(255,255,255,0.1);">
+              <th style="text-align:left;padding:0.75rem;color:var(--m5);font-weight:600;">Kategorija</th>
+              <th style="text-align:center;padding:0.75rem;color:var(--m5);font-weight:600;">Omembe</th>
+              <th style="text-align:left;padding:0.75rem;color:var(--m5);font-weight:600;">Nevron rešitev</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:0.75rem;color:var(--white);">Komunikacija</td>
+              <td style="padding:0.75rem;text-align:center;color:var(--m4);font-weight:600;">80+</td>
+              <td style="padding:0.75rem;color:var(--s4);">CMS, Push obvestila, Digital Signage, AI Chatbot</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:0.75rem;color:var(--white);">Kakovost storitev</td>
+              <td style="padding:0.75rem;text-align:center;color:var(--m4);font-weight:600;">55+</td>
+              <td style="padding:0.75rem;color:var(--s4);">Room Care, Messaging, Ankete</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:0.75rem;color:var(--white);">Hrana in naročanje</td>
+              <td style="padding:0.75rem;text-align:center;color:var(--m4);font-weight:600;">45+</td>
+              <td style="padding:0.75rem;color:var(--s4);">Digitalni meniji, naročanje prek TV/telefona</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:0.75rem;color:var(--white);">Recepcija in odjava</td>
+              <td style="padding:0.75rem;text-align:center;color:var(--m4);font-weight:600;">25+</td>
+              <td style="padding:0.75rem;color:var(--s4);">Fast Check-in, Digitalni checkout</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:0.75rem;color:var(--white);">Upsell in personalizacija</td>
+              <td style="padding:0.75rem;text-align:center;color:var(--m4);font-weight:600;">20+</td>
+              <td style="padding:0.75rem;color:var(--s4);">Personalizirane ponudbe, AI priporočila</td>
+            </tr>
+            <tr>
+              <td style="padding:0.75rem;color:var(--white);">Jezikovna ovira</td>
+              <td style="padding:0.75rem;text-align:center;color:var(--m4);font-weight:600;">15+</td>
+              <td style="padding:0.75rem;color:var(--s4);">Večjezični CMS, AI Chatbot v vseh jezikih</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     FOOTER
+     ============================================ -->
+<footer class="footer">
+  <div class="footer__logo">
+    <svg viewBox="0 0 1000 298.8" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:40px;width:auto;opacity:0.9;">
+      <g><g id="Layer_1"><g>
+        <path d="M254.4,97.8h31.8V2.1h-95.6v31.8h63.8v63.8h0ZM31.8,192.8H0v95.6h95.6v-31.8H31.8v-63.8ZM286.2,192.8h-31.8v49.9L31.8,2.1H0v95.6h31.8v-50.2l222.6,240.8h31.8v-95.6Z" fill="#fff"/>
+        <path d="M486.9,0c-15.9,0-26.3,7.9-31.1,17.4V2.1h-26.5v95.6h26.5v-55.2c0-14.1,8.6-21,19.9-21s16.8,6.2,16.8,19.2v57h26.5v-60.9C519,11.2,505.7,0,486.9,0ZM580.5,0c-27.8,0-49.2,19.6-49.2,49.7v1.5c0,30.5,21,48.6,49.9,48.6s42.6-11.5,45.7-32.2h-25c-1.6,8-7.7,13.3-19.9,13.3s-23-9.1-23.8-25h68.9v-7.3c0-34.2-21.9-48.6-46.6-48.6ZM558.6,39.6c2-13.5,10.1-21.4,21.9-21.4s19.9,6.9,20.8,21.4h-42.7ZM847.1,0c-28.7,0-50.4,19.6-50.4,49.5v1.5c0,29.8,21.8,48.8,50.3,48.8s50.4-19.2,50.4-49.3v-1.5c0-29.8-21.6-49-50.3-49ZM870.5,50.5c0,18.1-8.6,29.1-23.4,29.1s-23.4-11-23.4-29.2v-1.5c0-18.3,8.8-28.9,23.4-28.9s23.4,11,23.4,29.2v1.3ZM967.8,0c-15.9,0-26.3,7.9-31.1,17.4V2.1h-26.5v95.6h26.5v-55.2c0-14.1,8.6-21,19.9-21s16.8,6.2,16.8,19.2v57h26.5v-60.9c0-25.6-13.3-36.9-32.1-36.9ZM761.1,20.4V2.1h-26.5v95.6h26.5v-47.9c0-18.3,11.3-24.7,30.9-24.5V.6c-15.6.2-24.9,7-30.9,19.8ZM678,70.5l-22.8-68.4h-28.3l34.9,95.6h29.8L726.3,2.1h-25.6l-22.7,68.4Z" fill="#fff"/>
+      </g></g></g>
+    </svg>
+  </div>
+  <div style="width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--m3),transparent);margin:1.5rem auto;"></div>
+  <div class="footer__text">
+    To poročilo je pripravljeno kot del Nevronove storitve Guest Intelligence.<br>
+    Za več informacij nas kontaktirajte na <a href="mailto:info@nevron.eu" style="color:var(--m4);text-decoration:none;">info@nevron.eu</a> ali obiščite <a href="https://www.nevron.eu" style="color:var(--m4);text-decoration:none;">www.nevron.eu</a>
+  </div>
+  <div class="footer__tagline">&copy; 2026 Nevron d.o.o. Vse pravice pridržane.</div>
+</footer>
+
+<!-- ============================================
+     JAVASCRIPT
+     ============================================ -->
+<script>
+(function() {
+  // ===========================================
+  // IntersectionObserver for scroll reveal
+  // ===========================================
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        // Animate bar fills
+        const fills = entry.target.querySelectorAll('[data-width]');
+        fills.forEach(function(fill) {
+          fill.style.width = fill.getAttribute('data-width');
+        });
+        // Also check if entry itself has data-width
+        if (entry.target.getAttribute('data-width')) {
+          entry.target.style.width = entry.target.getAttribute('data-width');
+        }
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+  reveals.forEach(function(el) { observer.observe(el); });
+
+  // ===========================================
+  // Animate donut ring
+  // ===========================================
+  var donutRing = document.querySelector('.donut-ring');
+  if (donutRing) {
+    var circum = 2 * Math.PI * 85; // ~534
+    var target = parseFloat(donutRing.getAttribute('data-target'));
+    var donutObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          donutRing.style.strokeDasharray = target + ' ' + circum;
+        }
+      });
+    }, { threshold: 0.3 });
+    donutObserver.observe(donutRing);
+  }
+
+  // ===========================================
+  // Animate component bars on visibility
+  // ===========================================
+  var compFills = document.querySelectorAll('.comp-bar__fill');
+  compFills.forEach(function(fill) {
+    var barObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.style.width = entry.target.getAttribute('data-width');
+        }
+      });
+    }, { threshold: 0.3 });
+    barObserver.observe(fill);
+  });
+
+  // ===========================================
+  // Animate tech donut ring
+  // ===========================================
+  var techDonutRing = document.querySelector('.tech-donut-ring');
+  if (techDonutRing) {
+    var techCircum = 2 * Math.PI * 78; // ~490
+    var techTarget = parseFloat(techDonutRing.getAttribute('data-target'));
+    var techDonutObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          techDonutRing.style.strokeDasharray = techTarget + ' ' + techCircum;
+        }
+      });
+    }, { threshold: 0.3 });
+    techDonutObserver.observe(techDonutRing);
+  }
+
+  // ===========================================
+  // Animate tech category bars on visibility
+  // ===========================================
+  var techBarFills = document.querySelectorAll('.tech-cat-card__bar-pos, .tech-cat-card__bar-neg');
+  techBarFills.forEach(function(fill) {
+    var techBarObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.style.width = entry.target.getAttribute('data-width');
+        }
+      });
+    }, { threshold: 0.3 });
+    techBarObserver.observe(fill);
+  });
+
+  // ===========================================
+  // Smooth scroll for nav links
+  // ===========================================
+  document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      var target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // ===========================================
+  // Nav background on scroll
+  // ===========================================
+  var nav = document.querySelector('.nav');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 100) {
+      nav.style.background = 'rgba(0,1,38,0.95)';
+    } else {
+      nav.style.background = 'rgba(0,1,38,0.85)';
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
