@@ -1,0 +1,71 @@
+
+/* Bubble chart */
+.bubble-chart {
+  margin-top: 3rem;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--card-radius);
+  padding: 2rem;
+}
+
+.bubble-chart__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.bubble-chart svg { width: 100%; height: auto; }
+
+/* ============================================
+   GUEST TECHNOLOGY (Section 6b)
+   ============================================ */
+.tech-section {
+  background: linear-gradient(180deg, var(--s1) 0%, #0a0e1a 50%, var(--s1) 100%);
+  padding: var(--section-pad);
+}
+
+.tech-hero-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 4rem;
+  align-items: center;
+  margin-bottom: 4rem;
+}
+
+@media (max-width: 900px) {
+  .tech-hero-grid { grid-template-columns: 1fr; gap: 2rem; }
+}
+
+.tech-gauge-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tech-gauge-svg {
+  width: 220px;
+  height: 220px;
+}
+
+.tech-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.tech-stat {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.tech-stat__value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.tech-stat__label {
+  font-size: 0.75rem;

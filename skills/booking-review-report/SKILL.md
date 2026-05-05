@@ -120,13 +120,13 @@ Inputs are one of:
 2. **Booking.com hotel URL** — extract `<cc>` and `<slug>` directly.
 3. **Booking.com reviewlist URL** — already in canonical form, just normalize.
 
-Build the canonical reviewlist URL:
+Build the canonical reviewlist URL. **Booking ignores the `page` query parameter on this endpoint and always returns page 1; use `offset` instead** (verified 5. 5. 2026 on Bled Rose, where 99 page-N requests all returned page 1):
 
 ```
-https://www.booking.com/reviewlist.en-gb.html?cc1=<cc>&pagename=<slug>&customer_type=total&order=completed_desc&page=<N>&r_lang=all&rows=25
+https://www.booking.com/reviewlist.en-gb.html?cc1=<cc>&pagename=<slug>&customer_type=total&order=completed_desc&offset=<N>&r_lang=all&rows=25
 ```
 
-`rows=25` is the maximum Booking will serve via this endpoint; higher values are silently clamped.
+Where `offset = (page - 1) * 25`. `rows=25` is the maximum Booking will serve via this endpoint; higher values are silently clamped.
 
 Also build the hotel landing URL for facts:
 
@@ -228,15 +228,17 @@ Create the output dir + raw subdir:
 mkdir -p /Users/Shared/Domain/Context/Business/nevron/products/new-entry/review-sentiment/<slug>/raw
 ```
 
-For pages `1..P`, call `mcp__firecrawl__firecrawl_scrape` in batches of 8-10 in parallel:
+For pages `1..P`, call `mcp__firecrawl__firecrawl_scrape` in batches of 8-10 in parallel. **Use `offset=(N-1)*25`, NOT `page=N`** (Booking ignores `page` and returns page 1 every time):
 
 ```
-url:   https://www.booking.com/reviewlist.en-gb.html?cc1=<cc>&pagename=<slug>&customer_type=total&order=completed_desc&page=<N>&r_lang=all&rows=25
+url:   https://www.booking.com/reviewlist.en-gb.html?cc1=<cc>&pagename=<slug>&customer_type=total&order=completed_desc&offset=<(N-1)*25>&r_lang=all&rows=25
 proxy: "basic"
 formats: ["markdown"]
 waitFor: 2000
 onlyMainContent: true
 ```
+
+For larger hotels (>30 pages), prefer the helper script `scripts/scrape_pages.py` (template lives next to `parse_reviewlist.py`) which calls Firecrawl HTTP API directly with parallel threads, certifi SSL bundle, and atomic disk writes. The MCP route is fine for small hotels but hits per-call overhead.
 
 After each call, save the returned `markdown` field to:
 
@@ -326,7 +328,9 @@ HTML report at <out>/<slug>-review-analysis.html.
   - /Users/Shared/Domain/Context/Business/nevron/products/new-entry/review-sentiment/<slug>/stats.json
   - /Users/Shared/Domain/Context/Business/nevron/products/new-entry/review-sentiment/<slug>/liked.txt
   - /Users/Shared/Domain/Context/Business/nevron/products/new-entry/review-sentiment/<slug>/disliked.txt
-  - ~/.claude/skills/booking-review-report/templates/single-hotel-reference.html  (PRIMARY TEMPLATE for single-hotel reports)
+  - ~/.claude/skills/booking-review-report/templates/single-hotel-reference.html  (PRIMARY TEMPLATE — copy CSS, JS, section markup 1:1; match section-by-section depth)
+  - ~/.claude/skills/booking-review-report/templates/SECTION-DEPTH-CHECKLIST.md  (MANDATORY depth targets per section, output line count, action-card pattern, self-check greps)
+  - ~/.claude/skills/booking-review-report/templates/nevron-logo-nav.svg  (paste verbatim into the nav. NEVER hand-roll a placeholder logo.)
   - /Users/amadejdemsar/.claude/skills/booking-review-report/SKILL.md
   - The skill rules in ~/.claude/CLAUDE.md (style, dates, Slovenian)
 
