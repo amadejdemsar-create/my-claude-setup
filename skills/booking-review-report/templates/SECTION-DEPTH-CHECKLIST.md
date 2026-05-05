@@ -12,7 +12,7 @@ Numbers in parentheses are line counts in Habakuk's `single-hotel-reference.html
 | 2 | Hero | `#top` | ~25 | Hotel name, sub-heading, hero metrics row (4-6 stat cards: ocen, povprečje, % 9-10, sob, vodilni trg, doba) |
 | 3 | Hospitality Index | `#index` | ~200 | Big donut gauge (360px), 7 component bars with scores + rationale, formula card |
 | 4 | Pregled (Overview) | `#overview` | ~175 | Score distribution bar chart (10-1), top countries bar chart, segments table, room-types table, monthly trend line chart with anomaly annotations OUTSIDE the plot area |
-| 5 | Strengths | `#strengths` | ~90 | 8+ strength cards each with mention count, description, 2-4 verbatim quotes (original language, NEVER translated) |
+| 5 | Strengths | `#strengths` | ~90 | 8+ strength cards each with mention count, description, 2-4 verbatim quotes. **Section title: "Kaj je gostom všeč"** (s glagolom "je"; Habakuk reference izpusti "je" ampak to je nepravilna slovenščina, popravi vsakič). |
 | 6 | Weaknesses (raw) | `#weaknesses` | ~130 | 10-15 weakness cards with mention counts and quotes (NOT yet tiered — that's #issues) |
 | 7 | Verjetno že rešeno | `#fixed` | ~60 | 2-6 themes with badges (resolved green / partial yellow / uncertain orange), before-period mention count + quote, after-period mention count + quote OR silence note |
 | 8 | Aktualne težave | `#issues` | ~200 | 10+ themes split into KRITIČNA / VISOKA / SREDNJA tiers, each with quotes + `Priporočilo:` line. NO overlap with #fixed at HIGH/CRITICAL. |
