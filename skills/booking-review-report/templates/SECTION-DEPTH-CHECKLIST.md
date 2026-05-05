@@ -106,7 +106,45 @@ Every subagent run must enforce these. The rule was inverted earlier; this is th
    - Belgium → Belgija
    - Poland → Poljska
    - Romania → Romunija
-4. **Slovenian word diacritics**: če pišeš "kljucnih, povprecna, vec, cas, nacrt, tezav, oznaceno, sestevek, specificne, povprecje" → KLJUČNIH, POVPREČNA, VEČ, ČAS, NAČRT, TEŽAV, OZNAČENO, SEŠTEVEK, SPECIFIČNE, POVPREČJE. Always use proper č/š/ž. The Bled Rose first draft had 35 words missing diacritics; that's unacceptable in a Slovenian deliverable.
+4. **Slovenian word diacritics**: če pišeš katero od teh ASCII-renderirano, je bug:
+   - `kljucn` → ključn (ključnih, ključne)
+   - `povprecn / povprecje` → povprečn / povprečje
+   - `vec / Vec` → več / Več
+   - `vecj` → večj (večji, večja)
+   - `cas / Cas` → čas / Čas
+   - `nacrt / Nacrt` → načrt / Načrt
+   - `nacin / Nacin` → način / Način
+   - `znacil` → značil
+   - `tezav` → težav
+   - `tezk` → težk (težki, težko)
+   - `oznacen` → označen
+   - `sestev` → seštev (seštevek)
+   - `splosn` → splošn (splošno)
+   - `nastet / nasteti` → naštet (našteti)
+   - `specifin / specificn` → specifičn (specifične)
+   - `Zakljucek / Najvecja / tocke` → Zaključek / Največja / točke
+   - `vsec / všec` → všeč
+   - `noc / Noc / noci` → noč / Noč / noči
+   - `razlicn / razlicnim` → različn (različnimi, različno)
+   - `natancn` → natančn
+   - `vkljuc / izkljuc` → vključ / izključ
+   - `tisoc` → tisoč
+   - `placljiv / doplacil` → plačljiv / doplačil
+   - `Nemcija / Hrvaska / Madzarska / Ceska / Slovaska / Spanija / Svica / Svedska / Grcija` → Nemčija / Hrvaška / Madžarska / Češka / Slovaška / Španija / Švica / Švedska / Grčija
+   - `siroko / sirok / sibk / Sibk` → široko / širok / šibk / Šibk
+   - `mozno / Mozno / moznost` → možno / Možno / možnost
+   - `dolzin` → dolžin
+   - `dosezk / Dosezk / doseze` → dosežk / Dosežk / doseže
+   - `vazno / Vazno` → važno / Važno
+   - `sele / Sele` → šele / Šele
+   - `ze / Ze` (kot beseda, ne v "već") → že / Že
+   - `ucinkovit / Ucinkovit` → učinkovit / Učinkovit
+   - `zacet / Zacet / zacasn / zascit` → začet / Začet / začasn / zaščit
+   - `trzn / Trzn` → trž / Trž (tržni)
+   - `drzav / Drzav` → držav / Držav
+   - `izrecn` → izrečn (izrečno)
+
+   The Bled Rose run needed 4+ rounds to clean these. Run the self-check grep before declaring done.
 
 ## Self-check before declaring done
 
@@ -144,8 +182,8 @@ grep -cE '__quote">"(Der|Die|Das|Sehr|Wir|Ich|War) ' <output>.html  # MUST be 0
 grep -cE '__quote">"(Le|La|Les|Très|J&#39;ai|C&#39;est) ' <output>.html   # MUST be 0
 grep -cE '__quote">"[A-Z][a-z]+ (is|are|was|were|the|an|a) ' <output>.html  # MUST be 0 (English starters)
 
-# No ASCII-stripped Slovenian (catches the 35-word diacritic loss bug)
-grep -cE '\b(kljucn|povprecn|povprecj|nacrt|nacin|znacil|specifin|sestev|tezav|oznacen|tezk|cas|vecj|vec\b|Vec\b)' <output>.html  # MUST be 0
+# No ASCII-stripped Slovenian (extensive list — Bled Rose needed 4 rounds because regex was too narrow)
+grep -cE '\b(kljucn|povprecn|povprecj|nacrt|nacin|znacil|specifin|specificn|sestev|tezav|oznacen|tezk|cas|vecj|vec\b|Vec\b|izboljsa|drzav|izrecn|nujn|nastet|splosn|vsec|všec|noc\b|noci|razlicn|natancn|vkljuc|izkljuc|tisoc|placljiv|doplacil|Zakljucek|Najvecja|tocke|tocka|Mozno|mozno|moznost|dolzin|dosezk|doseze|vazno|sele\b|Sele\b|ze\b|Ze\b|ucinkovit|zacet|zacasn|zascit|trzn|sirok|sibk|Sibk)' <output>.html  # MUST be 0
 
 # No ASCII country names
 grep -cE '\b(Nemcija|Hrvaska|Madzarska|Ceska|Spanija|Svica|Slovaska|Grcija)\b' <output>.html  # MUST be 0
