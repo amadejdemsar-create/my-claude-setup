@@ -2240,6 +2240,14 @@
         <div class="mcp-tags"><span class="tag">HTTP/SSE</span><span class="tag">API key</span></div>
       </div>
     </div>
+    <div class="mcp-card card-clickable" style="--card-accent:var(--red);" onclick="openMcpModal('Meta Ads')" title="Click to view setup">
+      <div class="mcp-icon" style="background:var(--red-dim);">&#128241;</div>
+      <div class="mcp-info">
+        <h3>Meta Ads</h3>
+        <div class="mcp-desc">Official Meta connector for Facebook and Instagram ad campaigns.</div>
+        <div class="mcp-tags"><span class="tag">HTTP</span><span class="tag">OAuth</span></div>
+      </div>
+    </div>
   </div>
 
   <!-- SEO -->
@@ -2538,6 +2546,21 @@
         </div>
       </div>
     </div>
+
+    <!-- web-operator -->
+    <div class="card card-cyan card-clickable" onclick="openModal('web-operator')" title="Click to view full instructions">
+      <div class="agent-card">
+        <div class="agent-avatar" style="background: var(--cyan-dim);">&#127760;</div>
+        <div>
+          <h3>web-operator</h3>
+          <p>General-purpose web operator. Picks the right tool per task across the web stack (WebSearch, Firecrawl, Claude-in-Chrome, Playwright, Chrome DevTools).</p>
+          <div class="agent-meta">
+            <span class="chip chip-model">Opus</span>
+            <span class="chip" style="background:var(--cyan-dim);color:var(--cyan);">Web</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Workflow examples -->
@@ -2599,16 +2622,6 @@
   <!-- Content & Media Skills -->
   <div class="sub-header">Content &amp; Media</div>
   <div class="card-grid">
-
-    <div class="card card-pink">
-      <div class="card-icon">&#128300;</div>
-      <h3>/content-skill-graph</h3>
-      <p>Generic, customizable content production system. A 9-step interactive onboarding walks anyone through building their own brand-specific skill graph for creating content across platforms.</p>
-      <div class="card-tags">
-        <span class="tag tag-highlight">Custom Skill</span>
-        <span class="tag">Onboarding</span>
-      </div>
-    </div>
 
     <div class="card card-pink">
       <div class="card-icon">&#128444;</div>
@@ -2799,6 +2812,63 @@
       <div class="card-tags">
         <span class="tag tag-highlight">Custom Skill</span>
         <span class="tag">Content &amp; Design</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#128176;</div>
+      <h3>/buy</h3>
+      <p>Fast tranche execution check for a crypto or stock ticker. Go / wait / no-go before placing the buy.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Slash Command</span>
+        <span class="tag">Finance</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Advanced / Frameworks (multi-agent + multi-skill bundles) -->
+  <div class="sub-header" style="margin-top: 48px;">Advanced &amp; Frameworks</div>
+  <p class="collapsed-sub-header" style="margin-top:-8px;margin-bottom:24px;color:var(--s4);font-size:0.9rem;">Bundles that ship multiple sub-agents and slash commands together. Click any card for the full component list.</p>
+  <div class="card-grid">
+
+    <div class="card card-amber">
+      <div class="card-icon">&#128640;</div>
+      <h3>/gsd</h3>
+      <p>Get Shit Done plugin. ~30 <code>/gsd:*</code> commands and 11 sub-agents for structured project workflow: scope &rarr; plan &rarr; execute &rarr; verify.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Plugin</span>
+        <span class="tag">~40 components</span>
+      </div>
+    </div>
+
+    <div class="card card-amber">
+      <div class="card-icon">&#127919;</div>
+      <h3>/gtm</h3>
+      <p>Go-to-Market framework. 7 sub-agents (Apollo, Attio, Instantly, HeyReach, copy writers, orchestrator) and 8 <code>/gtm-*</code> commands running the full outbound flow.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Framework</span>
+        <span class="tag">15 components</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#128300;</div>
+      <h3>/content-skill-graph</h3>
+      <p>Multi-skill content framework. 5 entry-point commands (<code>/article</code>, <code>/repurpose</code>, <code>/tool-review</code>, <code>/new-tool</code>, plus the onboarding) on top of platform specs, workflows, and templates.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Skill Framework</span>
+        <span class="tag">5 skills</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#128231;</div>
+      <h3>gws</h3>
+      <p>Google Workspace bundle. 6 skills wrapping the <code>gws</code> CLI with shared auth and schemas: Gmail, Calendar, Drive, Docs, Sheets, plus a shared layer.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Skill Bundle</span>
+        <span class="tag">6 skills</span>
       </div>
     </div>
 
@@ -3937,6 +4007,37 @@ Then tell me to restart Claude Code for the agent to become available.`,
       </ul>
       <h2>Output</h2>
       <p>Company strategy breakdowns with competitive moats, growth mechanics, key decisions, and lessons applicable to other businesses.</p>
+    `
+  },
+
+  'web-operator': {
+    icon: '&#127760;',
+    iconBg: 'var(--cyan-dim)',
+    name: 'web-operator',
+    model: 'Opus',
+    tools: 'Read, Write, Edit, Bash, WebSearch, WebFetch, Firecrawl, Claude-in-Chrome, Playwright, Chrome DevTools',
+    color: 'cyan',
+    installPrompt: `Install the web-operator agent in my Claude Code setup.
+
+Run these commands:
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/web-operator.md -o ~/.claude/agents/web-operator.md
+
+Then tell me to restart Claude Code for the agent to become available. The agent expects Firecrawl, Claude-in-Chrome, Playwright, and Chrome DevTools MCP servers to be configured. Without them it falls back to WebSearch and WebFetch only.`,
+    content: `
+      <div class="persona-quote">General-purpose web operator. Picks the right tool per task instead of forcing every web operation through the same hammer.</div>
+      <h2>Tool Stack &amp; Decision Tree</h2>
+      <ul>
+        <li><strong>WebSearch</strong>: quick lookup, top URLs for a query. Default starting point.</li>
+        <li><strong>Firecrawl search / scrape / extract / crawl / map</strong>: JS-heavy pages, anti-bot, structured extraction with schemas, full-site crawls.</li>
+        <li><strong>WebFetch</strong>: single public URL, clean markdown, no JS rendering. Fallback.</li>
+        <li><strong>Claude-in-Chrome</strong>: logged-in sessions (X, LinkedIn, Gmail, Notion, private GitHub). Cannot save screenshots to disk.</li>
+        <li><strong>Playwright</strong>: fresh headless Chromium. No auth, but can save screenshots to disk and bypass Cloudflare.</li>
+        <li><strong>Chrome DevTools MCP</strong>: Lighthouse audits, network inspection, performance traces, console debugging.</li>
+      </ul>
+      <h2>When to Delegate</h2>
+      <p>Use the agent (vs. doing web work in the main session) when the task needs 3+ sequential web operations, produces file artifacts, spans logged-in and anonymous browsing, or would otherwise bloat main session context.</p>
+      <h2>Output</h2>
+      <p>Synthesized markdown reports, scraped JSON files, screenshots saved to disk, downloaded files, performance audit summaries.</p>
     `
   },
 
@@ -5168,6 +5269,49 @@ Step 3: restart Claude Code. The docker container must stay running for the MCP 
       <p>Postiz is open source and supports 20+ networks (LinkedIn, X, Instagram, Threads, TikTok, YouTube, Bluesky, Discord, Slack, Mastodon, Reddit, Pinterest, Medium, Dev.to, Hashnode, and more). The Postiz API key is generated inside the Postiz dashboard under developer settings. The Docker container must keep running for the MCP to respond; add it to your startup or a process manager if you use it often.</p>
     `
   },
+  'Meta Ads': {
+    icon: '&#128241;', iconBg: 'var(--red-dim)', color: 'red',
+    installPrompt: `Install the official Meta Ads MCP connector for Claude.
+
+Meta runs an official remote MCP at https://mcp.facebook.com/ads. It is registered as a custom connector on claude.ai (NOT a local ~/.claude.json entry), and uses Facebook OAuth.
+
+Walk me through this:
+1. Open https://claude.ai/settings/connectors
+2. Click "Add custom connector"
+3. Name: Meta Ads. URL: https://mcp.facebook.com/ads
+4. Save, then click Connect and complete the Facebook OAuth flow
+5. Approve the ad accounts and pages you want Claude to read/write
+6. In Claude Code, enable the connector per project via /mcp
+
+Requires an active Facebook Business / Meta Ads Manager account with permission on the ad accounts you want to query.`,
+    content: `
+      <h2>Connection</h2>
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Type</td><td><strong>HTTP (custom connector)</strong></td></tr>
+        <tr><td>Source</td><td>Official Meta connector</td></tr>
+        <tr><td>URL</td><td><code>https://mcp.facebook.com/ads</code></td></tr>
+        <tr><td>Auth</td><td>Facebook OAuth (Business / Ads Manager)</td></tr>
+        <tr><td>Setup</td><td><a href="https://claude.ai/settings/connectors" target="_blank" rel="noopener">claude.ai/settings/connectors</a> &rarr; Add custom connector</td></tr>
+      </table>
+      <h2>Capabilities</h2>
+      <ul>
+        <li>Read campaign / ad set / ad performance (impressions, spend, CPM, CPC, ROAS, CTR)</li>
+        <li>Pull creative assets, audiences, targeting specs</li>
+        <li>Create, edit, pause campaigns / ad sets / ads</li>
+        <li>Generate weekly performance reports across multiple ad accounts</li>
+        <li>Query Insights API across ad accounts the connected Facebook user can manage</li>
+      </ul>
+      <h2>Why use it</h2>
+      <p>First-party Meta connection means full coverage of the Marketing API + Insights API, no third-party rate caps, and OAuth scoped to your specific ad accounts. Replaces ad-hoc Marketing API scripts and saves the cost of partner connectors.</p>
+      <h2>Notes</h2>
+      <ul>
+        <li>The connector lives on claude.ai. To use it inside Claude Code, enable it on the relevant project with <code>/mcp</code>.</li>
+        <li>Pair with Buffer or Postiz for the publishing side; Meta Ads MCP is paid-media only, not organic content scheduling.</li>
+        <li>Permissions inherit from the Facebook user who authorizes. Use a dedicated agency / business account if you want a clean scope.</li>
+      </ul>
+    `
+  },
   'Clay': {
     icon: '&#128202;', iconBg: 'var(--pink-dim)', color: 'pink',
     installPrompt: `Install the Clay MCP connector on claude.ai.
@@ -5537,7 +5681,17 @@ rm -rf /tmp/my-claude-setup-csg
 
 Then tell me to restart Claude Code. After that I can run /content-skill-graph and the 9-step onboarding will walk me through building my own brand-specific content production system.`,
     content: `
-      <div class="persona-quote">A generalized content creation system for Claude Code. Runs across platforms with configurable voice, audience, and workflows. Brand-agnostic by default; a 9-step onboarding generates your brand-specific configuration on top of the shared framework.</div>
+      <div class="persona-quote">A generalized content creation system for Claude Code. NOT a single skill: ships as a framework of 5 slash commands, an engine of platform specs, workflows, quality gates, and templates. Brand-agnostic by default; a 9-step onboarding generates your brand-specific configuration on top of the shared framework.</div>
+      <h2>What's Inside</h2>
+      <p>5 slash commands working together with framework files:</p>
+      <ul>
+        <li><code>/content-skill-graph</code> &mdash; the 9-step onboarding that generates your voice, audience, pillars, brand, and proof points configuration.</li>
+        <li><code>/article</code> &mdash; 10-phase article creation pipeline.</li>
+        <li><code>/repurpose</code> &mdash; turn existing articles into platform-native posts on a drip schedule.</li>
+        <li><code>/tool-review</code> &mdash; structured review of tools tested over 2+ weeks.</li>
+        <li><code>/new-tool</code> &mdash; quick announcement pipeline for a new tool or resource.</li>
+      </ul>
+      <p>Each entry-point command reads BOTH the shared framework files (engine, platforms, workflows, quality, templates) AND your generated brand config to produce content that follows your brand voice and targets your audience.</p>
       <h2>How It Works</h2>
       <ol>
         <li><strong>Run /content-skill-graph</strong> to start the 9-step onboarding.</li>
@@ -6084,6 +6238,178 @@ Then tell me to restart Claude Code. You'll also need the Google Calendar MCP co
       <p>The <strong>Google Calendar MCP</strong> connected via OAuth. The skill loads MCP tools via ToolSearch on first use.</p>
       <hr>
       <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/calendar/SKILL.md</code></p>
+    `
+  },
+  '/buy': {
+    icon: '&#128176;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /buy command in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/commands
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/commands/buy.md -o ~/.claude/commands/buy.md
+
+Then tell me to restart Claude Code. You'll also need the CoinMarketCap MCP (or your preferred price source) connected, plus a personal analysis directory the command can read from. Edit the paths in buy.md to point at your own holdings analysis files.`,
+    content: `
+      <div class="persona-quote">Quick tranche execution check for a crypto or stock ticker. NOT a full analysis update. Fast go / wait / no-go before placing the buy.</div>
+      <h2>What It Does</h2>
+      <ol>
+        <li>Reads your existing analysis at the configured holdings path. Finds the Execution Rules section or tranche table for the ticker.</li>
+        <li>Identifies the next open / active tranche, its price zone, and the conditions you set.</li>
+        <li>Fetches current price + technicals (RSI, MACD, Fibonacci, moving averages) via CoinMarketCap MCP.</li>
+        <li>Runs a multi-window trend check: RECOVERY, COMPRESSION / RANGE-BOUND, FALLING KNIFE, DOWNTREND, UPTREND, or MIXED. The first label that fits wins.</li>
+        <li>Falling-knife override fires only on the FALLING KNIFE label and requires a bottoming signal or imminent catalyst before recommending entry.</li>
+        <li>Outputs a verdict (BUY / WAIT / NO-GO), price gap to your zone, sizing in EUR, and the 3-line rationale.</li>
+      </ol>
+      <h2>Inputs</h2>
+      <p><code>/buy &lt;TICKER&gt;</code> or <code>/buy &lt;TICKER&gt; tranche &lt;N&gt;</code></p>
+      <h2>Customize</h2>
+      <p>Edit the path at the top of <code>buy.md</code> to point at your own holdings/analysis directory. The format expected: per-ticker markdown files with an Execution Rules section listing tranches with price zones and conditions.</p>
+      <hr>
+      <p><strong>Type:</strong> Slash Command &middot; <strong>Location:</strong> <code>~/.claude/commands/buy.md</code></p>
+    `
+  },
+  '/gsd': {
+    icon: '&#128640;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the GSD framework in my Claude Code setup.
+
+GSD (Get Shit Done) is a Claude Code plugin, not a single skill or command file. The simplest way to install:
+
+In Claude Code, run:
+/plugin marketplace add get-shit-done
+/plugin install get-shit-done
+
+Then restart Claude Code. After install you'll have ~30 /gsd:* slash commands and the framework's specialised sub-agents available.
+
+If the plugin isn't on a marketplace you can reach, the framework lives at ~/.claude/get-shit-done/ once installed and adds /gsd:* commands under ~/.claude/commands/gsd/ plus sub-agents under ~/.claude/agents/. Ask Amadej for a tarball of the directory if you can't find the plugin.`,
+    content: `
+      <div class="persona-quote">Get Shit Done framework. NOT a single skill: a plugin that bundles ~30 slash commands and 11 specialised sub-agents into a structured project workflow.</div>
+      <h2>The Workflow</h2>
+      <p>Every GSD project follows the same shape:</p>
+      <ol>
+        <li><strong>Scope:</strong> <code>/gsd:new-project</code> or <code>/gsd:new-milestone</code> &rarr; gather deep context, write PROJECT.md.</li>
+        <li><strong>Plan:</strong> <code>/gsd:plan-phase</code> &rarr; research how, decompose into tasks, goal-backward verification.</li>
+        <li><strong>Execute:</strong> <code>/gsd:execute-phase</code> &rarr; wave-based parallelization, atomic commits, checkpoint protocols, deviation handling.</li>
+        <li><strong>Verify:</strong> <code>/gsd:verify-work</code> &rarr; conversational UAT against the goal, not against the task list.</li>
+        <li><strong>Audit:</strong> <code>/gsd:audit-milestone</code> &rarr; check completion against original intent before archiving.</li>
+      </ol>
+      <h2>Slash Commands (excerpted)</h2>
+      <p>Project lifecycle: <code>/gsd:new-project</code>, <code>/gsd:new-milestone</code>, <code>/gsd:complete-milestone</code>, <code>/gsd:audit-milestone</code>, <code>/gsd:cleanup</code>.<br>
+      Phase planning: <code>/gsd:plan-phase</code>, <code>/gsd:research-phase</code>, <code>/gsd:discuss-phase</code>, <code>/gsd:list-phase-assumptions</code>, <code>/gsd:plan-milestone-gaps</code>.<br>
+      Phase modification: <code>/gsd:add-phase</code>, <code>/gsd:insert-phase</code>, <code>/gsd:remove-phase</code>.<br>
+      Execution: <code>/gsd:execute-phase</code>, <code>/gsd:quick</code>, <code>/gsd:resume-work</code>, <code>/gsd:pause-work</code>, <code>/gsd:reapply-patches</code>.<br>
+      Verification &amp; debugging: <code>/gsd:verify-work</code>, <code>/gsd:debug</code>, <code>/gsd:add-tests</code>.<br>
+      Maintenance: <code>/gsd:check-todos</code>, <code>/gsd:add-todo</code>, <code>/gsd:progress</code>, <code>/gsd:health</code>, <code>/gsd:settings</code>, <code>/gsd:set-profile</code>, <code>/gsd:update</code>, <code>/gsd:help</code>, <code>/gsd:join-discord</code>, <code>/gsd:map-codebase</code>.</p>
+      <h2>Sub-agents</h2>
+      <p>Spawned by the orchestrator commands above. You don't call them directly:</p>
+      <ul>
+        <li><code>gsd-project-researcher</code> &mdash; researches domain ecosystem before roadmap creation.</li>
+        <li><code>gsd-roadmapper</code> &mdash; creates project roadmaps with phase breakdown.</li>
+        <li><code>gsd-phase-researcher</code> &mdash; researches how to implement a phase.</li>
+        <li><code>gsd-research-synthesizer</code> &mdash; synthesizes parallel research outputs.</li>
+        <li><code>gsd-planner</code> &mdash; creates executable phase plans.</li>
+        <li><code>gsd-plan-checker</code> &mdash; verifies plans will achieve the phase goal.</li>
+        <li><code>gsd-executor</code> &mdash; executes plans with atomic commits and state management.</li>
+        <li><code>gsd-integration-checker</code> &mdash; verifies cross-phase integration and E2E flows.</li>
+        <li><code>gsd-verifier</code> &mdash; goal-backward analysis after execution.</li>
+        <li><code>gsd-debugger</code> &mdash; scientific-method bug investigation with persistent state.</li>
+        <li><code>gsd-codebase-mapper</code> &mdash; explores and writes structured codebase analysis.</li>
+      </ul>
+      <h2>Why use it</h2>
+      <p>GSD enforces honest status reporting (no silent simplification, no fake "done"), atomic commits per task, and goal-backward verification at every level. Sessions stay coherent across context resets via persistent state files in <code>.planning/</code>.</p>
+      <hr>
+      <p><strong>Type:</strong> Plugin &middot; <strong>Components:</strong> ~30 slash commands + 11 sub-agents &middot; <strong>Location:</strong> <code>~/.claude/get-shit-done/</code></p>
+    `
+  },
+  '/gtm': {
+    icon: '&#127919;', iconBg: 'var(--amber-dim)', color: 'amber',
+    installPrompt: `Install the GTM framework in my Claude Code setup.
+
+GTM is a custom framework, NOT a single command. It ships as 7 sub-agents and 8 slash commands. If you have the bundle:
+
+mkdir -p ~/.claude/agents ~/.claude/skills
+# Agents (per-agent files)
+for a in gtm-orchestrator gtm-apollo-prospector gtm-attio-librarian gtm-instantly-operator gtm-heyreach-operator gtm-email-writer gtm-linkedin-writer; do
+  curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/$a.md -o ~/.claude/agents/$a.md
+done
+# Skills (per-skill folders with SKILL.md)
+for s in gtm-new-campaign gtm-write-copy gtm-launch-check gtm-weekly-batch gtm-daily-ops gtm-reply-triage gtm-pipeline-review gtm-add-target; do
+  mkdir -p ~/.claude/skills/$s
+  curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/$s/SKILL.md -o ~/.claude/skills/$s/SKILL.md
+done
+
+Then restart Claude Code. You'll need Apollo, Attio, Instantly, and HeyReach MCP servers (or API tokens) configured for the operator agents to actually run.
+
+If the agent / skill files aren't yet published in this repo, ask Amadej for a tarball of the bundle.`,
+    content: `
+      <div class="persona-quote">Go-to-Market framework. NOT a single agent or command: a coordinated bundle of 7 specialist sub-agents and 8 slash commands that runs the entire outbound flow end to end.</div>
+      <h2>The Outbound Flow</h2>
+      <ol>
+        <li><strong>ICP search:</strong> Apollo prospector pulls accounts and people matching the campaign's ICP, dedupes against the CRM, enriches what's missing.</li>
+        <li><strong>CRM upsert:</strong> Attio librarian logs every target, advances stages, appends notes, attaches replies and meetings.</li>
+        <li><strong>Email campaign:</strong> Instantly operator clones the master sequence, loads the batch, monitors replies and deliverability.</li>
+        <li><strong>LinkedIn campaign:</strong> HeyReach operator adds leads to a master campaign, manages inbox, respects LinkedIn rate caps.</li>
+        <li><strong>Copy:</strong> email writer + LinkedIn writer produce the 4-email sequence + connection note + 2 LinkedIn messages from the campaign's ICP, pricing, and positioning.</li>
+        <li><strong>Triage &amp; review:</strong> reply triage classifies and drafts responses; pipeline review computes KPIs vs floors and flags stuck deals.</li>
+      </ol>
+      <h2>Sub-agents</h2>
+      <ul>
+        <li><code>gtm-orchestrator</code> &mdash; top-level coordinator. Loads campaign config once, dispatches to specialists, aggregates draft-and-confirm gates.</li>
+        <li><code>gtm-apollo-prospector</code> &mdash; sources, enriches, exports target lists from Apollo. Dedupes against Attio before spending credits.</li>
+        <li><code>gtm-attio-librarian</code> &mdash; source-of-truth CRM operations in Attio. Called by every other GTM agent for reads and writes.</li>
+        <li><code>gtm-instantly-operator</code> &mdash; cold email campaigns via Instantly. Clones master sequences, loads leads, monitors replies and deliverability.</li>
+        <li><code>gtm-heyreach-operator</code> &mdash; LinkedIn outreach via HeyReach. Cannot create campaigns via API (uses master campaigns from the UI).</li>
+        <li><code>gtm-email-writer</code> &mdash; produces 4-email sequences with subject variants and spintax-ready bodies.</li>
+        <li><code>gtm-linkedin-writer</code> &mdash; connection note (max 280 chars) + Day 4 first message + Day 9 follow-up.</li>
+      </ul>
+      <h2>Slash Commands</h2>
+      <ul>
+        <li><code>/gtm-new-campaign</code> &mdash; register a new campaign. Walks through ICP, pricing, positioning, competitors. Records IDs for Apollo saved search, Instantly master, HeyReach master, Attio pipeline.</li>
+        <li><code>/gtm-write-copy</code> &mdash; generate the campaign's email sequence + LinkedIn copy from its ICP and positioning.</li>
+        <li><code>/gtm-launch-check</code> &mdash; verify every launch checklist item against live data. Pass / fail per item with a LAUNCH BLOCKED banner if any fails.</li>
+        <li><code>/gtm-weekly-batch</code> &mdash; pull Apollo list, dedupe, enrich, load to Attio, prepare Instantly campaign, load HeyReach leads, draft-and-confirm both sends.</li>
+        <li><code>/gtm-daily-ops</code> &mdash; 1-hour daily operating loop: morning reply triage, midday LinkedIn check, afternoon Attio hygiene, end-of-day deliverability.</li>
+        <li><code>/gtm-reply-triage</code> &mdash; clear Instantly + HeyReach inboxes, classify per playbook, draft responses, confirm per reply.</li>
+        <li><code>/gtm-pipeline-review</code> &mdash; weekly health check. Reads Attio deals, computes KPIs vs floors, flags stuck deals.</li>
+        <li><code>/gtm-add-target</code> &mdash; add a single manually-found target to an active campaign.</li>
+      </ul>
+      <h2>Requires</h2>
+      <p>API access to Apollo, Attio, Instantly, and HeyReach (via MCP servers or direct API tokens), plus a campaign registry file at <code>~/.claude/gtm-campaigns.json</code>.</p>
+      <hr>
+      <p><strong>Type:</strong> Framework &middot; <strong>Components:</strong> 7 sub-agents + 8 slash commands &middot; <strong>Location:</strong> <code>~/.claude/agents/gtm-*</code> + <code>~/.claude/skills/gtm-*</code></p>
+    `
+  },
+  'gws': {
+    icon: '&#128231;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the Google Workspace skill bundle in my Claude Code setup.
+
+Run these commands:
+for s in gws-shared gws-gmail gws-calendar gws-drive gws-docs gws-sheets; do
+  mkdir -p ~/.claude/skills/$s
+  curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/$s/SKILL.md -o ~/.claude/skills/$s/SKILL.md
+done
+
+Then restart Claude Code. The skills wrap the gws CLI, so install that on $PATH first (see gws-shared SKILL.md for install + auth options) and run gws auth login OR set GOOGLE_APPLICATION_CREDENTIALS for a service account.`,
+    content: `
+      <div class="persona-quote">Google Workspace skill bundle. Six skills wrapping the gws CLI with consistent input/output schemas across Gmail, Calendar, Drive, Docs, and Sheets, plus a shared auth/flag layer.</div>
+      <h2>Skills</h2>
+      <ul>
+        <li><code>gws-shared</code> &mdash; auth + global flags + output formatting patterns used by every other gws skill. Read this first.</li>
+        <li><code>gws-gmail</code> &mdash; send, read, search, label, thread, draft. Triage flows for unread inbox.</li>
+        <li><code>gws-calendar</code> &mdash; list calendars, list/create/update/delete events, free-busy, agenda views, suggest time.</li>
+        <li><code>gws-drive</code> &mdash; manage files, folders, shared drives. Upload, download, share, organize.</li>
+        <li><code>gws-docs</code> &mdash; read and append to Google Docs.</li>
+        <li><code>gws-sheets</code> &mdash; read values, append rows, update ranges.</li>
+      </ul>
+      <h2>Auth</h2>
+      <p>The bundle wraps the <code>gws</code> CLI binary. Two auth modes:</p>
+      <ul>
+        <li><strong>Browser OAuth</strong> (interactive): <code>gws auth login</code></li>
+        <li><strong>Service Account</strong>: <code>export GOOGLE_APPLICATION_CREDENTIALS=/path/to/key.json</code></li>
+      </ul>
+      <h2>Why a bundle</h2>
+      <p>The shared schema means you can chain skills cleanly: read a Sheet row, look up the email in Gmail, create a Calendar event with the deal context, upload the meeting brief to Drive, and reply with the brief link. Same input/output conventions in every skill.</p>
+      <hr>
+      <p><strong>Type:</strong> Skill Bundle &middot; <strong>Components:</strong> 6 skills &middot; <strong>Location:</strong> <code>~/.claude/skills/gws-*/SKILL.md</code></p>
     `
   },
   '/devtakeover': {
