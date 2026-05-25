@@ -221,7 +221,7 @@ Build a project profile:
 
 1. **"Who is the team?"** Options: (a) developers only, (b) mixed technical and non-technical, (c) solo developer, (d) non-developers who manage through Claude Code
 2. **"Any specific pain points, areas to focus on, or context I should know?"** (optional, free text)
-3. **"Where should I save the output?"** Suggest a default path based on the project name (e.g., `/Users/Shared/Domain/Context/Business/projects/{project-name}/devtakeover/` or `./.takeover/` in the project). Let the user choose.
+3. **"Where should I save the output?"** Suggest a default path based on the project name (e.g., `/Users/Shared/Domain/Business/Personal-projects/{project-name}/devtakeover/` or `./.takeover/` in the project). Let the user choose.
 
 Wait for answers before continuing.
 

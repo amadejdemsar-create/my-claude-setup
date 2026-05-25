@@ -99,8 +99,8 @@ Pick ONE root for everything (e.g., `~/Projects/`, `~/code/`, or a shared filesy
 | Business/company documents | `<root>/Context/Business/<company>/` |
 | Code and projects | `<root>/Code/<project>/` |
 | Brand assets, media, exports | `<root>/Assets/<company>/` |
-| Personal documents | `<root>/Context/Personal/` |
-| Reusable reference material (books, topics, frameworks) | `<root>/Context/Knowledge/` |
+| Personal documents | `<root>/Personal/Context/` |
+| Reusable reference material (books, topics, frameworks) | `<root>/Knowledge/` |
 
 ### Project-first organization
 
