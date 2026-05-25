@@ -4,7 +4,7 @@ This is NOT a full analysis update. This is a fast go/no-go check.
 
 ## Steps
 
-1. **Read the existing analysis** at `/Users/Shared/Domain/Context/Personal/finances/crypto/` for the ticker. Find the Execution Rules section (or the tranche table if no Execution Rules section exists yet).
+1. **Read the existing analysis** at `/Users/Shared/Domain/Personal/Context/finances/crypto/` for the ticker. Find the Execution Rules section (or the tranche table if no Execution Rules section exists yet).
 
 2. **Identify the next open/active tranche.** What is the price zone? What were the conditions?
 

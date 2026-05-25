@@ -21,7 +21,7 @@ Before starting the 9 steps, establish two things:
 Ask: "Where are the Content Skill Graph template files? These are the engine/, platforms/, workflows/, quality/, and templates/ directories."
 
 If the user does not know, search for `content-skill-graph/index.md` on their system. The default for this setup is:
-`/Users/Shared/Domain/Context/Business/nativeai/claude-code-toolkit/content-skill-graph/`
+`/Users/Shared/Domain/Business/NativeAI/Context/claude-code-toolkit/content-skill-graph/`
 
 Verify the directory exists and contains the expected subdirectories.
 

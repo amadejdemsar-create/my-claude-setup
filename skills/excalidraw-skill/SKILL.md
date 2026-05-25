@@ -13,7 +13,7 @@ The Excalidraw MCP tools connect to a **local canvas server**, not excalidraw.co
 
 1. **Start the canvas server** (if not already running):
    ```bash
-   cd /Users/Shared/Domain/Code/Personal/excalidraw/mcp-server && PORT=3000 npm run canvas
+   cd /Users/Shared/Domain/Business/Personal-projects/excalidraw/Code/mcp-server && PORT=3000 npm run canvas
    ```
    Run this in the background. The server must stay running throughout the session.
 
@@ -50,7 +50,7 @@ Two modes are available. Try MCP first; it has more capabilities.
 **Neither works?** Tell the user:
 > The Excalidraw canvas server is not running. Start it with:
 > ```
-> cd /Users/Shared/Domain/Code/Personal/mcp_excalidraw && PORT=3000 npm run canvas
+> cd /Users/Shared/Domain/Personal/mcp_excalidraw/Code && PORT=3000 npm run canvas
 > ```
 > Then open `http://localhost:3111` in a browser.
 

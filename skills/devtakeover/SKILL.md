@@ -281,10 +281,10 @@ Each audit file (ARCHITECTURE.md, PATTERNS.md, DOMAIN_AND_RISKS.md) must:
 ### Reference quality examples
 
 Read these existing audit files to internalize the bar before generating:
-- `/Users/Shared/Domain/Context/Business/projects/ascend-devtakeover/audit/ARCHITECTURE.md`
-- `/Users/Shared/Domain/Context/Business/projects/ascend-devtakeover/audit/PATTERNS.md`
-- `/Users/Shared/Domain/Context/Business/projects/ascend-devtakeover/audit/DOMAIN_AND_RISKS.md`
-- `/Users/Shared/Domain/Context/Business/projects/ascend-devtakeover/audit/MACHINE_CONTEXT.md`
+- `/Users/Shared/Domain/Business/Personal-projects/ascend/Context/audit/ARCHITECTURE.md`
+- `/Users/Shared/Domain/Business/Personal-projects/ascend/Context/audit/PATTERNS.md`
+- `/Users/Shared/Domain/Business/Personal-projects/ascend/Context/audit/DOMAIN_AND_RISKS.md`
+- `/Users/Shared/Domain/Business/Personal-projects/ascend/Context/audit/MACHINE_CONTEXT.md`
 
 ### Critical: Subagent type matters
 

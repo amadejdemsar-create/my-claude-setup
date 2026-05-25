@@ -1,6 +1,6 @@
 # my-claude-setup Site Editing (Mandatory)
 
-**When adding ANY new agent, MCP server, or skill card to `/Users/Shared/Domain/Code/Personal/my-claude-setup/index.html`, the card MUST be wired to the modal system. A card that isn't clickable is NOT done.**
+**When adding ANY new agent, MCP server, or skill card to `/Users/Shared/Domain/Business/Personal-projects/my-claude-setup/Code/index.html`, the card MUST be wired to the modal system. A card that isn't clickable is NOT done.**
 
 Origin: 2026-04-21. Added `/visualize` card to index.html but skipped the `skills[]` data object entry. The card rendered but wasn't clickable. User already told me the wiring pattern before. Can't happen again.
 
@@ -37,8 +37,8 @@ Before committing any change to `my-claude-setup/index.html` that adds a new car
 
 ## Don't forget
 
-- If the skill has a SKILL.md that changed locally, copy it to the repo too: `cp ~/.claude/skills/<name>/SKILL.md /Users/Shared/Domain/Code/Personal/my-claude-setup/skills/<name>/SKILL.md`.
-- Agents: `cp ~/.claude/agents/<name>.md /Users/Shared/Domain/Code/Personal/my-claude-setup/agents/<name>.md`.
+- If the skill has a SKILL.md that changed locally, copy it to the repo too: `cp ~/.claude/skills/<name>/SKILL.md /Users/Shared/Domain/Business/Personal-projects/my-claude-setup/Code/skills/<name>/SKILL.md`.
+- Agents: `cp ~/.claude/agents/<name>.md /Users/Shared/Domain/Business/Personal-projects/my-claude-setup/Code/agents/<name>.md`.
 - This is a CONTENT site. If something you're showcasing changes locally, the site copy drifts; always sync the canonical file alongside the modal entry.
 
 ## Anti-pattern (what I did on 2026-04-21)

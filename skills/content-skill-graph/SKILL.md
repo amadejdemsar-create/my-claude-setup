@@ -19,7 +19,7 @@ Read the onboarding flow in `onboarding.md` (same directory as this file) and fo
 
 ### Before Starting
 
-1. Confirm the **template location**: the content skill graph template files should be at a known path. Ask the user where they are. Default for this setup: `/Users/Shared/Domain/Context/Business/nativeai/claude-code-toolkit/content-skill-graph/`
+1. Confirm the **template location**: the content skill graph template files should be at a known path. Ask the user where they are. Default for this setup: `/Users/Shared/Domain/Business/NativeAI/Context/claude-code-toolkit/content-skill-graph/`
 
 2. Confirm the **output location**: where the generated config files will be saved. Ask the user to choose a directory. This is where their personalized content system will live. Suggest a sensible default based on their project context.
 

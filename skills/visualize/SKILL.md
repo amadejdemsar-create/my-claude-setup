@@ -81,11 +81,11 @@ Write these down as structured notes before moving to HTML generation.
 
 If the user chose personalized (B), read these files to understand their situation:
 
-- `/Users/Shared/Domain/Context/Personal/me/about.md`
-- `/Users/Shared/Domain/Context/Personal/me/experience.md`
-- `/Users/Shared/Domain/Context/Personal/me/skills.md`
-- `/Users/Shared/Domain/Context/Personal/me/preferences.md`
-- `/Users/Shared/Domain/Context/Personal/plans/` (read the master plan or current active plan)
+- `/Users/Shared/Domain/Personal/Context/me/about.md`
+- `/Users/Shared/Domain/Personal/Context/me/experience.md`
+- `/Users/Shared/Domain/Personal/Context/me/skills.md`
+- `/Users/Shared/Domain/Personal/Context/me/preferences.md`
+- `/Users/Shared/Domain/Personal/Context/plans/` (read the master plan or current active plan)
 
 Use this context to:
 - Apply each principle specifically to the reader's situation
@@ -181,7 +181,7 @@ Include a `@media (max-width: 380px)` block for small phones with further size r
 
 Save the HTML file in the same directory as the source file, named: `<source-name>-applied.html` (if personalized) or `<source-name>-visual.html` (if principles only).
 
-If the source is a URL, save to `/Users/Shared/Domain/Context/Knowledge/` in an appropriate subfolder.
+If the source is a URL, save to `/Users/Shared/Domain/Knowledge/` in an appropriate subfolder.
 
 Tell the user the file path and offer to open it in the browser with `open <path>`.
 
@@ -410,7 +410,7 @@ Any score < 8 → fix before announcing done.
 ## Mode P Examples
 
 ```
-/visualize /Users/Shared/Domain/Context/Business/nevron/mobile-apps/implementation-plan-phase1.md
+/visualize /Users/Shared/Domain/Business/Nevron/Context/mobile-apps/implementation-plan-phase1.md
 ```
 Generates `…/implementation-plan-phase1-visualization.html` (Nevron-branded) and opens it.
 

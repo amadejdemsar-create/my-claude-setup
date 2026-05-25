@@ -3,9 +3,9 @@ Load my complete portfolio context and prepare for a financial discussion.
 ## Step 1: Read Portfolio State
 
 Read these files:
-1. `/Users/Shared/Domain/Context/Personal/finances/portfolio.md` (active positions, entries, stop losses, targets, cash)
-2. `/Users/Shared/Domain/Context/Personal/0x100x-watchlist.json` (price conditions being monitored)
-3. `/Users/Shared/Domain/Context/Personal/finances/crypto/index.md` (research scores and analysis)
+1. `/Users/Shared/Domain/Personal/Context/finances/portfolio.md` (active positions, entries, stop losses, targets, cash)
+2. `/Users/Shared/Domain/Personal/Context/finances/crypto/0x100x/0x100x-watchlist.json` (price conditions being monitored)
+3. `/Users/Shared/Domain/Personal/Context/finances/crypto/index.md` (research scores and analysis)
 
 ## Step 2: Check Automation Logs
 

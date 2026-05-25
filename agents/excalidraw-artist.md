@@ -133,7 +133,7 @@ Before drawing anything, ensure the canvas is running:
 
 1. **Start the canvas server** (if not already running):
    ```bash
-   cd /Users/Shared/Domain/Code/Personal/excalidraw/mcp-server && PORT=3111 npm run canvas
+   cd /Users/Shared/Domain/Business/Personal-projects/excalidraw/Code/mcp-server && PORT=3111 npm run canvas
    ```
 
 2. **Open the canvas in the browser**:
