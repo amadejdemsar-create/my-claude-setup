@@ -1,2 +1,6 @@
 excalidraw.log
 .DS_Store
+
+# Company view build artifacts (plaintext roster - never commit)
+build/
+company-data.json
