@@ -2818,6 +2818,8 @@
   </div>
 
     <div class="sub-header" style="margin-top: 48px;">Design &amp; Frontend</div>
+    <p class="collapsed-sub-header" style="margin-top:-8px;margin-bottom:16px;color:var(--s4);font-size:0.9rem;">The full design toolkit: build engines, taste lenses, design system ops, and the DNA-to-deploy pipeline. Configure the whole suite in one paste.</p>
+    <button class="install-btn" style="display:inline-flex;align-items:center;gap:0.5rem;margin:0 0 24px;" onclick="copyDesignSuite(this)"><span class="btn-icon">&#9889;</span> Install all Design &amp; Frontend skills</button>
     <div class="card-grid">
 
     <div class="card card-pink">
@@ -7068,6 +7070,57 @@ function openGenericModal(data, title) {
 }
 
 // ===== COPY INSTALL PROMPT =====
+var DESIGN_SUITE_INSTALL = `Install my full Design & Frontend skill suite in Claude Code. Run each command below, then restart Claude Code.
+
+# Own skill (curl from repo)
+mkdir -p ~/.claude/skills/design-prompts
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/design-prompts/SKILL.md -o ~/.claude/skills/design-prompts/SKILL.md
+
+# Build engine, motion, reference DB
+npx skills add pbakaus/impeccable -g --agent claude-code --copy -y
+npx skills add emilkowalski/skill -g --agent claude-code --copy -y
+npx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ui-ux-pro-max --copy -y
+
+# Taste lenses, redesign, image-reference prompts (Leonxlnx/taste-skill)
+npx skills add Leonxlnx/taste-skill -g --agent claude-code --skill design-taste-frontend --copy -y
+npx skills add Leonxlnx/taste-skill -g --agent claude-code --skill high-end-visual-design --copy -y
+npx skills add Leonxlnx/taste-skill -g --agent claude-code --skill minimalist-ui --copy -y
+npx skills add Leonxlnx/taste-skill -g --agent claude-code --skill industrial-brutalist-ui --copy -y
+npx skills add Leonxlnx/taste-skill -g --agent claude-code --skill redesign-existing-projects --copy -y
+npx skills add Leonxlnx/taste-skill -g --agent claude-code --skill imagegen-frontend-web --copy -y
+
+# Design DNA extractor
+npx skills add firecrawl/firecrawl-workflows -g --agent claude-code --skill firecrawl-website-design-clone --copy -y
+
+# ckm design-ops suite (six skills, same repo)
+npx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-design --copy -y
+npx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-design-system --copy -y
+npx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-brand --copy -y
+npx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-ui-styling --copy -y
+npx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-banner-design --copy -y
+npx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-slides --copy -y
+
+# Note: /site-from-dna and /landing-page-builder are custom personal pipeline skills that orchestrate the ones above. They are not published as installs; build your own following the structure shown on their cards.`;
+
+function copyDesignSuite(btn) {
+  navigator.clipboard.writeText(DESIGN_SUITE_INSTALL).then(function() {
+    if (btn) {
+      var original = btn.innerHTML;
+      btn.classList.add('copied');
+      btn.innerHTML = '<span class="btn-icon">&#10003;</span> Copied! Paste into Claude Code';
+      setTimeout(function() {
+        btn.classList.remove('copied');
+        btn.innerHTML = original;
+      }, 2500);
+    }
+    var toast = document.getElementById('toast');
+    if (toast) {
+      toast.classList.add('show');
+      setTimeout(function() { toast.classList.remove('show'); }, 2000);
+    }
+  });
+}
+
 function copyInstallPrompt(itemName) {
   var item = mcpServers[itemName] || agents[itemName] || skills[itemName];
   if (!item || !item.installPrompt) return;
