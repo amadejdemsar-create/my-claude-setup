@@ -2040,12 +2040,13 @@
   .dept-sub-title { display: flex; align-items: center; gap: 8px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); margin: 22px 0 12px; }
   .dept-sub-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
   .chip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
-  .mini-card { display: flex; align-items: center; gap: 10px; text-align: left; cursor: pointer; font: inherit; color: var(--text); background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; transition: var(--transition-base); }
-  .mini-card:hover { background: var(--bg-card-hover); border-color: var(--border-hover); transform: translateY(-2px); }
+  .mini-card { display: flex; align-items: center; gap: 11px; text-align: left; cursor: pointer; font: inherit; color: var(--text); background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--c, var(--border)); border-radius: 10px; padding: 10px 12px; transition: var(--transition-base); }
+  .mini-card:hover { background: var(--bg-card-hover); border-color: var(--border-hover); border-left-color: var(--c, var(--border-hover)); transform: translateY(-2px); }
   .mini-av { width: 32px; height: 32px; flex: none; border-radius: 9px; display: grid; place-items: center; font-size: 0.95rem; }
-  .mini-info { min-width: 0; }
-  .mini-name { font-size: 0.8rem; font-weight: 600; color: var(--text-bright); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .mini-sub { font-size: 0.65rem; color: var(--text-dim); }
+  .mini-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+  .mini-name { font-size: 0.82rem; font-weight: 600; color: var(--text-bright); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mini-sub { font-size: 0.64rem; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mini-card .type-tag, .mini-card .mini-count { flex: none; }
 
   @media (max-width: 720px) {
     .company.full-bleed { padding-left: 18px; padding-right: 18px; }
@@ -7514,11 +7515,15 @@ function bigCard(it) {
 function miniCard(it) {
   var color = _itemColor(it);
   var name = _itemName(it);
-  var sub = (it.type === 'agent') ? it.key : _deptName(it.dept);
-  var count = ((it.type === 'group' || it.type === 'agency') && it.members) ? '<span class="mini-count">' + it.members.length + '</span>' : '';
-  return '<button class="mini-card" data-act="' + _act(it) + '" data-key="' + it.key + '" title="Open details">'
+  var isGroup = (it.type === 'group' || it.type === 'agency');
+  // sub-line carries only non-redundant info: the agent's real id, or a vendor's team.
+  // skills/hooks/groups need no sub (the name and the section header already say it).
+  var sub = (it.type === 'agent') ? it.key : (it.type === 'vendor' ? _deptName(it.dept) : '');
+  var subHtml = sub ? '<span class="mini-sub">' + sub + '</span>' : '';
+  var count = (isGroup && it.members) ? '<span class="mini-count">' + it.members.length + '</span>' : '';
+  return '<button class="mini-card" data-act="' + _act(it) + '" data-key="' + it.key + '" style="--c:var(--' + color + ')" title="' + name + '">'
     + '<span class="mini-av" style="background:var(--' + color + '-dim)">' + _itemIcon(it) + '</span>'
-    + '<span class="mini-info"><span class="mini-name">' + name + '</span><span class="mini-sub">' + sub + '</span></span>'
+    + '<span class="mini-info"><span class="mini-name">' + name + '</span>' + subHtml + '</span>'
     + _typeTag(it.type) + count
     + '</button>';
 }
