@@ -2891,10 +2891,20 @@
     <div class="card card-pink">
       <div class="card-icon">&#129488;</div>
       <h3>/grill-me</h3>
-      <p>Get interviewed relentlessly about a plan or design until you reach shared understanding, resolving each branch of the decision tree one question at a time.</p>
+      <p>Get interviewed relentlessly about a plan or design until you reach shared understanding, resolving each branch of the decision tree one question at a time. Best when there is no codebase.</p>
       <div class="card-tags">
         <span class="tag tag-highlight">Custom Skill</span>
         <span class="tag">Workflow</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#128214;</div>
+      <h3>/grill-with-docs</h3>
+      <p>Grill-me for codebases: the same relentless interview, but it challenges your plan against your project's language, sharpens terms into a CONTEXT.md glossary, and records hard-to-reverse decisions as ADRs inline.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Custom Skill</span>
+        <span class="tag">Development</span>
       </div>
     </div>
 
@@ -6062,6 +6072,35 @@ Then tell me to restart Claude Code. After that I can use it by typing /grill-me
       <p>Before building anything non-trivial: when you want a plan or design pressure-tested, when you are about to brief an AI on a big task and need to be on the same page first, or any time you say "grill me".</p>
       <hr>
       <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/grill-me/SKILL.md</code></p>
+      <p style="opacity:0.7;font-size:0.85rem;">Credit: skill by Matt Pocock (AI Hero) &middot; MIT &middot; <a href="https://github.com/mattpocock/skills" style="color:var(--pink);">github.com/mattpocock/skills</a></p>
+    `
+  },
+  '/grill-with-docs': {
+    icon: '&#128214;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /grill-with-docs skill in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/skills/grill-with-docs
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/grill-with-docs/SKILL.md -o ~/.claude/skills/grill-with-docs/SKILL.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/grill-with-docs/CONTEXT-FORMAT.md -o ~/.claude/skills/grill-with-docs/CONTEXT-FORMAT.md
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/grill-with-docs/ADR-FORMAT.md -o ~/.claude/skills/grill-with-docs/ADR-FORMAT.md
+
+Then tell me to restart Claude Code. After that I can use it by typing /grill-with-docs in Claude Code.`,
+    content: `
+      <div class="persona-quote">The same relentless interview as grill-me, but it aligns your plan with the project's language and documents decisions as you go.</div>
+      <h2>What It Does</h2>
+      <p>The codebase version of grill-me. It still interviews you one question at a time down each branch of the design tree, but it also reads and maintains the project's shared language so the AI uses your exact terms instead of re-deriving them every session.</p>
+      <h2>The Extra Layers</h2>
+      <ul>
+        <li><strong>CONTEXT.md glossary</strong> &mdash; a "ubiquitous language" doc (from Domain-Driven Design). The skill challenges fuzzy or conflicting terms against it, sharpens them on concrete scenarios, cross-references the actual code, and updates the glossary inline as each term is resolved.</li>
+        <li><strong>ADRs</strong> &mdash; short Architecture Decision Records in <code>docs/adr/</code>, created only for decisions that are hard to reverse, surprising without context, and the result of a real trade-off.</li>
+        <li><strong>Context maps</strong> &mdash; for monorepos, a <code>CONTEXT-MAP.md</code> points to per-context glossaries so the language scales across bounded contexts.</li>
+      </ul>
+      <h2>When to Use</h2>
+      <p>When you have a codebase. The shared language pays off in concise replies, tighter AI thinking, and code whose names match your docs. With no codebase, use <code>/grill-me</code> instead.</p>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill (3 files) &middot; <strong>Location:</strong> <code>~/.claude/skills/grill-with-docs/</code></p>
+      <p style="opacity:0.7;font-size:0.85rem;">Credit: skill by Matt Pocock (AI Hero) &middot; MIT &middot; <a href="https://github.com/mattpocock/skills" style="color:var(--pink);">github.com/mattpocock/skills</a></p>
     `
   },
   '/pda': {
