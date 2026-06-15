@@ -2889,6 +2889,16 @@
     </div>
 
     <div class="card card-pink">
+      <div class="card-icon">&#129488;</div>
+      <h3>/grill-me</h3>
+      <p>Get interviewed relentlessly about a plan or design until you reach shared understanding, resolving each branch of the decision tree one question at a time.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Custom Skill</span>
+        <span class="tag">Workflow</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
       <div class="card-icon">&#128204;</div>
       <h3>/pda</h3>
       <p>Project Decomposition Assistant. Breaks any project into phases, tasks (30-120 min), and MVAs (1-15 min). Applies Pareto 80/20 prioritization.</p>
@@ -6026,6 +6036,32 @@ Then tell me to restart Claude Code. After that I can use it by typing /prompt-w
       </ul>
       <hr>
       <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/prompt-writer/SKILL.md</code> &middot; <strong>Size:</strong> 1,017 lines</p>
+    `
+  },
+  '/grill-me': {
+    icon: '&#129488;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /grill-me skill in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/skills/grill-me
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/grill-me/SKILL.md -o ~/.claude/skills/grill-me/SKILL.md
+
+Then tell me to restart Claude Code. After that I can use it by typing /grill-me in Claude Code.`,
+    content: `
+      <div class="persona-quote">Interview me relentlessly about every aspect of this plan until we reach a shared understanding.</div>
+      <h2>What It Does</h2>
+      <p>Turns Claude into a relentless interviewer that stress-tests a plan or design. It walks down each branch of the decision tree, resolving dependencies between decisions one by one, until you and the model share the same picture of what you are building.</p>
+      <h2>How It Works</h2>
+      <ul>
+        <li>Asks questions <strong>one at a time</strong>, never dumping a wall of questions</li>
+        <li>For every question it offers its own <strong>recommended answer</strong>, so you can confirm or push back</li>
+        <li>If a question can be answered by reading the code, it explores the codebase instead of asking you</li>
+        <li>Continues down each decision branch until the plan has no unresolved forks</li>
+      </ul>
+      <h2>When to Use</h2>
+      <p>Before building anything non-trivial: when you want a plan or design pressure-tested, when you are about to brief an AI on a big task and need to be on the same page first, or any time you say "grill me".</p>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill &middot; <strong>Location:</strong> <code>~/.claude/skills/grill-me/SKILL.md</code></p>
     `
   },
   '/pda': {
