@@ -71,7 +71,7 @@ LOG="${OUTDIR}/.${FNAME}.render.log"
 
 # Dead-simple instruction. Force quality:high, save into the workspace, stop.
 read -r -d '' FULL <<EOF || true
-Generate one image with your built-in image_gen tool at quality: high (never medium), target size ${SIZE}. The tool writes the PNG under ~/.codex/generated_images/ ; copy that file into the current working directory as ./${FNAME} and confirm ./${FNAME} exists. Keep it simple: use only the built-in image_gen tool, then copy the file. Do not start a nested Codex and do not search for environment variables.
+Generate one image with your built-in image_gen tool at quality: high (never medium), target size ${SIZE}. The image_gen tool returns the path of the PNG it creates under ~/.codex/generated_images/. Copy THAT exact returned path into the current working directory as ./${FNAME} and confirm ./${FNAME} exists. Do NOT pick the newest file in the folder and do NOT copy any other image; that folder is shared and contains unrelated images. Keep it simple: call image_gen once, then copy the exact file it returned. Do not start a nested Codex and do not search for environment variables.
 
 Image prompt:
 ${PROMPT}
@@ -94,16 +94,28 @@ if [[ $DRY -eq 1 ]]; then
   exit 0
 fi
 
-# Collect a produced PNG from the known landing spots into OUTPATH.
+# ~/.codex/generated_images is SHARED across all Codex runs and is polluted with
+# unrelated images, some carrying future-dated mtimes, so "newest file there" is
+# unreliable (it grabbed a stray blue circle once). Snapshot it BEFORE rendering so
+# collect() can take the set-difference and only ever accept THIS run's new output.
+GENDIR="$HOME/.codex/generated_images"
+PRE_LIST="$(mktemp)"; trap 'rm -f "$PRE_LIST"' EXIT
+find "$GENDIR" -type f -name '*.png' 2>/dev/null | sort > "$PRE_LIST"
+
+# Collect THIS render's PNG into OUTPATH. Prefer a file the run newly created in the
+# shared gen dir (set-difference vs the pre-render snapshot), then fall back to a
+# copy the agent itself placed in the workspace or /tmp.
 collect() {
+  local newp
+  newp="$(comm -13 "$PRE_LIST" <(find "$GENDIR" -type f -name '*.png' 2>/dev/null | sort) \
+          | while IFS= read -r f; do [[ -f "$f" ]] && stat -f '%m %N' "$f"; done \
+          | sort -rn | head -1 | cut -d' ' -f2-)"
+  if [[ -n "$newp" && -f "$newp" ]]; then cp "$newp" "$OUTPATH" && return 0; fi
   [[ -f "$OUTPATH" ]] && return 0
-  local cand newest
+  local cand
   for cand in "/tmp/${FNAME}" "/private/tmp/${FNAME}"; do
     [[ -f "$cand" ]] && { cp "$cand" "$OUTPATH" && return 0; }
   done
-  newest=$(find "$HOME/.codex/generated_images" -name "*.png" -newermt "-8 minutes" 2>/dev/null \
-            -exec stat -f "%m %N" {} \; 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-)
-  [[ -n "$newest" && -f "$newest" ]] && { cp "$newest" "$OUTPATH" && return 0; }
   return 1
 }
 
