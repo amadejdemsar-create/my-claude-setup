@@ -38,6 +38,8 @@ intent:
   # --- consistency ---
   references: []            # abs paths of -i reference images (subject/brand/style)
   consistency_kind: none | style-set | subject | design-system | reproducible
+  anchor: none             # "<project>/<version>" to auto-attach that set's saved
+                           # anchor.png on render (render.sh --anchor); see consistency.md
 
   # --- guardrails ---
   negatives: <the anti-list: e.g. no soft Gaussian blur, no CGI plastic, no

@@ -41,6 +41,23 @@ report an image as done without looking at it. Critique against the intent-spec:
 - **Consistency:** if `references` set, did subject/brand identity hold?
 - **Negatives:** did any banned thing show up (watermark, cursor, extra fingers)?
 
+**Automated text gate — run it whenever the spec has `verbatim_text`.** Do not trust
+the eyeball pass on text; the generating model rationalises gibberish as "close
+enough." Run the objective gate:
+
+```bash
+scripts/ocr-check.sh --image render.png \
+  --expect "New chat" --expect "Ask anything"     # one --expect per verbatim_text string
+# or: --expect-file verbatim.txt   [--threshold 0.82] [--json]
+```
+
+It OCRs the render with Apple Vision and fuzzy-matches each string. Exit `0` = every
+string present and legible; exit `2` = one or more missing/garbled (it prints which
+and a per-string score); exit `3` = no OCR engine on this machine (then fall back to
+the eyeball check and tell the user to install Xcode CLT or tesseract). A MISS makes
+**warped/wrong text** the defect to fix in the next pass. This is the gate that
+turns the flagship "real-like screenshot" use case from hope into a hard check.
+
 ### 3. Refine — ONE targeted change per pass
 Change the smallest thing that fixes the worst defect; do not rewrite the whole
 prompt (that introduces new variance). Typical fixes, all proven in the spike:

@@ -3,6 +3,30 @@
 Four kinds of consistency, each with a concrete mechanism on the built-in path.
 All four were requested; all four are achievable without the API.
 
+## The anchor: a persisted reference, auto-attached (the automation layer)
+
+Mechanisms 2 to 4 below all work by passing a canonical render back as `--ref`.
+Doing that by hand every time is exactly where drift sneaks in (a forgotten ref, the
+wrong file). The **anchor** automates it per project/version so the set cannot drift
+by accident:
+
+1. **Set once.** When a render is approved as the canonical look/subject for a set,
+   lock it: `scripts/anchor.sh set <project> <version> <approved.png>`. It is copied
+   to `<store>/<project>/<version>/anchor.png` with `anchor.json` provenance. Set it
+   from the first render you would be happy to see repeated.
+2. **Auto-attach on every later render.** Pass `--anchor <project>/<version>` to
+   `render.sh`; it resolves the saved anchor and adds it as a `-i` reference itself
+   (in bash, so there is no fragile call-site word-splitting).
+   ```bash
+   render.sh --out <store>/<project>/<version>/<NN-slug>/render.png \
+             --prompt-file prompt.txt --anchor <project>/<version>
+   ```
+3. **Still lock the words.** The anchor holds the *visual*; keep the locked
+   style/design-system block in the prompt too (belt and braces with mechanisms 1, 3).
+
+A new visual direction = a new `<version>/` with its own anchor; `anchor.sh clear`
+removes one. The anchor is the single source of subject/style truth for a set.
+
 ## 1. Style / brand across a set
 Every image in a batch shares palette, light, type feel, mood, finish.
 

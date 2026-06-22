@@ -38,6 +38,8 @@ with a raw `codex exec`. (Why: see `references/engine-gpt-image-2.md`.)
 5. **Compile** the spec → prompt (prose by default; see intent-spec.md).
 6. **Run the loop** (`render-loop.md`): render via `render.sh` → `Read` the PNG →
    critique vs spec → ONE targeted refine → re-render. Stop on match or 3 passes.
+   When the spec has `verbatim_text`, gate the text objectively with
+   `scripts/ocr-check.sh` (Apple Vision OCR), not by eye.
 7. **Persist + report.** Save `spec.yaml`, `prompt.txt`, `render.png` under the
    store path. Report the pass count and any residual defect honestly. Open the
    final image for the user (`open <path>`) and/or send it.
@@ -47,6 +49,9 @@ with a raw `codex exec`. (Why: see `references/engine-gpt-image-2.md`.)
 When the user wants a set to match, or a subject to recur, read `consistency.md`
 and use a locked style/design-system block (identical words across the set) and/or
 `--ref` reference images. Force `quality: high` on reference renders specifically.
+For a recurring look/subject, **set a project anchor once** (`scripts/anchor.sh set
+<project> <version> <approved.png>`) and pass `--anchor <project>/<version>` to
+`render.sh` on every later render so the anchor auto-attaches: drift-proof by construction.
 
 ## Store
 
@@ -67,8 +72,10 @@ never the repo or Domain root.
 - **Built-in tool only.** No `OPENAI_API_KEY`, no `scripts/image_gen.py` CLI, no
   Gemini. 4K and inpainting masks are out of scope; if a task truly needs them,
   flag the API tradeoff to the user, don't silently switch.
-- **Verbatim text wins.** Spell out every on-screen/on-label string; that is what
-  kills gibberish and warped type.
+- **Verbatim text wins, and OCR proves it.** Spell out every on-screen/on-label
+  string; that is what kills gibberish and warped type. Whenever a render carries
+  `verbatim_text`, verify it with `scripts/ocr-check.sh` (Apple Vision) before
+  calling it done. A MISS is a refine trigger, not a pass. Do not gate text by eye.
 - **Never hand prompts to the user to render manually.** This skill renders.
 
 ## When invoked with no specific task

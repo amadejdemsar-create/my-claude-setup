@@ -20,12 +20,19 @@
 #
 # Usage:
 #   render.sh --out /abs/path/img.png --prompt-file /path/prompt.txt \
-#             [--ref /abs/ref1.png --ref /abs/ref2.png] [--size 1536x1024]
+#             [--ref /abs/ref1.png --ref /abs/ref2.png] [--size 1536x1024] \
+#             [--anchor <project>/<version>]
 #   render.sh --out /abs/path/img.png --prompt "inline prompt text" [...]
+#
+# --anchor <project>/<version> auto-attaches that project's saved consistency
+# anchor (anchor.sh) as a reference image, so a look/subject holds across a set
+# without re-passing --ref by hand. Resolution happens here in bash (not at the
+# call site) so it is robust regardless of the caller's shell word-splitting.
 set -uo pipefail
 
+SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CODEX="/Applications/Codex.app/Contents/Resources/codex"
-OUTPATH=""; PROMPT=""; PROMPTFILE=""; SIZE="1536x1024"; REFS=()
+OUTPATH=""; PROMPT=""; PROMPTFILE=""; SIZE="1536x1024"; REFS=(); ANCHOR=""; DRY=0
 MAX_ATTEMPTS=3
 
 while [[ $# -gt 0 ]]; do
@@ -35,6 +42,8 @@ while [[ $# -gt 0 ]]; do
     --prompt-file) PROMPT="$(cat "$2")"; shift 2;;
     --ref)         REFS+=("$2"); shift 2;;
     --size)        SIZE="$2"; shift 2;;
+    --anchor)      ANCHOR="$2"; shift 2;;
+    --dry-run)     DRY=1; shift;;
     *) echo "render.sh: unknown arg: $1" >&2; exit 2;;
   esac
 done
@@ -42,6 +51,18 @@ done
 [[ -z "$OUTPATH" ]] && { echo "render.sh: --out is required" >&2; exit 2; }
 [[ -z "$PROMPT" ]] && { echo "render.sh: --prompt or --prompt-file is required" >&2; exit 2; }
 [[ ! -x "$CODEX" ]] && { echo "render.sh: codex binary not found at $CODEX" >&2; exit 2; }
+
+# Resolve a saved consistency anchor and attach it as a reference image.
+if [[ -n "$ANCHOR" ]]; then
+  ap="${ANCHOR%/*}"; av="${ANCHOR##*/}"
+  apath="$("$SELF_DIR/anchor.sh" path "$ap" "$av" 2>/dev/null)" || apath=""
+  if [[ -n "$apath" && -f "$apath" ]]; then
+    REFS+=("$apath")
+    echo "render.sh: auto-attached anchor for ${ap}/${av}: $apath" >&2
+  else
+    echo "render.sh: no anchor set for ${ap}/${av} (rendering without one)" >&2
+  fi
+fi
 
 mkdir -p "$(dirname "$OUTPATH")"
 OUTDIR="$(cd "$(dirname "$OUTPATH")" && pwd)"
@@ -62,6 +83,16 @@ for r in "${REFS[@]:-}"; do
   [[ -z "$r" ]] && continue
   if [[ -f "$r" ]]; then IARGS+=(-i "$r"); else echo "render.sh: ref not found, skipping: $r" >&2; fi
 done
+
+# --dry-run: report the resolved config (incl. any anchor ref) and stop before Codex.
+if [[ $DRY -eq 1 ]]; then
+  echo "render.sh DRY-RUN (no Codex call):"
+  echo "  out:    $OUTPATH"
+  echo "  size:   $SIZE   quality: high"
+  echo "  refs:   $(( ${#IARGS[@]} / 2 )) image(s): ${IARGS[*]:-(none)}"
+  echo "  prompt: ${#PROMPT} chars"
+  exit 0
+fi
 
 # Collect a produced PNG from the known landing spots into OUTPATH.
 collect() {
