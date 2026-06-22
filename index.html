@@ -3080,11 +3080,11 @@
 
     <div class="card card-pink">
       <div class="card-icon">&#128444;</div>
-      <h3>/design-prompts</h3>
-      <p>Single front door for image-render prompts. Authors self-contained, versioned prompts that render via Codex, GPT Image 2, or Higgsfield.</p>
+      <h3>/image-director</h3>
+      <p>Single front door for all image generation: writes the optimal gpt-image-2 prompt, renders it via Codex at quality high, then inspects and refines until it lands.</p>
       <div class="card-tags">
         <span class="tag tag-highlight">Custom Skill</span>
-        <span class="tag">Design</span>
+        <span class="tag">Image Gen</span>
       </div>
     </div>
 
@@ -3135,16 +3135,6 @@
       <div class="card-tags">
         <span class="tag">Installed Skill</span>
         <span class="tag">Frontend</span>
-      </div>
-    </div>
-
-    <div class="card card-pink">
-      <div class="card-icon">&#128248;</div>
-      <h3>/imagegen-frontend-web</h3>
-      <p>Writes premium, conversion-aware web design-reference image prompts. One prompt per section, consistent palette, composition variety enforced.</p>
-      <div class="card-tags">
-        <span class="tag">Installed Skill</span>
-        <span class="tag">Design</span>
       </div>
     </div>
 
@@ -5741,7 +5731,7 @@ const skills = {
         <li><strong>Stage 1: Design DNA</strong> &mdash; clone a URL via /firecrawl-website-design-clone, use your DESIGN.md, or start from a prompt</li>
         <li><strong>Stage 2: Research</strong> &mdash; competitor and conversion blueprint via Firecrawl deep research (optional)</li>
         <li><strong>Stage 3: Build</strong> &mdash; hands the DNA + blueprint to /landing-page-builder for the full studio method</li>
-        <li><strong>Stage 4: Images</strong> &mdash; authors prompts via /design-prompts, renders via Codex or Higgsfield (never Gemini for images)</li>
+        <li><strong>Stage 4: Images</strong> &mdash; authors and renders via /image-director, which drives the Codex built-in image_gen tool at quality high (never Gemini for images)</li>
         <li><strong>Stage 5: Video</strong> &mdash; optional hero animation (Kling via Higgsfield or Veo handoff), with scroll-tied, loop, or hover playback</li>
         <li><strong>Stage 6: Deploy + QA</strong> &mdash; ships to your VPS or keeps local, then runs Playwright visual QA</li>
       </ul>
@@ -5769,22 +5759,22 @@ const skills = {
       <p><strong>Type:</strong> Custom Skill &middot; <strong>Source:</strong> <code>~/.claude/skills/landing-page-builder/</code></p>
     `
   },
-  '/design-prompts': {
+  '/image-director': {
     icon: '&#128444;', iconBg: 'var(--pink-dim)', color: 'pink',
-    installPrompt: `Install the /design-prompts skill.\n\nRun:\nmkdir -p ~/.claude/skills/design-prompts\ncurl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/design-prompts/SKILL.md -o ~/.claude/skills/design-prompts/SKILL.md\n\nThen restart Claude Code.`,
+    installPrompt: `Install the /image-director skill (multi-file).\n\nRun:\ngit clone --depth 1 https://github.com/amadejdemsar-create/my-claude-setup.git /tmp/mcs-id && rm -rf ~/.claude/skills/image-director && cp -r /tmp/mcs-id/skills/image-director ~/.claude/skills/image-director && rm -rf /tmp/mcs-id && chmod +x ~/.claude/skills/image-director/scripts/render.sh\n\nThen restart Claude Code. Rendering uses the Codex built-in image_gen tool, so you also need Codex installed.`,
     content: `
-      <div class="persona-quote">The single image-prompt front door. Authors self-contained, versioned image-render prompts organized by project and version. The same prompt renders via Codex / GPT Image 2 (default) or Higgsfield; engine is a parameter, not a rewrite.</div>
+      <div class="persona-quote">The single front door for any image generation need. You describe what you want; it writes the optimal gpt-image-2 prompt with the domain knowledge of photographers, web designers, and architects, renders it itself via the Codex built-in tool at quality high, inspects the PNG, and self-corrects until it lands.</div>
       <h2>What it does</h2>
-      <p>Manages the central image-render workflow: all design prompts live in one canonical location, organized by project and version, readable by any agent (Claude, Codex, Cursor).</p>
+      <p>Turns a plain description into a world-class render. One brain (the intent-spec) plus four domain modules, a closed render to inspect to refine loop, and a consistency system for holding a look across a whole set.</p>
       <ul>
-        <li><strong>Self-contained prompts</strong> &mdash; every prompt.md is paste-able into any render engine with zero external context</li>
-        <li><strong>Project + version structure</strong> &mdash; organized as project/version/NN-slug/prompt.md with STATUS.md tracking</li>
-        <li><strong>Engine-agnostic</strong> &mdash; one prompt drives Codex, GPT Image 2, or Higgsfield (Nano Banana or GPT Image 2)</li>
-        <li><strong>Screenshot-exact mockups</strong> &mdash; includes a recipe for pixel-accurate UI screenshots (render mode, frame, verbatim content, exact layout)</li>
-        <li><strong>Codex handoff</strong> &mdash; a mirrored Codex skill reads the same folder, renders unchecked prompts, and updates STATUS.md</li>
+        <li><strong>Four domain modules</strong> &mdash; UI screenshot (real-like app screens, e.g. recreate the ChatGPT web app), web and marketing imagery, editorial and product photography, architecture and product renders</li>
+        <li><strong>quality: high, always</strong> &mdash; the built-in tool defaults to medium, which looks cheap and soft; forcing high is the single biggest quality lever, encoded in render.sh</li>
+        <li><strong>Renders itself</strong> &mdash; the validated render.sh recipe drives the Codex built-in image_gen tool (gpt-image-2), with a retry loop and PNG collection from every export path</li>
+        <li><strong>Consistency system</strong> &mdash; locked style and design-system blocks plus reference images (--ref) hold subject identity and a shared look across a set</li>
+        <li><strong>Inspect before done</strong> &mdash; every render is read back and critiqued against the intent, then refined in a bounded loop, never shipped on faith</li>
       </ul>
       <hr>
-      <p><strong>Type:</strong> Custom Skill &middot; <strong>Source:</strong> <code>~/.claude/skills/design-prompts/</code></p>
+      <p><strong>Type:</strong> Custom Skill &middot; <strong>Source:</strong> <code>~/.claude/skills/image-director/</code></p>
     `
   },
   '/impeccable': {
@@ -5878,24 +5868,6 @@ const skills = {
       <p><strong>Type:</strong> Installed Skill &middot; <strong>Source:</strong> <code>Leonxlnx/taste-skill</code></p>
     `
   },
-  '/imagegen-frontend-web': {
-    icon: '&#128248;', iconBg: 'var(--pink-dim)', color: 'pink',
-    installPrompt: `Install /imagegen-frontend-web globally for Claude Code.\n\nRun:\nnpx skills add Leonxlnx/taste-skill -g --agent claude-code --skill imagegen-frontend-web --copy -y\n\nThen restart Claude Code.`,
-    content: `
-      <div class="persona-quote">Elite frontend image art director. Generates premium, conversion-aware website design-reference prompts that feel like real high-end website concepts, not generic AI art. One image prompt per section, always.</div>
-      <h2>What it does</h2>
-      <p>Writes image-generation prompts (rendered via Codex, never an image API) for each section of a landing page or marketing site. Feeds /design-prompts for storage and versioning.</p>
-      <ul>
-        <li><strong>One Prompt Per Section</strong> &mdash; 8 sections produce 8 prompts, never compressed into one tall image; each announced as "Section X of N"</li>
-        <li><strong>Hero Composition Variety</strong> &mdash; anti-bias against left-text/right-image; considers centered-over-background, off-grid editorial, mini minimalist</li>
-        <li><strong>Narrative Concept Spine</strong> &mdash; a single consistent palette and story thread across the entire prompt set</li>
-        <li><strong>Second-Read Moments</strong> &mdash; subtle details that reward closer inspection, not just hero-scale impact</li>
-        <li><strong>Background-Image Freedom</strong> &mdash; sections can use full-bleed photo, ambient gradient, or atmospheric imagery behind content</li>
-      </ul>
-      <hr>
-      <p><strong>Type:</strong> Installed Skill &middot; <strong>Source:</strong> <code>Leonxlnx/taste-skill</code></p>
-    `
-  },
   '/high-end-visual-design': {
     icon: '&#128142;', iconBg: 'var(--pink-dim)', color: 'pink',
     installPrompt: `Install /high-end-visual-design globally for Claude Code.\n\nRun:\nnpx skills add Leonxlnx/taste-skill -g --agent claude-code --skill high-end-visual-design --copy -y\n\nThen restart Claude Code.`,
@@ -5972,7 +5944,7 @@ const skills = {
     icon: '&#127913;', iconBg: 'var(--pink-dim)', color: 'pink',
     installPrompt: `Install the CKM Design Suite (six skills) globally for Claude Code.\n\nRun:\nnpx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-design --copy -y\nnpx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-design-system --copy -y\nnpx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-brand --copy -y\nnpx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-ui-styling --copy -y\nnpx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-banner-design --copy -y\nnpx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-slides --copy -y\n\nThen restart Claude Code. This installs all six sub-skills from the same repo.`,
     content: `
-      <div class="persona-quote">Six-skill design-ops suite covering brand identity, design tokens, UI styling, logo/icon/CIP prompt craft, banner design, and HTML slide decks. Image generation routes through /design-prompts to Codex, never Gemini.</div>
+      <div class="persona-quote">Six-skill design-ops suite covering brand identity, design tokens, UI styling, logo/icon/CIP prompt craft, banner design, and HTML slide decks. Image generation routes through /image-director to the Codex built-in tool, never Gemini.</div>
       <h2>What it does</h2>
       <p>A unified design-operations toolkit installed from one repo. Each sub-skill handles a specific design deliverable type, sharing style libraries and industry references across the suite.</p>
       <ul>
@@ -7283,22 +7255,20 @@ function openGenericModal(data, title) {
 // ===== COPY INSTALL PROMPT =====
 var DESIGN_SUITE_INSTALL = `Install my full Design & Frontend skill suite in Claude Code. Run each command below, then restart Claude Code.
 
-# Own skill (curl from repo)
-mkdir -p ~/.claude/skills/design-prompts
-curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/design-prompts/SKILL.md -o ~/.claude/skills/design-prompts/SKILL.md
+# Own skill (multi-file, clone from repo)
+git clone --depth 1 https://github.com/amadejdemsar-create/my-claude-setup.git /tmp/mcs-id && cp -r /tmp/mcs-id/skills/image-director ~/.claude/skills/image-director && rm -rf /tmp/mcs-id && chmod +x ~/.claude/skills/image-director/scripts/render.sh
 
 # Build engine, motion, reference DB
 npx skills add pbakaus/impeccable -g --agent claude-code --copy -y
 npx skills add emilkowalski/skill -g --agent claude-code --copy -y
 npx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ui-ux-pro-max --copy -y
 
-# Taste lenses, redesign, image-reference prompts (Leonxlnx/taste-skill)
+# Taste lenses and redesign (Leonxlnx/taste-skill)
 npx skills add Leonxlnx/taste-skill -g --agent claude-code --skill design-taste-frontend --copy -y
 npx skills add Leonxlnx/taste-skill -g --agent claude-code --skill high-end-visual-design --copy -y
 npx skills add Leonxlnx/taste-skill -g --agent claude-code --skill minimalist-ui --copy -y
 npx skills add Leonxlnx/taste-skill -g --agent claude-code --skill industrial-brutalist-ui --copy -y
 npx skills add Leonxlnx/taste-skill -g --agent claude-code --skill redesign-existing-projects --copy -y
-npx skills add Leonxlnx/taste-skill -g --agent claude-code --skill imagegen-frontend-web --copy -y
 
 # Design DNA extractor
 npx skills add firecrawl/firecrawl-workflows -g --agent claude-code --skill firecrawl-website-design-clone --copy -y

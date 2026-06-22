@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+# image-director / render.sh
+# The ONE validated way to drive Codex's built-in image_gen tool.
+#
+# Every lesson from the 2026-06-19 spike + 2026-06-21 hardening is baked in so no
+# render regresses to cheap/blurry output or silently fails to save:
+#   - quality:high is FORCED (medium is the trap that made output look like CGI).
+#   - -C <outdir> makes the output folder the writable workspace, so the tool's
+#     "copy final asset into the workspace" step can actually succeed.
+#   - the prompt is piped via stdin with a trailing `-`, because codex exec's
+#     -i/--image flag is VARIADIC and will otherwise swallow a positional prompt.
+#   - the instruction is kept DEAD SIMPLE (just: use image_gen at high, copy the
+#     file). A wordier instruction made the agent rabbit-hole into "nested Codex"
+#     and env-var hunting and produce nothing.
+#   - the built-in tool's headless save is occasionally flaky (renders inline
+#     without writing a file), so we RETRY up to 3 times and collect whatever any
+#     attempt left in the workspace, /tmp, or ~/.codex/generated_images.
+#
+# Built-in tool only. No OPENAI_API_KEY, no CLI fallback, no Gemini, ever.
+#
+# Usage:
+#   render.sh --out /abs/path/img.png --prompt-file /path/prompt.txt \
+#             [--ref /abs/ref1.png --ref /abs/ref2.png] [--size 1536x1024]
+#   render.sh --out /abs/path/img.png --prompt "inline prompt text" [...]
+set -uo pipefail
+
+CODEX="/Applications/Codex.app/Contents/Resources/codex"
+OUTPATH=""; PROMPT=""; PROMPTFILE=""; SIZE="1536x1024"; REFS=()
+MAX_ATTEMPTS=3
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --out)         OUTPATH="$2"; shift 2;;
+    --prompt)      PROMPT="$2"; shift 2;;
+    --prompt-file) PROMPT="$(cat "$2")"; shift 2;;
+    --ref)         REFS+=("$2"); shift 2;;
+    --size)        SIZE="$2"; shift 2;;
+    *) echo "render.sh: unknown arg: $1" >&2; exit 2;;
+  esac
+done
+
+[[ -z "$OUTPATH" ]] && { echo "render.sh: --out is required" >&2; exit 2; }
+[[ -z "$PROMPT" ]] && { echo "render.sh: --prompt or --prompt-file is required" >&2; exit 2; }
+[[ ! -x "$CODEX" ]] && { echo "render.sh: codex binary not found at $CODEX" >&2; exit 2; }
+
+mkdir -p "$(dirname "$OUTPATH")"
+OUTDIR="$(cd "$(dirname "$OUTPATH")" && pwd)"
+FNAME="$(basename "$OUTPATH")"
+LOG="${OUTDIR}/.${FNAME}.render.log"
+
+# Dead-simple instruction. Force quality:high, save into the workspace, stop.
+read -r -d '' FULL <<EOF || true
+Generate one image with your built-in image_gen tool at quality: high (never medium), target size ${SIZE}. The tool writes the PNG under ~/.codex/generated_images/ ; copy that file into the current working directory as ./${FNAME} and confirm ./${FNAME} exists. Keep it simple: use only the built-in image_gen tool, then copy the file. Do not start a nested Codex and do not search for environment variables.
+
+Image prompt:
+${PROMPT}
+EOF
+
+# Build -i args for reference images (skip missing files with a warning).
+IARGS=()
+for r in "${REFS[@]:-}"; do
+  [[ -z "$r" ]] && continue
+  if [[ -f "$r" ]]; then IARGS+=(-i "$r"); else echo "render.sh: ref not found, skipping: $r" >&2; fi
+done
+
+# Collect a produced PNG from the known landing spots into OUTPATH.
+collect() {
+  [[ -f "$OUTPATH" ]] && return 0
+  local cand newest
+  for cand in "/tmp/${FNAME}" "/private/tmp/${FNAME}"; do
+    [[ -f "$cand" ]] && { cp "$cand" "$OUTPATH" && return 0; }
+  done
+  newest=$(find "$HOME/.codex/generated_images" -name "*.png" -newermt "-8 minutes" 2>/dev/null \
+            -exec stat -f "%m %N" {} \; 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-)
+  [[ -n "$newest" && -f "$newest" ]] && { cp "$newest" "$OUTPATH" && return 0; }
+  return 1
+}
+
+for attempt in $(seq 1 $MAX_ATTEMPTS); do
+  echo "render.sh: attempt ${attempt}/${MAX_ATTEMPTS} (quality:high, size=${SIZE}, refs=${#IARGS[@]}/2) -> ${OUTPATH}"
+  rm -f "$OUTPATH"
+  if [[ ${#IARGS[@]} -gt 0 ]]; then
+    printf '%s' "$FULL" | "$CODEX" exec --skip-git-repo-check -s workspace-write -C "$OUTDIR" "${IARGS[@]}" - > "$LOG" 2>&1
+  else
+    printf '%s' "$FULL" | "$CODEX" exec --skip-git-repo-check -s workspace-write -C "$OUTDIR" - > "$LOG" 2>&1
+  fi
+  if collect; then
+    echo "render.sh: OK -> ${OUTPATH} ($(stat -f%z "$OUTPATH" 2>/dev/null) bytes) on attempt ${attempt}"
+    exit 0
+  fi
+  echo "render.sh: attempt ${attempt} produced no collectable PNG, retrying..." >&2
+  sleep 3
+done
+
+echo "render.sh: FAIL - no PNG after ${MAX_ATTEMPTS} attempts. Last log (non-noise):" >&2
+grep -a -v -e "load skill" -e "rmcp::transport" "$LOG" 2>/dev/null | tail -10 >&2
+exit 1
