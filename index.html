@@ -1809,6 +1809,12 @@
 
   .install-btn .btn-icon { font-size: 1rem; flex-shrink: 0; }
 
+  @keyframes installPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(96,165,250,0); }
+    50% { box-shadow: 0 0 0 6px rgba(96,165,250,0.45); }
+  }
+  #install-all:target { animation: installPulse 1s ease-in-out 3; outline: 2px solid rgba(96,165,250,0.8); }
+
   /* ===== TOAST ===== */
   .toast {
     position: fixed;
@@ -2113,7 +2119,7 @@
     <div class="smap-root-icon">&gt;_</div>
     <h1><span class="gradient">Claude Code</span></h1>
     <div class="smap-root-sub">Opus 4.6 &middot; click any node to explore</div>
-    <button class="install-btn" style="display:inline-flex;align-items:center;gap:0.5rem;margin:20px auto 0;" onclick="copyWholeSetup(this)"><span class="btn-icon">&#9889;</span> Install the entire setup</button>
+    <button id="install-all" class="install-btn" style="display:inline-flex;align-items:center;gap:0.5rem;margin:20px auto 0;" onclick="copyWholeSetup(this)"><span class="btn-icon">&#9889;</span> Install the entire setup</button>
   </div>
   <div class="smap-trunk"></div>
   <div class="smap-branches">
