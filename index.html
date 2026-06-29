@@ -3089,6 +3089,26 @@
     </div>
 
     <div class="card card-pink">
+      <div class="card-icon">&#128203;</div>
+      <h3>/visual-plan</h3>
+      <p>Turns any task into an interactive visual plan rendered in the local Lavish Editor, approved before work starts. Narrative, options, comparisons, timelines, diagrams, plus wireframes when there is a UI.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Custom Skill</span>
+        <span class="tag">Planning</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#128202;</div>
+      <h3>/visual-recap</h3>
+      <p>Turns completed work into an interactive visual recap in the local Lavish Editor: file map and annotated diffs for code, or narrative, comparisons, and decisions for everything else.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Custom Skill</span>
+        <span class="tag">Review</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
       <div class="card-icon">&#10024;</div>
       <h3>/impeccable</h3>
       <p>The frontend build engine: shape, craft, audit, polish any UI to production grade with obsessive attention to the last 2%.</p>
@@ -5775,6 +5795,42 @@ const skills = {
       </ul>
       <hr>
       <p><strong>Type:</strong> Custom Skill &middot; <strong>Source:</strong> <code>~/.claude/skills/image-director/</code></p>
+    `
+  },
+  '/visual-plan': {
+    icon: '&#128203;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /visual-plan skill.\n\nRun:\ngit clone --depth 1 https://github.com/amadejdemsar-create/my-claude-setup.git /tmp/mcs-vp && rm -rf ~/.claude/skills/visual-plan && cp -r /tmp/mcs-vp/skills/visual-plan ~/.claude/skills/visual-plan && rm -rf /tmp/mcs-vp\n\nThen restart Claude Code. Rendering needs lavish-axi (npm i -g lavish-axi, Node >= 22). Or install the whole setup at once: curl -fsSL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/install.sh | bash`,
+    content: `
+      <div class="persona-quote">Plan in pictures before you build. Any non-trivial task becomes an interactive HTML plan you review and approve in the browser, so you react to real screens and decisions instead of signing off on an abstract spec.</div>
+      <h2>What it does</h2>
+      <p>Renders the plan as a Lavish Editor surface (drawn by a Sonnet subagent to stay cheap and keep the markup out of the main context), then waits for your approval and annotations before any work starts.</p>
+      <ul>
+        <li><strong>Works for any work</strong> &mdash; a feature, a strategy, a GTM or content plan, research, an ops change, or a significant decision, not just code</li>
+        <li><strong>Decision-first</strong> &mdash; surfaces options, tradeoffs, comparisons, timelines, diagrams, and open questions so the hard-to-reverse calls get made up front</li>
+        <li><strong>Wireframes when there is a UI</strong> &mdash; narrow, theme-safe mockups with real content, never lorem</li>
+        <li><strong>Code blocks when it is a code change</strong> &mdash; file map, planned code, and data/API contracts</li>
+        <li><strong>Approval gate</strong> &mdash; you annotate and approve in the browser; the locked plan becomes the binding build spec</li>
+      </ul>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill &middot; <strong>Source:</strong> <code>~/.claude/skills/visual-plan/</code></p>
+    `
+  },
+  '/visual-recap': {
+    icon: '&#128202;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /visual-recap skill (multi-file).\n\nRun:\ngit clone --depth 1 https://github.com/amadejdemsar-create/my-claude-setup.git /tmp/mcs-vr && rm -rf ~/.claude/skills/visual-recap && cp -r /tmp/mcs-vr/skills/visual-recap ~/.claude/skills/visual-recap && rm -rf /tmp/mcs-vr\n\nThen restart Claude Code. Rendering needs lavish-axi (npm i -g lavish-axi, Node >= 22). Or install the whole setup at once: curl -fsSL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/install.sh | bash`,
+    content: `
+      <div class="persona-quote">The after-action review as a visual surface. A completed work unit becomes an interactive recap you read in the browser, so what changed and why is obvious at a glance instead of buried in a wall of text.</div>
+      <h2>What it does</h2>
+      <p>Renders a Lavish Editor recap (drawn by a Sonnet subagent) of a finished work unit, code or not, with evidence and structure rather than prose.</p>
+      <ul>
+        <li><strong>Code diffs</strong> &mdash; a working tree, PR, or ref range becomes a file map, annotated diffs, and schema/API deltas</li>
+        <li><strong>Before/after wireframes</strong> &mdash; for UI changes, the old and new states side by side</li>
+        <li><strong>Non-code work</strong> &mdash; narrative, comparisons, and the decisions made, structured for fast review</li>
+        <li><strong>Evidence-led</strong> &mdash; every claim tied to the actual change, not a summary on faith</li>
+        <li><strong>Browser review loop</strong> &mdash; annotate and reply in-surface through Lavish</li>
+      </ul>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill &middot; <strong>Source:</strong> <code>~/.claude/skills/visual-recap/</code></p>
     `
   },
   '/impeccable': {
