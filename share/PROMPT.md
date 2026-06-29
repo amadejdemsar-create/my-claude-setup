@@ -14,7 +14,7 @@ Do this, in order:
    ```
    curl -fsSL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/install.sh -o /tmp/claude-setup-install.sh
    ```
-   It: (a) installs the public npm package `lavish-axi`, (b) copies every skill into `~/.claude/skills/`, every agent into `~/.claude/agents/`, and every command into `~/.claude/commands/`, and (c) appends a SessionStart hook to `~/.claude/settings.json` (merging, never overwriting existing hooks). It is idempotent and never deletes my other skills/agents. Then run:
+   It: (a) installs the public npm package `lavish-axi`, (b) copies every skill into `~/.claude/skills/`, every agent into `~/.claude/agents/`, and every command into `~/.claude/commands/`, (c) installs a general-purpose global `~/.claude/CLAUDE.md` template ONLY if I don't already have one (if I do, it leaves mine untouched and saves the template as `CLAUDE.shared-template.md`), and (d) appends a SessionStart hook to `~/.claude/settings.json` (merging, never overwriting existing hooks). It is idempotent and never deletes my other skills/agents. Then run:
    ```
    bash /tmp/claude-setup-install.sh
    ```

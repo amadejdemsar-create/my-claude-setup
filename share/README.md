@@ -25,6 +25,7 @@ Or clone the repo and run `bash install.sh` from the checkout.
 | every skill in `skills/` | `~/.claude/skills/` |
 | every agent in `agents/` | `~/.claude/agents/` |
 | every command in `commands/` | `~/.claude/commands/` |
+| general-purpose `CLAUDE.md` template (only if none exists) | `~/.claude/CLAUDE.md` |
 
 ## Requirements
 
@@ -36,7 +37,9 @@ Or clone the repo and run `bash install.sh` from the checkout.
 - **Idempotent**: re-running never duplicates the SessionStart hook.
 - **Non-destructive**: it overwrites only same-named items it ships; it never
   deletes the recipient's other skills/agents/commands, and it merges into any
-  existing `SessionStart` hooks rather than replacing them.
+  existing `SessionStart` hooks rather than replacing them. An existing
+  `~/.claude/CLAUDE.md` is never overwritten (the template lands as
+  `CLAUDE.shared-template.md` instead).
 - **No secrets**: only the public, curated contents of this repo are installed;
   the installer fetches from this public repo, not from any private machine.
 

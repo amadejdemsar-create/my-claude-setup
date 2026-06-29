@@ -84,7 +84,21 @@ copy_tree "$SRC/skills"   "$SKILLS_DIR"   "skills"
 copy_tree "$SRC/agents"   "$AGENTS_DIR"   "agents"   "*.md"
 copy_tree "$SRC/commands" "$COMMANDS_DIR" "commands" "*.md"
 
-# --- 5. wire the SessionStart hook for lavish (idempotent merge) ------------
+# --- 5. install the shared global CLAUDE.md (non-destructive) ---------------
+# This is a sanitized, general-purpose template (placeholders + universal rules),
+# NOT anyone's personal config. If the recipient already has a CLAUDE.md, we
+# never overwrite it; we drop the template alongside for them to merge.
+if [ -f "$SRC/CLAUDE.md" ]; then
+  if [ -f "$CLAUDE_DIR/CLAUDE.md" ]; then
+    cp "$SRC/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.shared-template.md"
+    warn "~/.claude/CLAUDE.md already exists — left it untouched. Saved the template as ~/.claude/CLAUDE.shared-template.md; merge what you want."
+  else
+    cp "$SRC/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md"
+    say "Installed global CLAUDE.md -> $CLAUDE_DIR/CLAUDE.md (customize the placeholders)"
+  fi
+fi
+
+# --- 6. wire the SessionStart hook for lavish (idempotent merge) ------------
 if command -v lavish-axi >/dev/null 2>&1; then
   HOOK_CMD="$(command -v lavish-axi)"; HOOK_TIMEOUT=10
 else
@@ -112,8 +126,9 @@ if (present) {
 }
 NODE
 
-# --- 6. done ----------------------------------------------------------------
+# --- 7. done ----------------------------------------------------------------
 echo
-say "Done. Restart Claude Code so the SessionStart hook and new skills/agents load."
+say "Done. Restart Claude Code so the SessionStart hook, CLAUDE.md, and skills/agents load."
 echo "   Test Lavish:  echo '<h1>hi</h1>' > /tmp/lavish-test.html && lavish-axi /tmp/lavish-test.html"
 echo "   New skills include /visual-plan and /visual-recap; agents and commands are in ~/.claude/."
+echo "   If a global CLAUDE.md was installed, open ~/.claude/CLAUDE.md and replace the placeholders."
