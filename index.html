@@ -2113,6 +2113,7 @@
     <div class="smap-root-icon">&gt;_</div>
     <h1><span class="gradient">Claude Code</span></h1>
     <div class="smap-root-sub">Opus 4.6 &middot; click any node to explore</div>
+    <button class="install-btn" style="display:inline-flex;align-items:center;gap:0.5rem;margin:20px auto 0;" onclick="copyWholeSetup(this)"><span class="btn-icon">&#9889;</span> Install the entire setup</button>
   </div>
   <div class="smap-trunk"></div>
   <div class="smap-branches">
@@ -7309,6 +7310,21 @@ function openGenericModal(data, title) {
 }
 
 // ===== COPY INSTALL PROMPT =====
+var WHOLE_SETUP_INSTALL = `Install Amadej Demšar's Claude Code setup (skills, agents, commands, a general-purpose CLAUDE.md, and the Lavish editor) on my machine.
+
+Do this, in order:
+
+1. Check that Node.js >= 22 is installed (node -v) and git exists. If Node is missing or older than 22, STOP and tell me to install Node.js >= 22 from https://nodejs.org first, then I'll re-run this.
+
+2. Download this installer, give me a one-paragraph summary of what it does, then run it once I confirm:
+curl -fsSL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/install.sh -o /tmp/claude-setup-install.sh
+It installs the public npm package lavish-axi, copies every skill into ~/.claude/skills/, every agent into ~/.claude/agents/, every command into ~/.claude/commands/, installs a general-purpose ~/.claude/CLAUDE.md ONLY if I don't already have one (otherwise it leaves mine untouched and saves the template as CLAUDE.shared-template.md), and appends a SessionStart hook to ~/.claude/settings.json (merging, never overwriting). Idempotent, never deletes my other skills/agents. Then run:
+bash /tmp/claude-setup-install.sh
+
+3. After it finishes, restart Claude Code so everything loads.
+
+4. Verify and report back: the lavish-axi version, counts under ~/.claude/skills, ~/.claude/agents, ~/.claude/commands, whether ~/.claude/CLAUDE.md was installed, and that /visual-plan and /visual-recap exist.`;
+
 var DESIGN_SUITE_INSTALL = `Install my full Design & Frontend skill suite in Claude Code. Run each command below, then restart Claude Code.
 
 # Own skill (multi-file, clone from repo)
@@ -7338,6 +7354,25 @@ npx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --ski
 npx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-slides --copy -y
 
 # Note: /site-from-dna and /landing-page-builder are custom personal pipeline skills that orchestrate the ones above. They are not published as installs; build your own following the structure shown on their cards.`;
+
+function copyWholeSetup(btn) {
+  navigator.clipboard.writeText(WHOLE_SETUP_INSTALL).then(function() {
+    if (btn) {
+      var original = btn.innerHTML;
+      btn.classList.add('copied');
+      btn.innerHTML = '<span class="btn-icon">&#10003;</span> Copied! Paste into Claude Code';
+      setTimeout(function() {
+        btn.classList.remove('copied');
+        btn.innerHTML = original;
+      }, 2500);
+    }
+    var toast = document.getElementById('toast');
+    if (toast) {
+      toast.classList.add('show');
+      setTimeout(function() { toast.classList.remove('show'); }, 2000);
+    }
+  });
+}
 
 function copyDesignSuite(btn) {
   navigator.clipboard.writeText(DESIGN_SUITE_INSTALL).then(function() {
