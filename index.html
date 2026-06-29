@@ -1813,7 +1813,7 @@
     0%, 100% { box-shadow: 0 0 0 0 rgba(96,165,250,0); }
     50% { box-shadow: 0 0 0 6px rgba(96,165,250,0.45); }
   }
-  #install-all:target { animation: installPulse 1s ease-in-out 3; outline: 2px solid rgba(96,165,250,0.8); }
+  #install-lavish:target { animation: installPulse 1s ease-in-out 3; outline: 2px solid rgba(96,165,250,0.8); }
 
   /* ===== TOAST ===== */
   .toast {
@@ -2119,8 +2119,6 @@
     <div class="smap-root-icon">&gt;_</div>
     <h1><span class="gradient">Claude Code</span></h1>
     <div class="smap-root-sub">Opus 4.6 &middot; click any node to explore</div>
-    <button id="install-all" class="install-btn" style="display:inline-flex;align-items:center;gap:0.5rem;margin:20px auto 0;" onclick="copyWholeSetup(this)"><span class="btn-icon">&#9889;</span> Install the entire setup</button>
-    <div class="smap-root-sub" style="margin-top:8px;font-size:0.8rem;">The whole bundle in one paste: Lavish editor + all skills, agents, commands &amp; a starter CLAUDE.md</div>
   </div>
   <div class="smap-trunk"></div>
   <div class="smap-branches">
@@ -2850,6 +2848,12 @@
     <div class="section-tag tag-pink">Commands</div>
     <h2>Skills &amp; Slash Commands</h2>
     <p class="section-desc">Custom slash commands grouped by purpose: content creation, development, research, productivity, and built-in system tools. Custom skills live in <code style="color:var(--pink);font-size:0.85rem;">~/.claude/skills/</code>, each in its own subfolder with a SKILL.md. System skills are built into the Claude Code harness.</p>
+  </div>
+
+  <div id="lavish-bundle" style="margin:0 0 28px;padding:20px 24px;border:1px solid var(--pink);border-radius:14px;background:linear-gradient(135deg,rgba(244,114,182,0.08),rgba(244,114,182,0.03));">
+    <div style="font-weight:600;font-size:1.05rem;margin-bottom:4px;">&#9889; Lavish bundle</div>
+    <div class="smap-root-sub" style="font-size:0.85rem;margin-bottom:14px;">The Lavish editor plus the <code style="color:var(--pink);font-size:0.85rem;">/visual-plan</code> and <code style="color:var(--pink);font-size:0.85rem;">/visual-recap</code> skills and their CLAUDE.md guidance, in one paste.</div>
+    <button id="install-lavish" class="install-btn" style="display:inline-flex;align-items:center;gap:0.5rem;" onclick="copyLavishBundle(this)"><span class="btn-icon">&#9889;</span> Install the Lavish bundle</button>
   </div>
 
   <!-- Individual Skills (collapsible) -->
@@ -7317,20 +7321,20 @@ function openGenericModal(data, title) {
 }
 
 // ===== COPY INSTALL PROMPT =====
-var WHOLE_SETUP_INSTALL = `Install Amadej Demšar's Claude Code setup (skills, agents, commands, a general-purpose CLAUDE.md, and the Lavish editor) on my machine.
+var LAVISH_BUNDLE_INSTALL = `Install the Lavish bundle in my Claude Code: the Lavish editor plus the /visual-plan and /visual-recap skills and their CLAUDE.md guidance.
 
 Do this, in order:
 
 1. Check that Node.js >= 22 is installed (node -v) and git exists. If Node is missing or older than 22, STOP and tell me to install Node.js >= 22 from https://nodejs.org first, then I'll re-run this.
 
 2. Download this installer, give me a one-paragraph summary of what it does, then run it once I confirm:
-curl -fsSL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/install.sh -o /tmp/claude-setup-install.sh
-It installs the public npm package lavish-axi, copies every skill into ~/.claude/skills/, every agent into ~/.claude/agents/, every command into ~/.claude/commands/, installs a general-purpose ~/.claude/CLAUDE.md ONLY if I don't already have one (otherwise it leaves mine untouched and saves the template as CLAUDE.shared-template.md), and appends a SessionStart hook to ~/.claude/settings.json (merging, never overwriting). Idempotent, never deletes my other skills/agents. Then run:
-bash /tmp/claude-setup-install.sh
+curl -fsSL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/install.sh -o /tmp/lavish-install.sh
+It installs the public npm package lavish-axi, copies the visual-plan and visual-recap skills into ~/.claude/skills/, adds a short Lavish section to ~/.claude/CLAUDE.md (creating the file if absent, never overwriting), and appends a SessionStart hook to ~/.claude/settings.json (merging, never overwriting). Idempotent, never deletes my other skills. Then run:
+bash /tmp/lavish-install.sh
 
 3. After it finishes, restart Claude Code so everything loads.
 
-4. Verify and report back: the lavish-axi version, counts under ~/.claude/skills, ~/.claude/agents, ~/.claude/commands, whether ~/.claude/CLAUDE.md was installed, and that /visual-plan and /visual-recap exist.`;
+4. Verify and report back: the lavish-axi version, that ~/.claude/skills/visual-plan and ~/.claude/skills/visual-recap exist, and that the Lavish section is present in ~/.claude/CLAUDE.md.`;
 
 var DESIGN_SUITE_INSTALL = `Install my full Design & Frontend skill suite in Claude Code. Run each command below, then restart Claude Code.
 
@@ -7362,8 +7366,8 @@ npx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --ski
 
 # Note: /site-from-dna and /landing-page-builder are custom personal pipeline skills that orchestrate the ones above. They are not published as installs; build your own following the structure shown on their cards.`;
 
-function copyWholeSetup(btn) {
-  navigator.clipboard.writeText(WHOLE_SETUP_INSTALL).then(function() {
+function copyLavishBundle(btn) {
+  navigator.clipboard.writeText(LAVISH_BUNDLE_INSTALL).then(function() {
     if (btn) {
       var original = btn.innerHTML;
       btn.classList.add('copied');

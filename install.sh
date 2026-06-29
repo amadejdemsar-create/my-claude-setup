@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 #
-# Installs Amadej Demšar's Claude Code setup into the current machine:
-#   - the Lavish Editor (lavish-axi) + its SessionStart hook
-#   - every skill in   skills/
-#   - every agent in   agents/
-#   - every command in commands/
+# Lavish bundle installer.
+# Installs the Lavish Editor (lavish-axi) plus the two skills built on it
+# (visual-plan, visual-recap), and adds a short Lavish section to the global
+# CLAUDE.md so an agent knows when to use them.
 #
-# Idempotent and non-destructive: it overwrites only the items it ships
-# (same-named skills/agents/commands), never deletes anything else, and adds
-# the SessionStart hook only if one is not already present.
+# Idempotent and non-destructive: it overwrites only the two skills it ships,
+# never deletes anything else, adds the SessionStart hook only if absent, and
+# adds the CLAUDE.md section only once (between markers). It never overwrites an
+# existing CLAUDE.md; it appends a marked block (creating the file if missing).
 #
 # Requirements: git, Node.js >= 22 (npm ships with Node).
 #
@@ -20,12 +20,14 @@
 set -euo pipefail
 
 REPO_URL="https://github.com/amadejdemsar-create/my-claude-setup.git"
+SKILLS=("visual-plan" "visual-recap")
 
 CLAUDE_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 SKILLS_DIR="$CLAUDE_DIR/skills"
-AGENTS_DIR="$CLAUDE_DIR/agents"
-COMMANDS_DIR="$CLAUDE_DIR/commands"
 SETTINGS="$CLAUDE_DIR/settings.json"
+CLAUDE_MD="$CLAUDE_DIR/CLAUDE.md"
+MARK_BEGIN="<!-- BEGIN lavish-bundle -->"
+MARK_END="<!-- END lavish-bundle -->"
 
 say()  { printf '\033[1;32m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[1;33m[!]\033[0m %s\n' "$*"; }
@@ -38,21 +40,20 @@ NODE_MAJOR="$(node -p 'process.versions.node.split(".")[0]' 2>/dev/null || echo 
 [ "$NODE_MAJOR" -ge 22 ] || die "Node.js $NODE_MAJOR detected; need >= 22. Upgrade Node, then re-run."
 say "Node.js $(node -v) OK"
 
-# --- 2. locate the setup source (local checkout or fresh shallow clone) -----
+# --- 2. locate the source (local checkout or fresh shallow clone) -----------
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd 2>/dev/null || echo '')"
-if [ -n "$SCRIPT_DIR" ] && [ -d "$SCRIPT_DIR/skills" ] && [ -d "$SCRIPT_DIR/agents" ]; then
+if [ -n "$SCRIPT_DIR" ] && [ -d "$SCRIPT_DIR/skills/visual-plan" ]; then
   SRC="$SCRIPT_DIR"
   say "Using local checkout: $SRC"
 else
-  TMP="$(mktemp -d)"
-  trap 'rm -rf "$TMP"' EXIT
-  say "Fetching setup from $REPO_URL ..."
+  TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+  say "Fetching from $REPO_URL ..."
   git clone --depth 1 --quiet "$REPO_URL" "$TMP/repo"
   SRC="$TMP/repo"
 fi
 
 # --- 3. install lavish-axi (for the SessionStart hook) ----------------------
-# Skills fall back to `npx -y lavish-axi`, so a failed global install is non-fatal.
+# The skills fall back to `npx -y lavish-axi`, so a failed global install is non-fatal.
 if command -v lavish-axi >/dev/null 2>&1; then
   say "lavish-axi already installed ($(lavish-axi --version 2>/dev/null || echo '?'))"
 else
@@ -60,41 +61,32 @@ else
   if npm install -g lavish-axi >/dev/null 2>&1; then
     say "lavish-axi installed ($(lavish-axi --version 2>/dev/null || echo '?'))"
   else
-    warn "Global npm install failed. Lavish-based skills will use the 'npx -y lavish-axi' fallback."
+    warn "Global npm install failed. The skills will use the 'npx -y lavish-axi' fallback."
   fi
 fi
 
-# --- 4. copy skills / agents / commands -------------------------------------
-copy_tree() {  # $1 = source subdir, $2 = dest dir, $3 = label, $4 = glob (optional)
-  local src="$1" dest="$2" label="$3" glob="${4:-*}" n=0
-  [ -d "$src" ] || { warn "no $label to install (missing $src)"; return; }
-  mkdir -p "$dest"
-  shopt -s nullglob
-  for item in "$src"/$glob; do
-    local base; base="$(basename "$item")"
-    if [ -d "$item" ]; then rm -rf "${dest:?}/$base"; cp -R "$item" "$dest/$base";
-    else cp "$item" "$dest/$base"; fi
-    n=$((n+1))
-  done
-  shopt -u nullglob
-  say "Installed $n $label -> $dest"
-}
+# --- 4. install the two skills ---------------------------------------------
+mkdir -p "$SKILLS_DIR"
+for s in "${SKILLS[@]}"; do
+  [ -d "$SRC/skills/$s" ] || die "skill '$s' not found in source (unexpected)."
+  rm -rf "${SKILLS_DIR:?}/$s"
+  cp -R "$SRC/skills/$s" "$SKILLS_DIR/$s"
+  say "Installed skill: $s -> $SKILLS_DIR/$s"
+done
 
-copy_tree "$SRC/skills"   "$SKILLS_DIR"   "skills"
-copy_tree "$SRC/agents"   "$AGENTS_DIR"   "agents"   "*.md"
-copy_tree "$SRC/commands" "$COMMANDS_DIR" "commands" "*.md"
-
-# --- 5. install the shared global CLAUDE.md (non-destructive) ---------------
-# This is a sanitized, general-purpose template (placeholders + universal rules),
-# NOT anyone's personal config. If the recipient already has a CLAUDE.md, we
-# never overwrite it; we drop the template alongside for them to merge.
-if [ -f "$SRC/CLAUDE.md" ]; then
-  if [ -f "$CLAUDE_DIR/CLAUDE.md" ]; then
-    cp "$SRC/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.shared-template.md"
-    warn "~/.claude/CLAUDE.md already exists — left it untouched. Saved the template as ~/.claude/CLAUDE.shared-template.md; merge what you want."
+# --- 5. add the Lavish section to CLAUDE.md (idempotent, non-destructive) ----
+if [ -f "$SRC/share/CLAUDE-lavish.md" ]; then
+  mkdir -p "$CLAUDE_DIR"
+  touch "$CLAUDE_MD"
+  if grep -qF "$MARK_BEGIN" "$CLAUDE_MD" 2>/dev/null; then
+    say "Lavish section already in CLAUDE.md, leaving it unchanged"
   else
-    cp "$SRC/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md"
-    say "Installed global CLAUDE.md -> $CLAUDE_DIR/CLAUDE.md (customize the placeholders)"
+    {
+      printf '\n%s\n' "$MARK_BEGIN"
+      cat "$SRC/share/CLAUDE-lavish.md"
+      printf '%s\n' "$MARK_END"
+    } >> "$CLAUDE_MD"
+    say "Added Lavish section to $CLAUDE_MD"
   fi
 fi
 
@@ -128,7 +120,6 @@ NODE
 
 # --- 7. done ----------------------------------------------------------------
 echo
-say "Done. Restart Claude Code so the SessionStart hook, CLAUDE.md, and skills/agents load."
+say "Done. Restart Claude Code so the SessionStart hook, CLAUDE.md section, and skills load."
 echo "   Test Lavish:  echo '<h1>hi</h1>' > /tmp/lavish-test.html && lavish-axi /tmp/lavish-test.html"
-echo "   New skills include /visual-plan and /visual-recap; agents and commands are in ~/.claude/."
-echo "   If a global CLAUDE.md was installed, open ~/.claude/CLAUDE.md and replace the placeholders."
+echo "   Skills installed: /visual-plan and /visual-recap."

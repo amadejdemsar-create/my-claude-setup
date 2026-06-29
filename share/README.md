@@ -1,13 +1,15 @@
-# Share this Claude Code setup
+# Lavish bundle (shareable)
 
-A one-paste way to give anyone the full setup in this repo: the **Lavish Editor**
-plus **every skill, agent, and command** here.
+A one-paste way to give anyone the **Lavish Editor** plus the two skills built on
+it, **`/visual-plan`** and **`/visual-recap`**, and the matching CLAUDE.md
+guidance. This is a focused bundle, not the whole setup.
 
 ## The easy way: paste the prompt
 
 Open [`PROMPT.md`](./PROMPT.md), copy the whole block, paste it into a fresh
 Claude Code session. The recipient's agent fetches the installer, shows what it
-does, runs it, and verifies.
+does, runs it, and verifies. (The same button lives on the showcase site under
+the Skills section: "Install the Lavish bundle".)
 
 ## The manual way: run the installer
 
@@ -22,10 +24,9 @@ Or clone the repo and run `bash install.sh` from the checkout.
 | Piece | Destination |
 |---|---|
 | `lavish-axi` (public npm pkg) + SessionStart hook | global + `~/.claude/settings.json` |
-| every skill in `skills/` | `~/.claude/skills/` |
-| every agent in `agents/` | `~/.claude/agents/` |
-| every command in `commands/` | `~/.claude/commands/` |
-| general-purpose `CLAUDE.md` template (only if none exists) | `~/.claude/CLAUDE.md` |
+| `visual-plan` skill | `~/.claude/skills/visual-plan/` |
+| `visual-recap` skill | `~/.claude/skills/visual-recap/` |
+| Lavish guidance ([`CLAUDE-lavish.md`](./CLAUDE-lavish.md)) | appended to `~/.claude/CLAUDE.md` |
 
 ## Requirements
 
@@ -34,16 +35,10 @@ Or clone the repo and run `bash install.sh` from the checkout.
 
 ## Guarantees
 
-- **Idempotent**: re-running never duplicates the SessionStart hook.
-- **Non-destructive**: it overwrites only same-named items it ships; it never
-  deletes the recipient's other skills/agents/commands, and it merges into any
-  existing `SessionStart` hooks rather than replacing them. An existing
-  `~/.claude/CLAUDE.md` is never overwritten (the template lands as
-  `CLAUDE.shared-template.md` instead).
-- **No secrets**: only the public, curated contents of this repo are installed;
-  the installer fetches from this public repo, not from any private machine.
-
-## Adding more to the share
-
-The installer loops over `skills/`, `agents/`, and `commands/`, so anything added
-to those folders here is automatically included next time someone installs.
+- **Idempotent**: re-running never duplicates the SessionStart hook or the
+  CLAUDE.md section.
+- **Non-destructive**: it overwrites only the two skills it ships, never deletes
+  the recipient's other skills, merges into existing `SessionStart` hooks, and
+  appends to `~/.claude/CLAUDE.md` between markers (creating it only if absent)
+  rather than overwriting it.
+- **No secrets**: only the public, curated contents of this repo are installed.
