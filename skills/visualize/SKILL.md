@@ -1,3 +1,8 @@
+---
+name: visualize
+description: Use when the user runs /visualize <source> or asks to turn a document, plan, dataset, portfolio, or topic into a premium single-file HTML page, dashboard, or tracker.
+---
+
 # /visualize <source>
 
 Transform any text source into a premium single-file HTML page.

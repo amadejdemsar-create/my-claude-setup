@@ -2139,26 +2139,26 @@
     <a href="#agents" class="smap-node smap-node-green">
       <div class="smap-card">
         <div class="smap-icon">&#129302;</div>
-        <div class="smap-count">13</div>
+        <div class="smap-count">15</div>
         <div class="smap-label">Agents</div>
         <div class="smap-items">
           <span>stock-analyst</span>
           <span>senior-architect</span>
           <span>sdr-blueprint</span>
-          <span class="more">+10 more &darr;</span>
+          <span class="more">+12 more &darr;</span>
         </div>
       </div>
     </a>
     <a href="#skills" class="smap-node smap-node-pink">
       <div class="smap-card">
         <div class="smap-icon">&#9889;</div>
-        <div class="smap-count">23</div>
+        <div class="smap-count">31</div>
         <div class="smap-label">Commands</div>
         <div class="smap-items">
           <span>/prd</span>
           <span>/content-skill-graph</span>
           <span>/analyze-stock</span>
-          <span class="more">+20 more &darr;</span>
+          <span class="more">+28 more &darr;</span>
         </div>
       </div>
     </a>
@@ -2793,6 +2793,36 @@
         </div>
       </div>
     </div>
+
+    <!-- native-transcreator -->
+    <div class="card card-green card-clickable" onclick="openModal('native-transcreator')" title="Click to view full instructions">
+      <div class="agent-card">
+        <div class="agent-avatar" style="background: var(--green-dim);">&#128172;</div>
+        <div>
+          <h3>native-transcreator</h3>
+          <p>Native-quality transcreation between any language pair that kills calques and translationese, with a source-blind review pass so the output reads as if written from scratch.</p>
+          <div class="agent-meta">
+            <span class="chip chip-model">Opus</span>
+            <span class="chip" style="background:var(--green-dim);color:var(--green);">Language</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- video-analyst -->
+    <div class="card card-purple card-clickable" onclick="openModal('video-analyst')" title="Click to view full instructions">
+      <div class="agent-card">
+        <div class="agent-avatar" style="background: var(--purple-dim);">&#127916;</div>
+        <div>
+          <h3>video-analyst</h3>
+          <p>Watches a video (frames plus transcript) in its own context and returns a structured report, so heavy frame reading never bloats the caller's session.</p>
+          <div class="agent-meta">
+            <span class="chip chip-model">Sonnet</span>
+            <span class="chip" style="background:var(--purple-dim);color:var(--purple);">Video</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Workflow examples -->
@@ -2890,6 +2920,46 @@
   <!-- Individual Skill Cards -->
   <div class="sub-header" style="margin-top: 48px;">Featured Individual Skills</div>
   <div class="card-grid">
+    <div class="card card-pink">
+      <div class="card-icon">&#127760;</div>
+      <h3>/transcreate</h3>
+      <p>Native-quality transcreation between any language pair, running a two-pass loop where an independent native reviewer never sees the source so it cannot re-introduce calques.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Custom Skill</span>
+        <span class="tag">Language</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#129504;</div>
+      <h3>/reason-business</h3>
+      <p>Pressure-tests a business idea or stuck venture with a first-principles constraint engine (Goldratt, Musk, Hormozi) to find the real bottleneck before you build.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Custom Skill</span>
+        <span class="tag">Strategy</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#128302;</div>
+      <h3>/premortem</h3>
+      <p>Imagines a high-stakes move has already failed and works backward to surface the failure modes, so you de-risk the decision before committing.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Custom Skill</span>
+        <span class="tag">Decision</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#127909;</div>
+      <h3>/video-watch</h3>
+      <p>Actually watches a YouTube, TikTok, Instagram, X, or local video (frames plus transcript) and summarizes, transcribes, or answers questions about it.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Custom Skill</span>
+        <span class="tag">AI &amp; Research</span>
+      </div>
+    </div>
+
     <div class="card card-pink">
       <div class="card-icon">&#128221;</div>
       <h3>/prompt-writer</h3>
@@ -3211,12 +3281,32 @@
     </div>
 
     <div class="card card-pink">
-      <div class="card-icon">&#127913;</div>
-      <h3>/ckm-design-suite</h3>
-      <p>Six-skill design-ops suite: brand identity, token architecture, shadcn/Tailwind styling, logo/icon/CIP prompt craft, banners, HTML slide decks.</p>
+      <div class="card-icon">&#127912;</div>
+      <h3>/brand-system</h3>
+      <p>Creates a brand identity, encodes it as three-layer design tokens (primitive, semantic, component), and implements them in shadcn/ui plus Tailwind.</p>
       <div class="card-tags">
-        <span class="tag">Installed Skill</span>
+        <span class="tag tag-highlight">Custom Skill</span>
         <span class="tag">Design System</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#128396;</div>
+      <h3>/asset-studio</h3>
+      <p>Design-asset craft in one skill: logos, corporate-identity programs, icons, social visuals, banner art direction, and Chart.js HTML slide decks.</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Custom Skill</span>
+        <span class="tag">Design</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-icon">&#128260;</div>
+      <h3>/animation-analyzer</h3>
+      <p>Reverse-engineers a UI animation frame by frame into an exact motion spec plus recreation code (CSS keyframes, Framer Motion, or Lottie).</p>
+      <div class="card-tags">
+        <span class="tag tag-highlight">Custom Skill</span>
+        <span class="tag">Motion</span>
       </div>
     </div>
 
@@ -3558,7 +3648,7 @@
       <div class="config-num">4</div>
       <h4>Agents Directory</h4>
       <div class="config-path">~/.claude/agents/</div>
-      <p>13 agent files (.md). Each has YAML frontmatter (name, description, model, color, tools) followed by system prompt. Frontmatter must start on line 1.</p>
+      <p>15 agent files (.md). Each has YAML frontmatter (name, description, model, color, tools) followed by system prompt. Frontmatter must start on line 1.</p>
     </div>
 
     <div class="config-card">
@@ -3622,6 +3712,63 @@
 
 <script>
 const agents = {
+  'native-transcreator': {
+    icon: '&#128172;',
+    iconBg: 'var(--green-dim)',
+    name: 'native-transcreator',
+    model: 'Opus',
+    tools: 'Read, Write, Edit, Bash, Grep, Glob',
+    color: 'green',
+    installPrompt: `Install the native-transcreator agent in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/agents
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/native-transcreator.md -o ~/.claude/agents/native-transcreator.md
+
+Then tell me to restart Claude Code. It pairs with the /transcreate skill, which dispatches it across the transcreate and independent-review passes.`,
+    content: `
+      <div class="persona-quote">A native professional in the target language who rewrites for meaning, register, and intent instead of translating word for word, so the output reads as if it was written from scratch, not translated.</div>
+      <h2>What it does</h2>
+      <p>Runs in four modes so the /transcreate loop can keep each pass in its own context.</p>
+      <ul>
+        <li><strong>transcreate</strong> &mdash; source to target, applying a persistent glossary and an optional native voice sample</li>
+        <li><strong>review</strong> &mdash; an independent native audit that never sees the source, so it cannot re-anchor to the original and re-introduce calques</li>
+        <li><strong>backtranslate</strong> &mdash; a faithful reverse translation for the accuracy gate</li>
+        <li><strong>accuracy</strong> &mdash; a meaning-drift comparison of source versus back-translation</li>
+      </ul>
+      <p>Kills calques, false friends, and translationese; gets case, gender, aspect, and locale conventions right. Deep reference knowledge for Slovenian, Croatian, Italian, German, and English, and it flags when a language is outside that set.</p>
+      <hr>
+      <p><strong>Model:</strong> Opus &middot; <strong>Tools:</strong> Read, Write, Edit, Bash, Grep, Glob &middot; <strong>Source:</strong> <code>~/.claude/agents/native-transcreator.md</code></p>
+    `
+  },
+  'video-analyst': {
+    icon: '&#127916;',
+    iconBg: 'var(--purple-dim)',
+    name: 'video-analyst',
+    model: 'Sonnet',
+    tools: 'Bash, Read, Write, Glob, Grep',
+    color: 'purple',
+    installPrompt: `Install the video-analyst agent in my Claude Code setup.
+
+Run these commands:
+mkdir -p ~/.claude/agents
+curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/video-analyst.md -o ~/.claude/agents/video-analyst.md
+
+Then tell me to restart Claude Code. It relies on the video-watch skill's scripts (yt-dlp, ffmpeg, and a local Whisper), so install those too (see the /video-watch skill for setup).`,
+    content: `
+      <div class="persona-quote">Actually watches the video (frames plus transcript) and returns a precise, structured report. Runs in its own context so the heavy frame reading never pollutes the caller's session.</div>
+      <h2>What it does</h2>
+      <p>Downloads the video, transcribes it, extracts frames, reads the frames to see the footage, and reports back.</p>
+      <ul>
+        <li><strong>Any source</strong> &mdash; YouTube, TikTok, Instagram, X/Twitter, or a local file</li>
+        <li><strong>Transcription cascade</strong> &mdash; captions first, then local faster-whisper, then an optional cloud Whisper fallback</li>
+        <li><strong>Sees the footage</strong> &mdash; samples and reads frames so the report reflects what is on screen, not just the audio</li>
+        <li><strong>Context isolation</strong> &mdash; delegate here so reading dozens of frames does not bloat the main conversation</li>
+      </ul>
+      <hr>
+      <p><strong>Model:</strong> Sonnet &middot; <strong>Tools:</strong> Bash, Read, Write, Glob, Grep &middot; <strong>Source:</strong> <code>~/.claude/agents/video-analyst.md</code></p>
+    `
+  },
   'stock-analyst': {
     icon: '&#128200;',
     iconBg: 'var(--blue-dim)',
@@ -5781,7 +5928,7 @@ const skills = {
   },
   '/landing-page-builder': {
     icon: '&#127751;', iconBg: 'var(--pink-dim)', color: 'pink',
-    installPrompt: `/landing-page-builder is a custom personal skill that runs the full agency-grade landing page workflow: discovery, strategy, concept boards, copy, build, multi-lens critique, and browser QA.\n\nIt is not published as a standalone install. To build your own version:\n1. Create ~/.claude/skills/landing-page-builder/SKILL.md\n2. Define phases: discovery (consultant intake), strategy + visual direction, copy deck, structure, build (via /impeccable), multi-discipline critique, and a Playwright QA loop\n3. Include reference files for agency roles, concept boards, copywriting playbook, design principles, craft standards, and a conversion checklist\n4. The skill conducts a roster of specialists (/impeccable, /design-taste-frontend, /ui-ux-pro-max, /emil-design-eng) and owns the strategy layer\n\nRestart Claude Code after creating the skill file.`,
+    installPrompt: `Install the /landing-page-builder skill (multi-file, bundled in this repo).\n\nRun:\ngit clone --depth 1 https://github.com/amadejdemsar-create/my-claude-setup.git /tmp/mcs-lpb && rm -rf ~/.claude/skills/landing-page-builder && cp -r /tmp/mcs-lpb/skills/landing-page-builder ~/.claude/skills/landing-page-builder && rm -rf /tmp/mcs-lpb\n\nThen restart Claude Code. It conducts a roster of specialist skills (impeccable, design-taste-frontend, ui-ux-pro-max, emil-design-eng), so install those from their upstream repos for the full pipeline.`,
     content: `
       <div class="persona-quote">Build landing pages at the level the best agency on earth would ship: 25 years each in brand strategy, conversion copywriting, art direction, UX, motion, front-end engineering, and CRO. The bar is not "good for an AI." The bar is: would a world-class studio charge $40k for this?</div>
       <h2>What it does</h2>
@@ -6016,23 +6163,109 @@ const skills = {
       <p><strong>Type:</strong> Installed Skill &middot; <strong>Source:</strong> <code>firecrawl/firecrawl-workflows</code></p>
     `
   },
-  '/ckm-design-suite': {
-    icon: '&#127913;', iconBg: 'var(--pink-dim)', color: 'pink',
-    installPrompt: `Install the CKM Design Suite (six skills) globally for Claude Code.\n\nRun:\nnpx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-design --copy -y\nnpx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-design-system --copy -y\nnpx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-brand --copy -y\nnpx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-ui-styling --copy -y\nnpx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-banner-design --copy -y\nnpx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-slides --copy -y\n\nThen restart Claude Code. This installs all six sub-skills from the same repo.`,
+  '/brand-system': {
+    icon: '&#127912;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /brand-system skill (multi-file, bundled in this repo).\n\nRun:\ngit clone --depth 1 https://github.com/amadejdemsar-create/my-claude-setup.git /tmp/mcs-bs && rm -rf ~/.claude/skills/brand-system && cp -r /tmp/mcs-bs/skills/brand-system ~/.claude/skills/brand-system && rm -rf /tmp/mcs-bs\n\nThen restart Claude Code.`,
     content: `
-      <div class="persona-quote">Six-skill design-ops suite covering brand identity, design tokens, UI styling, logo/icon/CIP prompt craft, banner design, and HTML slide decks. Image generation routes through /image-director to the Codex built-in tool, never Gemini.</div>
+      <div class="persona-quote">Brand identity, design tokens, and UI implementation as one pipeline: Part 1 creates the brand, Part 2 encodes it as tokens, Part 3 implements it in real components. Merged from the CKM brand, design-system, and UI-styling skills into a single bundled skill.</div>
       <h2>What it does</h2>
-      <p>A unified design-operations toolkit installed from one repo. Each sub-skill handles a specific design deliverable type, sharing style libraries and industry references across the suite.</p>
       <ul>
-        <li><strong>ckm-design</strong> &mdash; hub skill routing to brand, tokens, UI, logos (55 styles), CIP (50 deliverables), banners (22 styles), icons, social photos</li>
-        <li><strong>ckm-design-system</strong> &mdash; three-layer token architecture (primitive, semantic, component), CSS variables, spacing/typography scales, Chart.js slides</li>
-        <li><strong>ckm-brand</strong> &mdash; brand voice, visual identity, messaging frameworks, asset management, consistency audits, color extraction</li>
-        <li><strong>ckm-ui-styling</strong> &mdash; shadcn/ui + Radix UI + Tailwind component library: dialogs, dropdowns, forms, tables, themes, dark mode</li>
-        <li><strong>ckm-banner-design</strong> &mdash; 22 art direction styles for social, ads, web heroes, and print across all major platforms</li>
-        <li><strong>ckm-slides</strong> &mdash; strategic HTML presentations with Chart.js visualization, design tokens, responsive layouts, copywriting formulas</li>
+        <li><strong>Part 1: Brand</strong> &mdash; voice, messaging, and visual identity creation</li>
+        <li><strong>Part 2: Tokens</strong> &mdash; three-layer token architecture (primitive, semantic, component)</li>
+        <li><strong>Part 3: UI</strong> &mdash; shadcn/ui plus Tailwind implementation and theming reference</li>
       </ul>
       <hr>
-      <p><strong>Type:</strong> Installed Skill (suite of 6) &middot; <strong>Source:</strong> <code>nextlevelbuilder/ui-ux-pro-max-skill</code></p>
+      <p><strong>Type:</strong> Custom Skill (bundled) &middot; <strong>Source:</strong> <code>skills/brand-system/</code> in this repo</p>
+    `
+  },
+  '/asset-studio': {
+    icon: '&#128396;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /asset-studio skill (multi-file, bundled in this repo).\n\nRun:\ngit clone --depth 1 https://github.com/amadejdemsar-create/my-claude-setup.git /tmp/mcs-as && rm -rf ~/.claude/skills/asset-studio && cp -r /tmp/mcs-as/skills/asset-studio ~/.claude/skills/asset-studio && rm -rf /tmp/mcs-as\n\nThen restart Claude Code. Raster rendering routes through the /image-director skill, so install that too.`,
+    content: `
+      <div class="persona-quote">Design-asset craft in one skill: logos, corporate-identity programs, icons, social visuals, banners, and slide decks. Merged from the CKM design, logo, banner, and slides skills. All raster rendering routes through /image-director, never Gemini.</div>
+      <h2>What it does</h2>
+      <ul>
+        <li><strong>Part 1</strong> &mdash; logo design (55 styles), corporate-identity programs, icon design (SVG authored directly), and social visuals</li>
+        <li><strong>Part 2</strong> &mdash; banner art direction with platform sizes and safe zones</li>
+        <li><strong>Part 3</strong> &mdash; HTML slide decks with Chart.js</li>
+      </ul>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill (bundled) &middot; <strong>Source:</strong> <code>skills/asset-studio/</code> in this repo</p>
+    `
+  },
+  '/animation-analyzer': {
+    icon: '&#128260;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /animation-analyzer skill (multi-file, bundled in this repo).\n\nRun:\ngit clone --depth 1 https://github.com/amadejdemsar-create/my-claude-setup.git /tmp/mcs-aa && rm -rf ~/.claude/skills/animation-analyzer && cp -r /tmp/mcs-aa/skills/animation-analyzer ~/.claude/skills/animation-analyzer && rm -rf /tmp/mcs-aa\n\nThen restart Claude Code. It reads video frames, so ffmpeg on your PATH helps.`,
+    content: `
+      <div class="persona-quote">Dissects a screen recording of a UI animation frame by frame and layer by layer, then reproduces it. Exact timing, per-element transforms, easing curves, and stagger, turned into a motion spec plus working code.</div>
+      <h2>What it does</h2>
+      <ul>
+        <li><strong>Reverse-engineers</strong> &mdash; timing, translate/scale/rotate/opacity/blur/clip/color transforms, easing, and sequence from an .mp4/.mov/.webm/.gif</li>
+        <li><strong>Outputs a spec plus code</strong> &mdash; CSS keyframes, Framer Motion, or Lottie, auto-picked per animation</li>
+        <li><strong>Whole-screen teardown</strong> &mdash; can also document every screen in a recording into a recreate-ready design and motion reference</li>
+      </ul>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill (bundled) &middot; <strong>Source:</strong> <code>skills/animation-analyzer/</code> in this repo</p>
+    `
+  },
+  '/transcreate': {
+    icon: '&#127760;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /transcreate skill in my Claude Code setup.\n\nRun these commands:\nmkdir -p ~/.claude/skills/transcreate\ncurl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/transcreate/SKILL.md -o ~/.claude/skills/transcreate/SKILL.md\ncurl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/agents/native-transcreator.md -o ~/.claude/agents/native-transcreator.md\n\nThen restart Claude Code. The skill dispatches the native-transcreator agent, so both files are needed.`,
+    content: `
+      <div class="persona-quote">Native-quality transcreation, not literal machine translation. Produces text a native professional would write from scratch: no calques, no false friends, no translationese, correct case, gender, aspect, register, and locale.</div>
+      <h2>What it does</h2>
+      <p>Turns the manual "translate, then have a native rewrite it" loop into one command, with a translation desk's machinery.</p>
+      <ul>
+        <li><strong>Two-pass loop</strong> &mdash; a transcreate pass, then an independent native review that never sees the source, so it cannot re-anchor and re-introduce calques</li>
+        <li><strong>Translation memory</strong> &mdash; a persistent glossary keeps terminology consistent across jobs</li>
+        <li><strong>Accuracy gate</strong> &mdash; an optional back-translation check catches meaning drift a nativeness pass cannot see</li>
+        <li><strong>Fan-out</strong> &mdash; one source to many target languages, each chain independent</li>
+      </ul>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill &middot; <strong>Source:</strong> <code>skills/transcreate/</code> plus the native-transcreator agent</p>
+    `
+  },
+  '/reason-business': {
+    icon: '&#129504;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /reason-business skill (multi-file, bundled in this repo).\n\nRun:\ngit clone --depth 1 https://github.com/amadejdemsar-create/my-claude-setup.git /tmp/mcs-rb && rm -rf ~/.claude/skills/reason-business && cp -r /tmp/mcs-rb/skills/reason-business ~/.claude/skills/reason-business && rm -rf /tmp/mcs-rb\n\nThen restart Claude Code.`,
+    content: `
+      <div class="persona-quote">Reason through a business idea, decision, or stuck venture like a first-principles founder. Finds the one real constraint before you pour effort into the wrong thing.</div>
+      <h2>What it does</h2>
+      <p>Runs a constraint-finding and first-principles engine (Goldratt, Musk, Hormozi, Lean Startup, Kahneman) in a fast QUICK mode by default, or a full DEEP mode for big bets.</p>
+      <ul>
+        <li><strong>Finds the bottleneck</strong> &mdash; what actually limits the outcome, not the busywork around it</li>
+        <li><strong>Pressure-tests the idea</strong> &mdash; is this worth building, and what has to be true for it to work</li>
+        <li><strong>DEEP mode memory</strong> &mdash; saves a reasoning record so the loop resumes across sessions</li>
+      </ul>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill (bundled) &middot; <strong>Source:</strong> <code>skills/reason-business/</code> in this repo</p>
+    `
+  },
+  '/premortem': {
+    icon: '&#128302;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /premortem skill in my Claude Code setup.\n\nRun these commands:\nmkdir -p ~/.claude/skills/premortem\ncurl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/main/skills/premortem/SKILL.md -o ~/.claude/skills/premortem/SKILL.md\n\nThen restart Claude Code.`,
+    content: `
+      <div class="persona-quote">Assume the decision already failed, then work backward to find out why. A lightweight foresight pass for high-stakes moves before you commit.</div>
+      <h2>What it does</h2>
+      <p>Imagines a future in which the move has gone wrong, enumerates the plausible failure modes, and turns them into mitigations you can act on now. Lighter than a full constraint analysis, aimed at de-risking a specific decision.</p>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill &middot; <strong>Source:</strong> <code>skills/premortem/</code> in this repo</p>
+    `
+  },
+  '/video-watch': {
+    icon: '&#127909;', iconBg: 'var(--pink-dim)', color: 'pink',
+    installPrompt: `Install the /video-watch skill (multi-file, bundled in this repo).\n\nRun:\ngit clone --depth 1 https://github.com/amadejdemsar-create/my-claude-setup.git /tmp/mcs-vw && rm -rf ~/.claude/skills/video-watch && cp -r /tmp/mcs-vw/skills/video-watch ~/.claude/skills/video-watch && rm -rf /tmp/mcs-vw && bash ~/.claude/skills/video-watch/setup.sh\n\nThen restart Claude Code. Setup installs yt-dlp, ffmpeg, and a local Whisper for transcription.`,
+    content: `
+      <div class="persona-quote">Actually watches a video (frames plus transcript) instead of just reading its title. Summarize, transcribe, pull quotes, describe what is on screen, or answer questions about a specific moment.</div>
+      <h2>What it does</h2>
+      <p>Routes the heavy work to the video-analyst agent so reading dozens of frames never bloats your main session.</p>
+      <ul>
+        <li><strong>Any source</strong> &mdash; YouTube, TikTok, Instagram, X/Twitter, or a local file</li>
+        <li><strong>Transcription cascade</strong> &mdash; captions, then local faster-whisper, then an optional cloud Whisper</li>
+        <li><strong>Sees the footage</strong> &mdash; extracts and reads frames, so the answer reflects what is shown, not just the audio</li>
+      </ul>
+      <hr>
+      <p><strong>Type:</strong> Custom Skill (bundled) &middot; <strong>Source:</strong> <code>skills/video-watch/</code> plus the video-analyst agent</p>
     `
   },
   '/prompt-writer': {
@@ -7364,15 +7597,10 @@ npx skills add Leonxlnx/taste-skill -g --agent claude-code --skill redesign-exis
 # Design DNA extractor
 npx skills add firecrawl/firecrawl-workflows -g --agent claude-code --skill firecrawl-website-design-clone --copy -y
 
-# ckm design-ops suite (six skills, same repo)
-npx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-design --copy -y
-npx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-design-system --copy -y
-npx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-brand --copy -y
-npx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-ui-styling --copy -y
-npx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-banner-design --copy -y
-npx skills add nextlevelbuilder/ui-ux-pro-max-skill -g --agent claude-code --skill ckm-slides --copy -y
+# Bundled design-ops skills (multi-file, clone from this repo). brand-system merges the CKM brand + design-system + UI-styling skills; asset-studio merges CKM logo/banner/slides craft.
+git clone --depth 1 https://github.com/amadejdemsar-create/my-claude-setup.git /tmp/mcs-ds && cp -r /tmp/mcs-ds/skills/brand-system ~/.claude/skills/brand-system && cp -r /tmp/mcs-ds/skills/asset-studio ~/.claude/skills/asset-studio && cp -r /tmp/mcs-ds/skills/animation-analyzer ~/.claude/skills/animation-analyzer && cp -r /tmp/mcs-ds/skills/landing-page-builder ~/.claude/skills/landing-page-builder && rm -rf /tmp/mcs-ds
 
-# Note: /site-from-dna and /landing-page-builder are custom personal pipeline skills that orchestrate the ones above. They are not published as installs; build your own following the structure shown on their cards.`;
+# Note: /site-from-dna is a custom personal pipeline skill that orchestrates the ones above. It is not published as an install; build your own following the structure shown on its card.`;
 
 function copyLavishBundle(btn) {
   navigator.clipboard.writeText(LAVISH_BUNDLE_INSTALL).then(function() {

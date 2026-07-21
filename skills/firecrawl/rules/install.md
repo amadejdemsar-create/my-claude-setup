@@ -1,89 +1,83 @@
 ---
 name: firecrawl-cli-installation
 description: |
-  Install the Firecrawl CLI and handle authentication errors.
+  Install the official Firecrawl CLI and handle authentication.
+  Package: https://www.npmjs.com/package/firecrawl-cli
+  Source: https://github.com/firecrawl/cli
+  Docs: https://docs.firecrawl.dev/sdks/cli
 ---
 
 # Firecrawl CLI Installation
 
-## Installation
-
-Check if firecrawl is already available:
+## Quick Setup (Recommended)
 
 ```bash
-firecrawl --version
+npx -y firecrawl-cli@1.16.2 init -y --browser
 ```
 
-If the command is not found, install via npm:
+This installs `firecrawl-cli` globally, authenticates via browser, and installs core, build, and workflow skills.
+
+This setup is safe to re-run when the CLI is missing, stale, or only partially configured.
+
+If `firecrawl` is already installed and you want to update it first:
 
 ```bash
-npm install -g firecrawl-cli
+npm update -g firecrawl-cli
 ```
 
-## Verify Installation
+Skills are installed globally across all detected coding editors by default.
 
-Check if installed and authenticated:
+To install skills manually:
 
 ```bash
-firecrawl --version --auth-status
+firecrawl setup skills
+firecrawl setup workflows
 ```
 
-Output will show:
+## Manual Install
 
-- Version number
-- `authenticated: true` or `authenticated: false`
+```bash
+npm install -g firecrawl-cli@1.16.2
+```
+
+## Verify
+
+First check status:
+
+```bash
+firecrawl --status
+```
+
+Then run one small real request to prove install, auth, and output all work:
+
+```bash
+mkdir -p .firecrawl
+firecrawl scrape "https://firecrawl.dev" -o .firecrawl/install-check.md
+```
+
+The install is healthy when both commands succeed.
 
 ## Authentication
 
-If not authenticated, run:
+Authenticate using the built-in login flow:
 
 ```bash
 firecrawl login --browser
 ```
 
-The `--browser` flag automatically opens the browser for authentication without prompting. This is the recommended method for agents. Don't tell users to run the commands themselves - just execute the command and have it prompt them to authenticate in their browser.
+This opens the browser for OAuth authentication. Credentials are stored securely by the CLI.
 
-## If you fail to authenticate, use the following error handling instructions:
+### If authentication fails
 
-If ANY command returns an authentication error after you ran `firecrawl login --browser` (e.g., "not authenticated", "unauthorized", "API key"), use an ask user question tool if available (such as the AskUserQuestion tool in Claude Code):
+Ask the user how they'd like to authenticate:
 
-**Question:** "How would you like to authenticate with Firecrawl?"
-
-**Options:**
-
-1. **Login with browser (Recommended)** - Opens your browser to authenticate with Firecrawl
-2. **Enter API key manually** - Paste an existing API key from firecrawl.dev
-
-### If user selects browser login:
-
-Run `firecrawl login --browser` to automatically open the browser. Wait for them to confirm authentication, then retry the original command.
-
-### If user selects manual API key:
-
-Ask for their API key, then run:
-
-```bash
-firecrawl login --api-key "<their-key>"
-```
-
-Or set the environment variable:
-
-```bash
-export FIRECRAWL_API_KEY="<their-key>"
-```
-
-Retry the original command if the environment variable is set.
-
-## Troubleshooting
+1. **Login with browser (Recommended)** - Run `firecrawl login --browser`
+2. **Enter API key manually** - Run `firecrawl login --api-key "<key>"` with a key from firecrawl.dev
 
 ### Command not found
 
-If `firecrawl` command is not found after installation:
+If `firecrawl` is not found after installation:
 
-1. Make sure npm global bin is in PATH
-2. Try: `npx firecrawl-cli --version`
-3. Or reinstall: `npm install -g firecrawl-cli`
-
-### Specific Instructions for Codex
-
-When a user selects to authenticate with a browser, run `firecrawl login --browser` to automatically open the browser for authentication without requiring interactive input.
+1. Ensure npm global bin is in PATH
+2. Try: `npx firecrawl-cli@1.16.2 --version`
+3. Reinstall: `npm install -g firecrawl-cli@1.16.2`

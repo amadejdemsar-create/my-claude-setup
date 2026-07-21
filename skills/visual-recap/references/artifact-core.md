@@ -64,7 +64,7 @@ DaisyUI v5 CDN snippet and components. Use semantic theme colors (`bg-base-100`,
 ## Wireframe quality bar
 
 Before authoring ANY wireframe, the renderer must follow the mockup/wireframe quality bar in
-`~/.claude/rules/design-prototype-first.md` verbatim: real content not lorem, modify don't
+`~/.claude/rules/design-and-build.md` verbatim: real content not lorem, modify don't
 redesign, comparable before/after, theme tokens not hex, full-width chrome, pinned bottom bars,
 fill the frame, no fake shadows, zoom in on sub-surfaces.
 
@@ -86,7 +86,7 @@ render a cheap structural pass before any expensive wireframe.
 - **Redact secrets.** Never copy API keys, tokens, `.env` values, or webhook URLs into any
   block; use `sk-•••` / `<redacted>`.
 - **No silent caps.** On a large input, sample the key items and state what was dropped.
-- **Inspect before handoff** (verify-before-done): open the rendered artifact and check for
+- **Inspect before handoff** (completion-discipline): open the rendered artifact and check for
   overlap, clipping, empty bands, wrapped labels before asking for review.
 
 ## The Lavish review loop

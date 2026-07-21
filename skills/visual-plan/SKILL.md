@@ -49,7 +49,7 @@ hand the BUILD to `landing-page-builder`.
 ## On approval: emit a Build Handoff Spec (when the plan has UI screens)
 
 The approved plan is a **binding spec**, not a reference — see
-`~/.claude/rules/design-fidelity-contract.md`. When the approved plan contains wireframes or
+`~/.claude/rules/design-and-build.md`. When the approved plan contains wireframes or
 references a locked prototype, write a per-screen build handoff spec BEFORE execution begins (a
 section appended to the plan doc, or `.lavish/build-spec-<slug>.md`). It is the literal checklist
 the builder follows and the design-diff verifier walks. For every screen:
@@ -67,4 +67,4 @@ the builder follows and the design-diff verifier walks. For every screen:
    bottom sheet vs modal). Every screen has a mobile spec.
 
 Skip this only for purely backend / strategy / non-visual plans. Build to the spec exactly, then
-run the design diff in `design-fidelity-contract.md` before declaring done.
+run the design diff in `design-and-build.md` before declaring done.
