@@ -1,7 +1,7 @@
 ---
 name: gws-sheets
 version: 1.0.0
-description: "Google Sheets: Read and write spreadsheets."
+description: "Google Sheets via the gws CLI: read ranges, append rows, write cells, create spreadsheets. Use when the user asks to read or update a spreadsheet, log data to a sheet, or pull tabular data from Sheets. Confirm before writes."
 metadata:
   openclaw:
     category: "productivity"

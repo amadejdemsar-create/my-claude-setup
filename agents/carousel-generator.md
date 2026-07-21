@@ -1,7 +1,7 @@
 ---
 name: carousel-generator
 description: "Generates a complete LinkedIn carousel post. Writes the HTML, exports to PNG + PDF, ready to upload.\n\n<example>\nuser: \"Make a carousel about 5 signs your business needs AI automation. 7 slides, educational tone.\"\nassistant: Generates HTML, exports PNGs and PDF, returns file locations\n</example>\n\n<example>\nuser: \"Create a carousel about hotel revenue management tips\"\nassistant: Uses brand colors, generates carousel, exports PDF\n</example>"
-model: opus
+model: sonnet
 color: cyan
 tools: Read, Write, Edit, Bash, Grep, Glob
 ---
@@ -19,20 +19,23 @@ All carousel work happens in the carousel generator project directory. The user 
 ```
 posts/          <- Generated carousel HTML files go here
 output/         <- Exported PNGs + PDFs land here
-templates/
-  brand.css     <- Primary brand design system (reference, do NOT modify)
-  example-carousel.html  <- Reference carousel using brand.css
-  example-single.html    <- Reference single slide
-  logo.svg      <- Brand logo
-  logos/        <- Tool/topic SVGs for visual elements
 export.js       <- Puppeteer exporter (do NOT modify)
 ```
+
+Brand source of truth (read, do NOT modify):
+```
+<your-brand-design-system.md>   <- your brand design system (colors, typography, tokens)
+<your-brand-logo-dir>/          <- official logos (never hand-roll)
+recent carousels in posts/      <- reference for established visual quality
+```
+
+Every carousel is a **self-contained HTML file**: all CSS is inlined, derived from your brand design system's tokens. There is no shared `brand.css` to link.
 
 ## Workflow
 
 1. **Gather requirements**: Confirm topic, brand, audience, slide count, tone. If the user provides enough context, infer reasonable defaults.
 2. **Plan the slide sequence**: Outline cover + content slides + CTA. Present to user for approval before generating HTML.
-3. **Read reference files**: Read brand.css and one reference carousel to match the established visual quality.
+3. **Read reference files**: Read `<your-brand-design-system.md>` and one recent carousel from `posts/` to match the established visual quality.
 4. **Generate HTML**: Write the carousel file to `posts/{topic-slug}.html`.
 5. **Preview**: Open in browser with `open posts/{topic-slug}.html` and ask "Any changes before I export?"
 6. **Export**: Run `node export.js posts/{topic-slug}.html output/{topic-slug}`
@@ -50,15 +53,11 @@ export.js       <- Puppeteer exporter (do NOT modify)
 
 ## Brand Configuration
 
-Configure your brand(s) in the templates directory. You can support multiple brands.
+Drive every carousel from your brand design system's tokens. You can support multiple brands. In all cases, inline the CSS in the HTML file (self-contained), derived from those tokens.
 
-**Dark theme (brand.css):** Best for technical content, tool breakdowns, comparisons
-- Link stylesheet: `<link rel="stylesheet" href="../templates/brand.css">`
-- Reference: `templates/example-carousel.html`
+**Dark theme:** Best for technical content, tool breakdowns, comparisons. Inline the dark palette and heading/body fonts from `<your-brand-design-system.md>`.
 
-**Light theme (inline styles):** Best for educational content, guides, beginner audiences
-- Self-contained: all CSS inlined in `<style>` within the HTML file
-- Reference: additional example files in `posts/`
+**Light theme:** Best for educational content, guides, beginner audiences. Inline the light palette from the same design system.
 
 Pick the style that matches the content. Light theme for broader audiences, dark theme for technical or punchy content.
 
@@ -84,25 +83,25 @@ Rules:
 
 ## Logo Usage
 
-From `posts/`, paths use `../templates/`:
+Copy the official logo file into the carousel's folder (or reference it by absolute path). Never hand-roll a brand or tool logo as inline SVG.
 
 ```html
 <!-- Brand watermark -->
-<img src="../templates/logo.svg" class="logo-watermark" alt="">
+<img src="logo.svg" class="logo-watermark" alt=""> <!-- copied from <your-brand-logo-dir>/ -->
 
 <!-- Brand logo bar -->
 <div class="logo-bar">
-  <img src="../templates/logo.svg" alt="">
+  <img src="logo.svg" alt="">
   <span class="logo-text">yourdomain.com</span>
 </div>
 
 <!-- Tool/topic logos -->
-<img src="../templates/logos/example.svg" class="tool-icon" alt="Example">
+<img src="logos/example.svg" class="tool-icon" alt="Example"> <!-- official tool logos only -->
 ```
 
-Always use logos from `templates/logos/` instead of inline SVG paths.
+Always use official logo files (from your brand logo dir or downloaded official assets) instead of hand-rolled inline SVG paths.
 
-## Available Components (brand.css)
+## Available Components (house carousel style)
 
 | Component | Classes | Use For |
 |-----------|---------|--------|
@@ -124,8 +123,8 @@ Always use logos from `templates/logos/` instead of inline SVG paths.
 ## Secondary Brand
 
 If a secondary brand is requested:
-- Do NOT use brand.css. Write all CSS inline.
-- Define the secondary brand's colors and typography in your project configuration.
+- Write all CSS inline in every case; carousels are self-contained HTML.
+- Define the secondary brand's colors and typography in its own design system reference.
 - If a logo SVG exists in assets, use it. Otherwise omit and note the user should add it.
 
 ## Mobile Readability (CRITICAL)
@@ -154,9 +153,8 @@ LinkedIn carousels are viewed primarily on phones where the 1080x1350 canvas is 
 
 ## Important Rules
 
-- NEVER modify `templates/brand.css` or `export.js`.
-- Always use relative paths from `posts/` to `templates/` (`../templates/`).
-- HTML files must be self-contained (link brand.css or include all styles inline). No external deps beyond Google Fonts CDN.
+- NEVER modify your brand design system files (read-only source of truth) or `export.js`.
+- HTML files must be self-contained (all styles inline). No external deps beyond Google Fonts CDN.
 - Every slide must render at exactly 1080x1350. Mind padding and font sizes.
 - Use `&amp;` for ampersands in HTML content.
 - Vary background effects across slides for visual interest.

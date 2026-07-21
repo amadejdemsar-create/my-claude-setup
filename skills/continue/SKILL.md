@@ -33,7 +33,7 @@ Analyze the full conversation history and create a comprehensive continue prompt
 ```markdown
 # Continue Prompt
 
-> **INSTRUCTIONS FOR NEW SESSION:** Read this file carefully, then resume the work described below. After you have fully read and understood this file, confirm to the user that you've loaded the context and are ready to continue.
+> **INSTRUCTIONS FOR NEW SESSION:** Read this file carefully, then resume the work described below. After you have fully read and understood this file, confirm to the user that you've loaded the context and are ready to continue. Then DELETE this file (`rm <this file's absolute path>`); continue prompts are single-use and must not linger after their context is absorbed.
 
 ## Task Description
 [What the user originally asked for / the overall goal]
@@ -72,3 +72,14 @@ Analyze the full conversation history and create a comprehensive continue prompt
 After writing the file, tell the user:
 - The continue prompt has been saved (show the full path)
 - In their next session, they just need to say **"continue"** and they'll be able to pick which session to resume
+
+## Resuming from a continue prompt (loading)
+
+When the user asks to resume, "continue", or "find continue prompts" and then picks one to load:
+
+1. List the files in `~/.claude/continue-prompts/` so the user can choose (newest first).
+2. Read the chosen continue prompt file **and** every file it points to (spec files, source files, the "read these first" list) until you genuinely have the context loaded, not just the prompt itself.
+3. **Delete the chosen continue prompt file after it is fully loaded.** A continue prompt is single-use: once its context has been absorbed into the live session, the file has served its purpose. Leaving it behind clutters the picker and risks resuming stale state later. Run `rm ~/.claude/continue-prompts/<chosen-file>.md` once loading is confirmed complete.
+4. Confirm to the user that the context is loaded, that you deleted the now-consumed continue prompt, and that you're ready to continue the work.
+
+Only delete the **one** file the user chose to load. Never delete the others. If loading fails or the user did not actually pick a file to resume, do not delete anything.

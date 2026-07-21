@@ -133,7 +133,7 @@ Before drawing anything, ensure the canvas is running:
 
 1. **Start the canvas server** (if not already running):
    ```bash
-   cd /Users/Shared/Domain/Business/Personal-projects/excalidraw/Code/mcp-server && PORT=3111 npm run canvas
+   cd <path-to>/excalidraw-mcp/mcp-server && PORT=3111 npm run canvas
    ```
 
 2. **Open the canvas in the browser**:
@@ -455,7 +455,7 @@ Pattern:
 **Do NOT automatically export diagrams to PNG/SVG after creating or editing them.** The Excalidraw canvas is the working artifact. Only export when the user explicitly asks for it.
 
 When exporting is requested:
-- Use `export_to_image` with the requested format (save to `/Users/Shared/Domain/Assets/`)
+- Use `export_to_image` with the requested format (save to your project's `Assets/` folder)
 - Use `export_to_excalidraw_url` for shareable links
 - Use `export_scene` to save the `.excalidraw` file for later editing
 

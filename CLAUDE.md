@@ -2,11 +2,11 @@
 
 > A sanitized template of the global `~/.claude/CLAUDE.md` used across every Claude Code session. Replace placeholder values (`<your-name>`, `<your-gh-username>`, `<your-tz>`, etc.) with your own. The behavioral rules (Execution Quality Bar, Systematic Problem Solving, Reference Integrity, Writing Style) are intended to be useful as-is for anyone.
 
-## Model Preference
+## Model Routing
 
-- Default to the latest available Claude Opus for everything: main session, Task tool subagents, custom agents, plan mode. Override on a per-task basis only when cost or latency genuinely justifies it.
-- When using the Task tool, set `model: "opus"` in the agent configuration unless you have a specific reason to downgrade.
-- If Claude Code auto-downgrades to a smaller model mid-session, override it back.
+- **Default to your strongest model for anything that needs judgment:** the main session, plan mode, and any agent doing reasoning, synthesis, design, or user-facing craft. Judgment is the highest-leverage use of your best model; do not let the harness auto-downgrade it, override it back if it does.
+- **Keep a small-model allowlist for bulk mechanical work.** Route boilerplate, tests, formatting, bulk edits, migrations, and token-heavy reading (locating code, transcribing, fetch-and-extract) to a cheaper model on purpose. Judge the output, not the price tag: if a cheaper model misses the bar, redo it on the stronger one.
+- **Delegate through subagent model parameters, never by switching the main session's model.** When you want another model for a piece of work, set `model` on the Task/subagent call (it runs in its own context and returns just its result). Do not run a command that re-points the current session to a different model, there is no automatic return and you strand yourself on the wrong model. Small reasoning you do inline; anything worth another model goes to a subagent.
 
 ## Writing Style
 
@@ -61,6 +61,8 @@ A "multi-step task" is any task with a numbered spec, a skill file, a checklist,
    - If ANY are SKIPPED or NOT DONE, you may not use the word "complete." Use "partially complete."
 
 8. **Honest status over flattering status.** "I finished phases 1 to 3 of 5" beats "Done!" when 40% was skipped.
+
+9. **Pair completion with artifact verification.** This bar merges with a verify-before-done discipline: before any finishing word, inspect every artifact you produced, do not trust that a tool "returned success." Read each file, image, page, or export you created and confirm it actually matches the ask (the screenshot shows the dashboard, not the login screen; the doc is the right length; no placeholder or template text remains). "The tool reported success" is not verification; looking at the output and seeing it is correct is. Fix and re-verify before you claim done.
 
 ### Forbidden phrases when gaps exist
 

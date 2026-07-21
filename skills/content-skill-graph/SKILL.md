@@ -1,3 +1,8 @@
+---
+name: content-skill-graph
+description: "Interactive 9-step onboarding that sets up a personalized content creation system (brand voice, audience, content pillars, platform specs, workflows) from a content-system template. Use when the user runs /content-skill-graph, wants to set up or re-run the content system onboarding for a brand, or is packaging the content toolkit for a client. Produces the config files that the generated content skills (/article, /repurpose, /new-tool, /tool-review) consume; those commands exist only AFTER onboarding generates them."
+---
+
 # /content-skill-graph
 
 Set up a personalized content creation system for Claude Code. This skill walks you through a 9-step onboarding that configures your brand voice, audience, content pillars, and workflows, then generates all the config files Claude needs to create content that sounds like you.

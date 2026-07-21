@@ -1,7 +1,7 @@
 ---
 name: gws-docs
 version: 1.0.0
-description: "Read and write Google Docs."
+description: "Google Docs via the gws CLI: create, read, and write documents. Use when the user asks to create or edit a Google Doc, export a doc's content, or turn local markdown into a shared Doc. Confirm before writes to shared docs."
 metadata:
   openclaw:
     category: "productivity"

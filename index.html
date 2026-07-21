@@ -2139,7 +2139,7 @@
     <a href="#agents" class="smap-node smap-node-green">
       <div class="smap-card">
         <div class="smap-icon">&#129302;</div>
-        <div class="smap-count">12</div>
+        <div class="smap-count">13</div>
         <div class="smap-label">Agents</div>
         <div class="smap-items">
           <span>stock-analyst</span>
@@ -2165,7 +2165,7 @@
     <a href="#automation" class="smap-node smap-node-blue">
       <div class="smap-card">
         <div class="smap-icon">&#9881;&#65039;</div>
-        <div class="smap-count">5</div>
+        <div class="smap-count">6</div>
         <div class="smap-label">Automation</div>
         <div class="smap-items">
           <span>Session Hooks</span>
@@ -2660,7 +2660,7 @@
         <div class="agent-avatar" style="background: var(--cyan-dim);">&#127912;</div>
         <div>
           <h3>design-visionary</h3>
-          <p>UI/UX design with Web3 aesthetics. Color psychology, responsive design, micro-interactions. Steve Jobs philosophy meets neuroscience.</p>
+          <p>The design-routing brain that routes every visual task across a de-overlapped design skill stack and executes to a premium bar.</p>
           <div class="agent-meta">
             <span class="chip chip-model">Opus</span>
             <span class="chip" style="background:var(--cyan-dim);color:var(--cyan);">Design</span>
@@ -3355,42 +3355,49 @@
   </div>
 
   <div class="auto-card">
-    <h4>SessionStart Hook: Second Brain Maintenance</h4>
-    <p>Runs <code>~/.claude/hooks/maintenance-check.sh</code> every time Claude Code starts.</p>
+    <h4>PreToolUse Hook: Safety Guard</h4>
+    <p>Runs before a tool executes and can block the call.</p>
     <div class="auto-detail">
-      <strong>What it does:</strong> Checks if 7+ days have passed since last maintenance run. If so, launches a background Sonnet session that runs a maintenance prompt against the knowledge base.<br><br>
-      <strong>Safeguards:</strong> Environment variable prevents infinite loops. Lockfile prevents race conditions from multiple simultaneous sessions. 30-minute timeout kills stale processes. Log rotation keeps the last 5 runs.<br><br>
-      <strong>State file:</strong> <code>~/.claude/maintenance-state.json</code><br>
-      <strong>Prompt:</strong> <code>~/.claude/prompts/second-brain-maintenance.md</code><br>
-      <strong>Logs:</strong> <code>~/.claude/maintenance-output.log</code>
+      <strong>What it does:</strong> Blocks dangerous shell commands (destructive <code>rm</code>, <code>git push --force</code>), scans staged changes for secrets before a commit lands, and guards protected files from accidental edits.<br><br>
+      <strong>Trigger:</strong> Fires on every <code>PreToolUse</code> event, primarily <code>Bash</code> and file-write tools.<br><br>
+      <strong>Behavior:</strong> On a match it stops the tool call and returns the reason, so the risky action never runs.
     </div>
   </div>
 
   <div class="auto-card">
-    <h4>PreToolUse Hook: Git Commit Confirmation</h4>
-    <p>Runs <code>~/.claude/hooks/confirm-git-commit.sh</code> before any git commit command.</p>
+    <h4>PostToolUse Hook: Format &amp; Lint</h4>
+    <p>Runs after a file write or edit completes.</p>
     <div class="auto-detail">
-      <strong>What it does:</strong> Intercepts git commit commands before execution and requires explicit user approval. Prevents accidental commits without review.<br><br>
-      <strong>Trigger:</strong> Fires on any <code>Bash</code> tool invocation that contains a git commit command.<br><br>
-      <strong>Behavior:</strong> Blocks the commit and prompts the user for confirmation. Only proceeds if the user explicitly approves.
+      <strong>What it does:</strong> Auto-formats edited JS/TS/JSON/MD/HTML/CSS with prettier (when the project has it), runs a dash linter that flags em/en dashes used as punctuation, and validates agent frontmatter (must start on line 1, valid YAML).<br><br>
+      <strong>Trigger:</strong> Fires on <code>PostToolUse</code> for <code>Write</code>, <code>Edit</code>, and <code>MultiEdit</code>.<br><br>
+      <strong>Note:</strong> The formatter may rewrite a file after you edit it, so re-read before the next edit if a match fails.
     </div>
   </div>
 
   <div class="auto-card">
-    <h4>SessionStart Hook: GSD Update Checker</h4>
-    <p>Runs <code>~/.claude/hooks/gsd-check-update.js</code> every time Claude Code starts.</p>
+    <h4>SessionStart Hook: Environment Detection</h4>
+    <p>Runs once when a session starts.</p>
     <div class="auto-detail">
-      <strong>What it does:</strong> Checks if the GSD (Get Stuff Done) framework has updates available. Ensures the project management system stays current with the latest phases, templates, and workflow improvements.<br><br>
-      <strong>Trigger:</strong> Fires on every <code>SessionStart</code> event alongside the maintenance check hook.
+      <strong>What it does:</strong> Detects the host and OS and which browser, preview, and tunnel tools are available here, then injects that context into the session so tool routing is correct from the first message.<br><br>
+      <strong>Trigger:</strong> Fires on every <code>SessionStart</code> event.
     </div>
   </div>
 
   <div class="auto-card">
-    <h4>PostToolUse Hook: GSD Context Monitor</h4>
-    <p>Runs <code>~/.claude/hooks/gsd-context-monitor.js</code> after tool use.</p>
+    <h4>SessionEnd Hook: Session Mining</h4>
+    <p>Runs when a session ends.</p>
     <div class="auto-detail">
-      <strong>What it does:</strong> Monitors tool usage during GSD project execution to track context consumption and warn when context is running low during multi-phase work. Helps prevent mid-phase context exhaustion.<br><br>
-      <strong>Trigger:</strong> Fires on <code>PostToolUse</code> events when a GSD project is active.
+      <strong>What it does:</strong> Mines the finished session for durable lessons and decisions and appends them to notes, so learnings compound across sessions instead of being lost.<br><br>
+      <strong>Trigger:</strong> Fires on the <code>SessionEnd</code> event.
+    </div>
+  </div>
+
+  <div class="auto-card">
+    <h4>Stop Hook: Config Sync</h4>
+    <p>Runs when the assistant finishes responding.</p>
+    <div class="auto-detail">
+      <strong>What it does:</strong> Keeps configuration in sync at the end of a turn, so config changes made during the session are reconciled without a manual step.<br><br>
+      <strong>Trigger:</strong> Fires on the <code>Stop</code> event.
     </div>
   </div>
 
@@ -3537,7 +3544,7 @@
       <div class="config-num">2</div>
       <h4>Settings</h4>
       <div class="config-path">~/.claude/settings.json</div>
-      <p>SessionStart hooks (maintenance-check.sh, gsd-check-update.js), PreToolUse hook (confirm-git-commit.sh), PostToolUse hook (gsd-context-monitor.js), custom status line, plus MCPs: Firecrawl, Brave Search, Todoist, OpenAI Docs, Docker (uvx).</p>
+      <p>Five hook events (PreToolUse safety guard, PostToolUse format &amp; lint, SessionStart environment detection, SessionEnd session mining, Stop config sync), a custom status line, plus harness-level MCP entries.</p>
     </div>
 
     <div class="config-card">
@@ -3551,7 +3558,7 @@
       <div class="config-num">4</div>
       <h4>Agents Directory</h4>
       <div class="config-path">~/.claude/agents/</div>
-      <p>12 agent files (.md). Each has YAML frontmatter (name, description, model, color, tools) followed by system prompt. Frontmatter must start on line 1.</p>
+      <p>13 agent files (.md). Each has YAML frontmatter (name, description, model, color, tools) followed by system prompt. Frontmatter must start on line 1.</p>
     </div>
 
     <div class="config-card">
@@ -3565,7 +3572,7 @@
       <div class="config-num">6</div>
       <h4>Hooks &amp; Scripts</h4>
       <div class="config-path">~/.claude/hooks/ &amp; scripts</div>
-      <p>maintenance-check.sh (144 lines, 5 safeguards), confirm-git-commit.sh (PreToolUse), gsd-check-update.js (SessionStart), gsd-context-monitor.js (PostToolUse), statusline-command.sh (37 lines), prompts/second-brain-maintenance.md.</p>
+      <p>Hook scripts for the five lifecycle events (PreToolUse safety guard, PostToolUse format &amp; lint, SessionStart environment detection, SessionEnd session mining, Stop config sync), plus the status-line script.</p>
     </div>
   </div>
 
@@ -4032,7 +4039,7 @@ curl -sL https://raw.githubusercontent.com/amadejdemsar-create/my-claude-setup/m
 
 Then tell me to restart Claude Code for the agent to become available.`,
     content: `
-      <div class="persona-quote">You are the embodiment of Steve Jobs' design philosophy, merged with cutting-edge Web3 aesthetics and deep understanding of human psychology. You possess an obsessive, uncompromising eye for design perfection. Every pixel matters. Every interaction must feel inevitable.</div>
+      <div class="persona-quote">The design-routing brain and world-class UI/UX judgment for any visual work. It knows your full installed design stack and routes every task to the right primary skill plus overlay, then executes to a premium bar. Every pixel matters. Every interaction must feel inevitable.</div>
 
       <h2>Design DNA</h2>
       <ul>
@@ -4047,8 +4054,8 @@ Then tell me to restart Claude Code for the agent to become available.`,
 
       <h3>Color Psychology</h3>
       <ul>
-        <li><strong style="color:var(--blue);">Blues:</strong> Trust, security, stability (financial/wallet interfaces)</li>
-        <li><strong style="color:var(--purple);">Purples:</strong> Luxury, creativity, Web3 native (gradients evoke metaverse)</li>
+        <li><strong style="color:var(--blue);">Blues:</strong> Trust, security, stability (finance and trust-critical interfaces)</li>
+        <li><strong style="color:var(--purple);">Purples:</strong> Luxury, creativity, premium accents (gradients add depth)</li>
         <li><strong style="color:var(--green);">Greens:</strong> Growth, success, positive returns</li>
         <li><strong style="color:var(--amber);">Oranges/Yellows:</strong> Energy, optimism, calls-to-action (sparingly)</li>
         <li>Dark modes with accent colors: Sophistication, focus, reduced cognitive load</li>
@@ -4078,13 +4085,14 @@ Then tell me to restart Claude Code for the agent to become available.`,
         <li>Whitespace: Cramped is cheap. Let designs breathe.</li>
       </ul>
 
-      <h2>Web3 Design Excellence</h2>
+      <h2>Design Routing Brain</h2>
+      <p>The router for a de-overlapped design skill stack: one primary skill per task, an overlay only when it genuinely composes.</p>
       <ul>
-        <li>Glassmorphism with purpose (depth, not decoration)</li>
-        <li>Gradient meshes that feel alive</li>
-        <li>Dark themes with vibrant accents</li>
-        <li>Card-based layouts with generous radius (12-24px)</li>
-        <li>Skeleton loaders matching final content structure</li>
+        <li>Any page or component build routes to the build engine, with the anti-slop quality gate as a pre-flight overlay</li>
+        <li>Palette, font-pairing, chart, and accessibility lookups route to the searchable reference, never the build engine</li>
+        <li>Animation and micro-interaction polish route to the motion authority</li>
+        <li>Brand creation and design tokens route to the brand and token skills</li>
+        <li>Any image generation routes to image-director at quality: high, inspected and refined in a loop</li>
       </ul>
 
       <h2>Responsive Mastery</h2>
@@ -4872,11 +4880,11 @@ After running the command, tell me to restart Claude Code.`,
     icon: '&#127760;', iconBg: 'var(--amber-dim)', color: 'amber',
     installPrompt: `Install the Claude in Chrome extension for browser automation with Claude Code.
 
-This is NOT a config file change — it's a Chrome extension:
+This is NOT a config file change, it's a Chrome extension:
 
 1. Go to the Chrome Web Store and search for "Claude in Chrome" (or "Claude Code Chrome Extension")
 2. Install the extension
-3. The extension will automatically be detected by Claude Code — no config needed
+3. The extension will automatically be detected by Claude Code, no config needed
 
 After installing, restart Claude Code. The browser automation tools (navigate, click, screenshot, fill forms, etc.) will appear automatically.`,
     content: `
@@ -5017,7 +5025,7 @@ Add this to ~/.claude/settings.json under the "mcpServers" key (create the key i
   "url": "https://developers.openai.com/mcp"
 }
 
-No API key needed — this provides read-only access to OpenAI's developer documentation. After adding, tell me to restart Claude Code.`,
+No API key needed, this provides read-only access to OpenAI's developer documentation. After adding, tell me to restart Claude Code.`,
     content: `
       <h2>Connection</h2>
       <table>
@@ -5047,7 +5055,7 @@ No API key needed — this provides read-only access to OpenAI's developer docum
   "args": ["mcp-server-docker"]
 }
 
-No API key needed — this uses your local Docker daemon. Make sure Docker Desktop is installed and running, and that you have Python with uvx installed (pip install uvx). After adding, tell me to restart Claude Code.`,
+No API key needed, this uses your local Docker daemon. Make sure Docker Desktop is installed and running, and that you have Python with uvx installed (pip install uvx). After adding, tell me to restart Claude Code.`,
     content: `
       <h2>Connection</h2>
       <table>

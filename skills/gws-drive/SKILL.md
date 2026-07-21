@@ -1,7 +1,7 @@
 ---
 name: gws-drive
 version: 1.0.0
-description: "Google Drive: Manage files, folders, and shared drives."
+description: "Google Drive via the gws CLI: search, read, upload, download, share, and organize files and folders. Use when the user asks to find, read, upload, or share something in Drive, or wants a file from Drive into the workspace. Prefer over the Claude.ai Drive MCP (fuller surface). Confirm before shares or deletes."
 metadata:
   openclaw:
     category: "productivity"

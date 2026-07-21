@@ -1,7 +1,7 @@
 ---
 name: gws-calendar
 version: 1.0.0
-description: "Google Calendar: Manage calendars and events."
+description: "Google Calendar via the gws CLI: list, create, update, move, and delete events, agendas, availability. Use for any direct calendar read or write: what is on my calendar, schedule or move a meeting, add or cancel an event. For planning a whole week around tasks and priorities use the calendar skill (personal planner built on this). Confirm before writes."
 metadata:
   openclaw:
     category: "productivity"

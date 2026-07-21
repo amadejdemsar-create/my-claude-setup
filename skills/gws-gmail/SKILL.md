@@ -1,7 +1,7 @@
 ---
 name: gws-gmail
 version: 1.0.0
-description: "Gmail: Send, read, and manage email."
+description: "Gmail via the gws CLI: send, read, search, triage, label, draft, and manage email (full API surface; the Claude.ai Gmail MCP is a read/draft-only fallback, never use it to send). Use whenever the user asks to send an email, check or read the inbox, find a message or thread, or manage labels and drafts. Pick the right account identity for the context and confirm before sending."
 metadata:
   openclaw:
     category: "productivity"

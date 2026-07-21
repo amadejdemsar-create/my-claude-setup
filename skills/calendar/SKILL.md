@@ -1,6 +1,6 @@
 ---
 name: calendar
-description: "Personal calendar management. Plan a whole week, edit a specific day, add or move events, view the schedule. Integrates with a task manager for priorities. Use when the user wants to plan, schedule, review, or modify their calendar."
+description: "Personal calendar management. Plan a whole week, edit a specific day, add or move events, view the schedule. Integrates with a task manager for priorities. Use when the user wants to plan, schedule, review, or modify their calendar or week. For raw low-level Calendar API operations (bulk edits, other calendars, exact API flags), gws-calendar is the underlying surface this skill uses."
 ---
 
 # Calendar
